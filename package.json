@@ -28,9 +28,9 @@
     }
   },
   "lint-staged": {
-    "*.{ts, tsx}": [
-      "npx prettier --write",
+    "*.{ts,tsx}": [
       "eslint --fix"
-    ]
+    ],
+    "*.{ts,tsx,json,md}": "npx prettier --write"
   }
 }
