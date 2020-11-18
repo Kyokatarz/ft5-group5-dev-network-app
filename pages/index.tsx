@@ -5,7 +5,7 @@ export default function Home(): JSX.Element {
   return (
     <div>
       <Head>
-        <title>Create Next App</title>
+        <title>Developer Network</title>
       </Head>
       <Surprise />
     </div>
