@@ -1,3 +1,3 @@
-export default function Surprise() {
-  return <div>Surprise!</div>;
+export default function Surprise(): JSX.Element {
+  return <div>Surprise!</div>
 }
