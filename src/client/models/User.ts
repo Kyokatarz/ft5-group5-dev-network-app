@@ -2,6 +2,12 @@ import mongoose, { Document, Schema } from 'mongoose'
 
 import { PostDocument } from './Post'
 
+enum EmploymentStatus {
+  employed = 'EMPLOYED',
+  openToWork = 'OPEN_TO_WORK',
+  Freelancer = 'FREELANCER',
+}
+
 export type UserDocument = Document & {
   id: string
   email: string
@@ -9,7 +15,7 @@ export type UserDocument = Document & {
   firstName?: string
   lastName?: string
   image?: string
-  currentPosition: string
+  employmentStatus?: EmploymentStatus
   company?: string
   posts?: PostDocument[]
 }
@@ -20,7 +26,10 @@ const userSchema = new Schema({
   firstName: String,
   lastName: String,
   image: String,
-  currentPosition: String,
+  employmentStatus: {
+    type: String,
+    enum: ['EMPLOYED', 'OPEN_TO_WORK', 'FREELANCER'],
+  },
   company: String,
   posts: [
     {

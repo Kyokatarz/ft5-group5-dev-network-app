@@ -5,7 +5,7 @@ export type PostDocument = Document & {
   content: string
   likes: number
   date: Date
-  comments: Array<{
+  comments?: Array<{
     commentUserId: string
     text: string
     avatar: string

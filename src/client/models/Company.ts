@@ -8,10 +8,10 @@ export type CompanyDocument = Document & {
   email: string
   password: string
   companyName: string
-  companyDetails: string
-  website: string
-  contactNumber: string
-  address: string
+  companyDetails?: string
+  website?: string
+  contactNumber?: string
+  address?: string
   posts?: PostDocument[]
 }
 
