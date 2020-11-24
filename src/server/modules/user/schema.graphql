@@ -1,3 +1,63 @@
-export default function Test() {
-  console.log(test)
+# TODO: decide if the update password should be separated from updateProfile route;
+type Post {
+  id: ID!,
+  content: String!,
+  date!: Date,
+  likes: Int
+}
+
+type User {
+  id: ID!,
+  email: String!,
+  password: String!,
+  firstName: String,
+  lastName: String,
+  image: String,
+  employmentStatus: EmploymentStatus,
+  company: String,
+  posts: Post[]
+}
+
+type Query {
+  getUser: User,
+  getAllUsers: User[]
+}
+
+type Mutation {
+  signupUser(user: UserSignupInput): String,
+  loginUser(user: UserLoginInput): String,
+  logoutUser: String,
+  updateUserProfile(id: ID, user: UserUpdateProfileInput): String,
+  forgotPassword(email: String!): String,
+  createPost(id: ID, post: Post): String,
+  createComment(id: ID, UserCreateCommentInput): String, # not sure about that cause we need postId as well
+  connectToAnotherUser(): String, # todo
+  deletePost(): String, # todo
+  deleteComment(): String, # todo
+  discinnectFromAnotherUser(): String # todo
+}
+
+input UserSignupInput {
+  email: String!
+  password: String!
+}
+
+input UserLoginInput {
+  email: String!
+  password: String!
+}
+
+input UserUpdateProfileInput {
+  email: String,
+  firstName: String,
+  lastName: String,
+  image: String,
+  employmentStatus: EmploymentStatus,
+  company: String
+}
+
+input UserCreateCommentInput {
+  # postId: String!,
+  text: String!,
+  likes: Int
 }
