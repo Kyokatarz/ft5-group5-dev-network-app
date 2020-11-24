@@ -30,4 +30,4 @@ const companySchema = new Schema({
   ],
 })
 
-export default mongoose.model<UserDocument>('user', companySchema)
+export default mongoose.model<UserDocument>('company', companySchema)

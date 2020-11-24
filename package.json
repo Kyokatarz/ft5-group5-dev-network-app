@@ -7,18 +7,22 @@
     "build": "next build",
     "start": "next start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "watch-dev": "nodemon --ext ts -x npm run dev "
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/jest": "^26.0.15",
     "@types/mongoose": "^5.10.1",
     "apollo-server-micro": "^2.19.0",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "graphql": "^15.4.0",
     "graphql-import": "^1.0.2",
     "graphql-tools": "^7.0.1",
     "mongoose": "^5.10.15",
     "next": "10.0.1",
+    "nodemon": "^2.0.6",
     "react": "17.0.1",
     "react-dom": "17.0.1"
   },
