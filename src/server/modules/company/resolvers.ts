@@ -1,4 +1,5 @@
 import { GraphQLResolver } from '../../../types'
+import { companySchema } from '../../models/Company'
 import * as companyServices from './services'
 
 export const resolvers: GraphQLResolver = {
@@ -13,5 +14,10 @@ export const resolvers: GraphQLResolver = {
       companyServices.createNewCompany(_args.companyInfo),
     signIn: (_parent, _args, _context) =>
       companyServices.signIn(_args.credentials),
+    updateCompanyInfo: (_parent, _args, _context) =>
+      companyServices.updateCompanyInfo(
+        _args.companyId,
+        _args.newCompanyDetails
+      ),
   },
 }

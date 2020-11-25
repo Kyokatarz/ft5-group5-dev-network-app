@@ -70,6 +70,30 @@ export class NotFoundError extends CustomError {
   }
 }
 
+export class CredentialError extends CustomError {
+  statusCode = 401
+
+  constructor() {
+    super('Invalid credentials')
+  }
+
+  serialiseErrors(): SerialiseErrorsType {
+    return [{ message: 'Invalid credentials' }]
+  }
+}
+
+export class InternalServerError extends CustomError {
+  statusCode = 500
+
+  constructor() {
+    super('Internal server error')
+  }
+
+  serialiseErrors(): SerialiseErrorsType {
+    return [{ message: 'Internal server error' }]
+  }
+}
+
 //TODO: add request validation error class
 /** then we could use it like this:
  * serialiseErrors() {
