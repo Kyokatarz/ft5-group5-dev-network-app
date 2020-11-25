@@ -1,0 +1,12 @@
+#import Credentials, Company, Token from './types.graphql'
+#import CompanyInfo, newCompanyDetails from './inputs.graphql'
+
+#Mutation
+type Mutation {
+  createNewCompany(companyInfo: CompanyInfo): Company
+  signIn(credentials: Credentials): Token
+  updateCompanyInfo(
+    companyId: String!
+    newCompanyDetails: newCompanyDetails!
+  ): Company
+}
