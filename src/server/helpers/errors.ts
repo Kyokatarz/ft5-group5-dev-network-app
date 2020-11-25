@@ -62,11 +62,11 @@ export class NotFoundError extends CustomError {
   statusCode = 404
 
   constructor() {
-    super('Route not found')
+    super("Whatever you are looking for, it's not there")
   }
 
   serialiseErrors(): SerialiseErrorsType {
-    return [{ message: 'Page not found' }]
+    return [{ message: "Whatever you are looking for, it's not there" }]
   }
 }
 

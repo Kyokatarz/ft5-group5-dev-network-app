@@ -3,9 +3,10 @@ import bcrypt from 'bcryptjs'
 import { CompanyDocument } from '../../models/Company'
 import Company from '../../models/Company'
 import {
-  BadRequestError,
-  CredentialError,
-  InternalServerError,
+  CREDENTIAL_ERROR,
+  IDENTIFICATION_DUPLICATED,
+  NOT_FOUND_ERROR,
+  errorHandler,
 } from '../../helpers'
 import Post, { PostDocument } from '../../models/Post'
 
@@ -26,7 +27,7 @@ export const createNewCompany = async (
   try {
     const companyExists = await Company.findOne({ email })
     if (companyExists) {
-      throw 'IdentificationDuplicated'
+      throw IDENTIFICATION_DUPLICATED
     }
 
     const salt = await bcrypt.genSalt(10)
@@ -49,11 +50,11 @@ export const createNewCompany = async (
 export const signIn = async (companyInfo: CompanyDocument) => {
   const { email, password } = companyInfo
   const company = await Company.findOne({ email })
-  if (!company) return 'CredentialError'
+  if (!company) throw CREDENTIAL_ERROR
 
   const { password: hashedPassword } = company
   const match = await bcrypt.compare(password, hashedPassword)
-  if (!match) return 'CredentialError'
+  if (!match) throw CREDENTIAL_ERROR
 
   return {
     token: '//TODO:Token goes here',
@@ -69,20 +70,24 @@ export const createPost = async (
   postContent: PostDocument
 ): Promise<PostDocument> => {
   const { content, date } = postContent
+  try {
+    const company = await Company.findById(companyId).exec()
+    if (!company) throw NOT_FOUND_ERROR
+    const post = new Post({
+      content,
+      date,
+    })
 
-  const company = await Company.findById(companyId).exec()
-  const post = new Post({
-    content,
-    date,
-  })
+    const companyPosts = company.posts
+    companyPosts.unshift(post)
 
-  const companyPosts = company.posts
-  companyPosts.unshift(post)
+    await post.save()
+    await company.save()
 
-  await post.save()
-  await company.save()
-
-  return post
+    return post
+  } catch (err) {
+    errorHandler(err)
+  }
 }
 
 //Update Company Info
@@ -90,33 +95,24 @@ export const updateCompanyInfo = async (
   companyId: string,
   newDetails: Partial<CompanyDocument>
 ): Promise<CompanyDocument> => {
-  const {
-    companyName,
-    contactNumber,
-    companyDetails,
-    address,
-    website,
-  } = newDetails
-  const company = await Company.findById(companyId)
+  try {
+    const {
+      companyName,
+      contactNumber,
+      companyDetails,
+      address,
+      website,
+    } = newDetails
+    const company = await Company.findById(companyId)
 
-  if (companyName) company.companyName = companyName
-  if (contactNumber) company.contactNumber = contactNumber
-  if (companyDetails) company.companyDetails = companyDetails
-  if (address) company.address = address
-  if (website) company.website = website
-  await company.save()
-  return company
-}
-/*=============+
- |ErrorHandling|
- +=============*/
-const errorHandler = (err: string) => {
-  switch (err) {
-    case 'IdentificationDuplicated':
-      throw new BadRequestError('This email has already existed')
-    case 'CredentialError':
-      throw new CredentialError()
-    default:
-      throw new InternalServerError()
+    if (companyName) company.companyName = companyName
+    if (contactNumber) company.contactNumber = contactNumber
+    if (companyDetails) company.companyDetails = companyDetails
+    if (address) company.address = address
+    if (website) company.website = website
+    await company.save()
+    return company
+  } catch (err) {
+    errorHandler(err)
   }
 }
