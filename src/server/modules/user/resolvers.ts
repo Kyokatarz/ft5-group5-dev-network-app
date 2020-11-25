@@ -10,9 +10,9 @@ export const resolvers: GraphQLResolver = {
   },
 
   Mutation: {
-    signup: (_parents, _args, _context) =>
+    signupUser: (_parents, _args, _context) =>
       userServices.signupUser(_args.email, _args.password),
-    login: (_parent, _args, _context) =>
+    loginUser: (_parent, _args, _context) =>
       userServices.loginUser(_args.email, _args.password),
   },
 }
