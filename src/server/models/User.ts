@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose, { Document, Model, Schema } from 'mongoose'
 
 import { PostDocument } from './Post'
 
@@ -38,5 +38,5 @@ const userSchema = new Schema({
   ],
 })
 
-export default mongoose.models.user ||
+export default (mongoose.models.user as Model<UserDocument>) ||
   mongoose.model<UserDocument>('user', userSchema)

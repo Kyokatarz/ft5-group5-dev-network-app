@@ -9,10 +9,10 @@ type Query {
 type Mutation {
   createNewCompany(companyInfo: CompanyInfo): Company
   signIn(credentials: Credentials): Token
-}
-
-type Token {
-  token: String!
+  updateCompanyInfo(
+    companyId: String!
+    newCompanyDetails: newCompanyDetails!
+  ): Company
 }
 
 #Types
@@ -30,6 +30,10 @@ type Company {
   posts: [Post!]
 }
 
+type Token {
+  token: String!
+}
+
 #Inputs
 input CompanyInfo {
   email: String!
@@ -39,5 +43,13 @@ input CompanyInfo {
 
 input Credentials {
   email: String!
-  password: String
+  password: String!
+}
+
+input newCompanyDetails {
+  companyName: String
+  contactNumber: String
+  companyDetails: String
+  address: String
+  website: String
 }
