@@ -1,0 +1,6 @@
+#import Query from './schemas/queries.graphql'
+#import Mutation from './schemas/mutation.graphql'
+#import Type from './schemas/types.graphql'
+#import Input from './schemas/inputs.graphql'
+
+
