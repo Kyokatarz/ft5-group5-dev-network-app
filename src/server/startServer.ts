@@ -17,7 +17,7 @@ const combineSchemas = (): GraphQLSchema => {
   folders.forEach((folder) => {
     const { resolvers } = require(`./modules/${folder}/resolvers`)
     const typeDefs = importSchema(
-      `./src/server/modules/${folder}/schema.graphql`
+      `./src/server/modules/${folder}/index.graphql`
     )
     schemas.push(makeExecutableSchema({ typeDefs, resolvers }))
   })

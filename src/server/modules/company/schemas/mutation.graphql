@@ -1,5 +1,5 @@
-#import Credentials, Company, Token from './types.graphql'
-#import CompanyInfo, newCompanyDetails from './inputs.graphql'
+#import './types.graphql'
+#import './inputs.graphql'
 
 #Mutation
 type Mutation {

@@ -1,4 +1,5 @@
-#import Company from './types.graphql'
+#import './types.graphql'
+#import './inputs.graphql'
 
 #Queries
 type Query {
