@@ -21,7 +21,7 @@ type User {
 }
 
 type Query {
-  getUser: User
+  getUserById(id: String): User
   getAllUsers: [User]
 }
 
@@ -31,11 +31,10 @@ type Mutation {
   logoutUser: String
   updateUserProfile(id: String, user: UserUpdateProfileInput): String
   forgotPassword(email: String!): String
-  deleteUser(id: ID!): User!
   # createPost(id: String, post: Post): String #check return type: Post!
   createComment(id: String, commentObj: UserCreateCommentInput): String # not sure about that cause we need postId as well
   connectToAnotherUser: String # todo
-  deletePost(id: postId): Post # todo
+  deletePost: String # todo
   deleteComment: String # todo
   discinnectFromAnotherUser: String # todo
 }

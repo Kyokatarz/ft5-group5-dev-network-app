@@ -1,0 +1,11 @@
+type Post {
+  id: String
+  content: String
+  date: String
+  likes: Int
+}
+
+type LikedUser {
+  firstName: String!
+  lastName: String!
+}

@@ -1,0 +1,43 @@
+#import Post from '../post/schema.graphql'
+
+#Queries
+type Query {
+  getAllCompanies: [Company!]
+}
+
+#Mutation
+type Mutation {
+  createNewCompany(companyInfo: CompanyInfo): Company
+  signIn(credentials: Credentials): Token
+}
+
+type Token {
+  token: String!
+}
+
+#Types
+type Company {
+  id: String!
+  email: String!
+  password: String!
+  companyName: String!
+  companyDetails: String
+  website: String
+  contactNumber: String
+  jobDescription: String
+  address: String
+  numOfApplicants: String
+  posts: [Post!]
+}
+
+#Inputs
+input CompanyInfo {
+  email: String!
+  password: String!
+  companyName: String!
+}
+
+input Credentials {
+  email: String!
+  password: String
+}
