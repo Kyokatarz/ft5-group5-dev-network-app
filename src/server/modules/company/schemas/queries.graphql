@@ -1,0 +1,7 @@
+#import './types.graphql'
+#import './inputs.graphql'
+
+#Queries
+type Query {
+  getAllCompanies: [Company!]
+}
