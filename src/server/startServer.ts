@@ -10,7 +10,7 @@ import { connectDb } from './connectDb'
 
 dotenv.config()
 
-const combineSchemas = (): GraphQLSchema => {
+export const combineSchemas = (): GraphQLSchema => {
   const schemas: GraphQLSchema[] = []
   const folders = fs.readdirSync('./src/server/modules/')
 
