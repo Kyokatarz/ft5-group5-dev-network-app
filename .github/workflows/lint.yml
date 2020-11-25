@@ -4,8 +4,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout 
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Setup cache
+        uses: actions/cache@v1
+        with: 
+          key: ${{ runner.os }}-install-${{ hashFiles('**/package-lock.json') }}
+          path: ~/.npm
+          restore-keys: 
+            ${{ runner.os }}-install-
+            ${{ runner.os }}-
+
       - name: Install modules
-        run: yarn
+        run: npm ci
+
       - name: Run ESLint
-        run: yarn lint
+        run: npm run lint

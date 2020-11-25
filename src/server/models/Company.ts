@@ -1,7 +1,6 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose, { Document, Model, Schema } from 'mongoose'
 
 import { PostDocument } from './Post'
-import { UserDocument } from './User'
 
 export type CompanyDocument = Document & {
   id: string
@@ -15,7 +14,7 @@ export type CompanyDocument = Document & {
   posts?: PostDocument[]
 }
 
-const companySchema = new Schema({
+export const companySchema = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   companyName: String,
@@ -30,4 +29,5 @@ const companySchema = new Schema({
   ],
 })
 
-export default mongoose.model<UserDocument>('company', companySchema)
+export default (mongoose.models.company as Model<CompanyDocument>) ||
+  mongoose.model<CompanyDocument>('company', companySchema)

@@ -1,9 +1,9 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose, { Document, Model, Schema } from 'mongoose'
 
 export type PostDocument = Document & {
   id: string
   content: string
-  likes: number
+  likes: string[]
   date: Date
   comments?: Array<{
     commentUserId: string
@@ -17,9 +17,16 @@ const postSchema = new Schema({
   date: { type: Date, required: true },
   likes: [
     {
-      likedUser: Schema.Types.ObjectId,
+      likedUsers: Schema.Types.ObjectId,
+    },
+  ],
+  comments: [
+    {
+      commentedUserId: Schema.Types.ObjectId,
+      text: String,
     },
   ],
 })
 
-export default mongoose.model('post', postSchema)
+export default (mongoose.models.post as Model<PostDocument>) ||
+  mongoose.model('post', postSchema)
