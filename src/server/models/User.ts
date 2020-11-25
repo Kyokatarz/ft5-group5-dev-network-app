@@ -28,7 +28,7 @@ const userSchema = new Schema({
   image: String,
   employmentStatus: {
     type: String,
-    enum: ['EMPLOYED', 'OPEN_TO_WORK', 'FREELANCER'],
+    enum: ['EMPLOYED', 'OPEN_TO_WORK', 'FREELANCER'], // enum: Object.values(EmploymentStatus)
   },
   company: String,
   posts: [
