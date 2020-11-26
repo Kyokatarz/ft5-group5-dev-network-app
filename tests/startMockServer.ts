@@ -5,10 +5,12 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 const rootSchema = combineSchemas()
-const server = new ApolloServer({ schema: rootSchema, mocks: true })
+const server = new ApolloServer({ schema: rootSchema })
+
+export const host = 'http://localhost:4000'
 
 export const startMockServer = async () => {
-  const { url } = await server.listen()
+  await server.listen()
 }
 export const stopMockServer = async () => {
   await server.stop()
