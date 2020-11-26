@@ -2,8 +2,8 @@ import bcrypt from 'bcryptjs'
 
 import {
   errorHandler,
-  Identification_Duplicated,
-  Credential_Error,
+  IDENTIFICATION_DUPLICATED,
+  CREDENTIAL_ERROR,
 } from '../../helpers'
 import { UserDocument } from '../../models/User'
 import User from '../../models/User'
@@ -23,7 +23,7 @@ export const signupUser = async (
   try {
     const userExists = await User.findOne({ email })
     if (userExists) {
-      throw Identification_Duplicated
+      throw IDENTIFICATION_DUPLICATED
     }
 
     const salt = await bcrypt.genSalt(10)
@@ -46,10 +46,10 @@ export const loginUser = async (
   try {
     const user = await User.findOne({ email })
     if (!user) {
-      throw Identification_Duplicated
+      throw IDENTIFICATION_DUPLICATED
     }
     const match = await bcrypt.compare(password, user.password)
-    if (!match) throw Credential_Error
+    if (!match) throw CREDENTIAL_ERROR
     return user //TODO: fix when we have jwt
   } catch (err) {
     errorHandler(err)
@@ -63,7 +63,7 @@ export const updateUserProfile = async (
   try {
     const user = await User.findById(userId).select('-password')
     if (!user) {
-      throw Credential_Error
+      throw CREDENTIAL_ERROR
     }
     if (update.firstName) user.firstName = update.firstName
     if (update.lastName) user.lastName = update.lastName

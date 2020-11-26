@@ -1,0 +1,12 @@
+# TODO: decide if the update password should be separated from updateProfile route;
+#import Query from './schemas/queries.graphql'
+#import Mutation from './schemas/mutations.graphql'
+#import Type from './schemas/types.graphql'
+#import Input from './schemas/inputs.graphql'
+
+
+
+
+
+
+
