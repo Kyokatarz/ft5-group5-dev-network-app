@@ -16,8 +16,8 @@ describe('Testing the... test?', () => {
   })
   afterAll(async () => {
     console.log('Test stoping')
-    await stopMockServer()
     await dbHelper.closeDatabase()
+    await stopMockServer()
   })
 
   it('should be equal to 2', () => {
