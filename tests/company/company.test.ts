@@ -1,47 +1,58 @@
-import { request } from 'graphql-request'
+import { createTestClient } from 'apollo-server-testing'
+import { getAllCompanies } from '../../src/server/modules/company/services'
 
-import { startMockServer, stopMockServer, host } from '../startMockServer'
-import * as dbHelper from '../db-helper'
 import * as requestStrings from './graphql-request-string'
+import * as dbHelper from '../db-helper'
+import { server } from '../startMockServer'
 
-describe('Testing company', () => {
-  beforeAll(async () => {
-    await startMockServer()
-    console.log('Before all')
-  })
+const { query, mutate } = createTestClient(server)
 
+describe('Testing the... test?', () => {
   beforeEach(async () => {
     await dbHelper.connect()
-    console.log('Before each')
   })
 
   afterEach(async () => {
     await dbHelper.clearDatabase()
-    console.log('after each')
   })
   afterAll(async () => {
-    console.log('Test stoping')
     await dbHelper.closeDatabase()
-    console.log('after all')
   })
 
-  it('should return all companies', async () => {
-    const createCompanyMutation1 = requestStrings.createMockCompany({
-      email: 'company1@email.com',
-    })
-    const createCompanyMutation2 = requestStrings.createMockCompany({
-      email: 'company2@email.com',
-    })
-    const createCompanyMutation3 = requestStrings.createMockCompany({
-      email: 'company3@email.com',
-    })
-    const getCompaniesMutation = requestStrings.getAllCompanies()
-    await request(host, createCompanyMutation1)
-    await request(host, createCompanyMutation2)
-    await request(host, createCompanyMutation3)
+  it('should be equal to 2', () => {
+    expect(1 + 1).toBe(2)
+  })
 
-    const response = await request(host, getCompaniesMutation)
-    expect(response.getAllCompanies.length).toBe(3)
-    console.log(response)
+  it('should create a company', async () => {
+    const createCompanyMutation = requestStrings.createMockCompany({
+      companyName: 'Test Company',
+    })
+    const resp = await mutate({
+      mutation: createCompanyMutation,
+    })
+    expect(resp.data.createNewCompany.companyName).toBe('Test Company')
+  })
+
+  it('should not create a company if email existed', async () => {
+    const createCompanyMutation = requestStrings.createMockCompany()
+
+    await mutate({
+      mutation: createCompanyMutation,
+    })
+    const resp = await mutate({
+      mutation: createCompanyMutation,
+    })
+    expect(resp.errors[0].message).toBe('This email has already existed')
+  })
+
+  it('should get all companies', async () => {
+    const res = await query({
+      query: `query {
+        getAllCompanies{
+          companyName
+        }
+      }`,
+    })
+    expect(res.data.getAllCompanies.length).toBe(0)
   })
 })

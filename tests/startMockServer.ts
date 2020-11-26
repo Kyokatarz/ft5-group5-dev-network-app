@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 const rootSchema = combineSchemas()
-const server = new ApolloServer({ schema: rootSchema })
+export const server = new ApolloServer({ schema: rootSchema })
 
 export const host = 'http://localhost:4000'
 
