@@ -1,7 +1,7 @@
 import { BadRequestError, CredentialError, InternalServerError } from './errors'
 
-const Identification_Duplicated = 'IdentificationDuplicated'
-const Credential_Error = 'CredentialError'
+export const Identification_Duplicated = 'IdentificationDuplicated'
+export const Credential_Error = 'CredentialError'
 
 export const errorHandler = (err: string) => {
   switch (err) {
