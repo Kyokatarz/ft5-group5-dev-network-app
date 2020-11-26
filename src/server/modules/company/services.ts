@@ -41,13 +41,13 @@ export const createNewCompany = async (
 
     await company.save()
 
-    return { email, companyName }
+    return { id: company.id, email, companyName }
   } catch (err) {
     errorHandler(err)
   }
 }
 //Sign in as a company
-export const signIn = async (companyInfo: CompanyDocument) => {
+export const signInCompany = async (companyInfo: CompanyDocument) => {
   const { email, password } = companyInfo
   const company = await Company.findOne({ email })
   if (!company) throw CREDENTIAL_ERROR

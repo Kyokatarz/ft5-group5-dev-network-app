@@ -1,4 +1,3 @@
-import { startMockServer, stopMockServer } from './startMockServer'
 import * as dbHelper from './db-helper'
 
 describe('Testing the... test?', () => {

@@ -1,5 +1,4 @@
 import { createTestClient } from 'apollo-server-testing'
-import { getAllCompanies } from '../../src/server/modules/company/services'
 
 import * as requestStrings from './graphql-request-string'
 import * as dbHelper from '../db-helper'
@@ -7,7 +6,7 @@ import { server } from '../startMockServer'
 
 const { query, mutate } = createTestClient(server)
 
-describe('Testing the... test?', () => {
+describe("Testing Company's GraphQL", () => {
   beforeEach(async () => {
     await dbHelper.connect()
   })
@@ -46,13 +45,66 @@ describe('Testing the... test?', () => {
   })
 
   it('should get all companies', async () => {
-    const res = await query({
-      query: `query {
-        getAllCompanies{
-          companyName
-        }
-      }`,
+    await mutate({
+      mutation: requestStrings.createMockCompany({
+        email: 'company1@email.com',
+      }),
     })
-    expect(res.data.getAllCompanies.length).toBe(0)
+    await mutate({
+      mutation: requestStrings.createMockCompany({
+        email: 'company2@email.com',
+      }),
+    })
+    await mutate({
+      mutation: requestStrings.createMockCompany({
+        email: 'company3@email.com',
+      }),
+    })
+
+    const res = await query({
+      query: requestStrings.getAllCompanies(),
+    })
+    console.log('res', res)
+
+    expect(res.data.getAllCompanies.length).toBe(3)
+  })
+
+  it('should sign in with the right credentials', async () => {
+    const createCompanyMutation = requestStrings.createMockCompany({
+      email: 'testEmail@email.com',
+      password: 'hardToGuessEasyToRemember',
+    })
+
+    await mutate({
+      mutation: createCompanyMutation,
+    })
+
+    const signInCompanyMutation = requestStrings.signInCompany({
+      email: 'testEmail@email.com',
+      password: 'hardToGuessEasyToRemember',
+    })
+
+    const res = await mutate({ mutation: signInCompanyMutation })
+    console.log(res.data)
+    expect(res.data.signInCompany).toHaveProperty('token')
+  })
+
+  it('should update company info', async () => {
+    const createCompanyMutation = requestStrings.createMockCompany()
+    console.log(createCompanyMutation)
+    const res1 = await mutate({
+      mutation: createCompanyMutation,
+    })
+    const companyId = res1.data.createNewCompany.id
+
+    console.log(res1.data.createNewCompany)
+    const updateCompanyMutation = requestStrings.updateCompanyInfo(companyId, {
+      companyName: 'New Name',
+    })
+
+    const res2 = await mutate({
+      mutation: updateCompanyMutation,
+    })
+    expect(res2.data.updateCompanyInfo.companyName).toBe('New Name')
   })
 })

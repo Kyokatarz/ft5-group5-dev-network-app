@@ -4,7 +4,7 @@
 #Mutation
 type Mutation {
   createNewCompany(companyInfo: CompanyInfo): Company
-  signIn(credentials: Credentials): Token
+  signInCompany(credentials: Credentials): Token
   updateCompanyInfo(
     companyId: String!
     newCompanyDetails: newCompanyDetails!

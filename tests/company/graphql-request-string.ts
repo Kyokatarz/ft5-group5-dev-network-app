@@ -19,7 +19,8 @@ export const createMockCompany = (override?: CompanyOverride): string => {
         companyName: "${companyName}"
       }){
         email,
-        companyName
+        companyName,
+        id
       }
     }
   `
@@ -33,5 +34,55 @@ export const getAllCompanies = (): string => {
         companyName
       }
     }
+  `
+}
+
+export const signInCompany = (credentials: {
+  email: string
+  password: string
+}): string => {
+  const { email, password } = credentials
+  return gql`
+    mutation{
+      signInCompany(credentials: {
+        email: "${email}",
+        password: "${password}"
+      }){
+        token
+      }
+    }
+  `
+}
+
+export const updateCompanyInfo = (
+  companyId: string,
+  newCompanyDetails: any
+): string => {
+  const {
+    companyName,
+    contactNumber,
+    companyDetails,
+    address,
+    website,
+  } = newCompanyDetails
+
+  return gql`
+  mutation{
+    updateCompanyInfo(companyId: "${companyId}", newCompanyDetails: {
+      companyName: "${companyName}",
+      contactNumber: "${contactNumber}",
+      companyDetails: "${companyDetails}",
+      address: "${address}",
+      website: "${website}"
+    }){
+      id,
+      email,
+      companyName,
+      contactNumber,
+      companyDetails,
+      address,
+      website
+    }
+  }
   `
 }
