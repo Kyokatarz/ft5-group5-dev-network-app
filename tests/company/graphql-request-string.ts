@@ -67,22 +67,50 @@ export const updateCompanyInfo = (
   } = newCompanyDetails
 
   return gql`
-  mutation{
-    updateCompanyInfo(companyId: "${companyId}", newCompanyDetails: {
-      companyName: "${companyName}",
-      contactNumber: "${contactNumber}",
-      companyDetails: "${companyDetails}",
-      address: "${address}",
-      website: "${website}"
-    }){
-      id,
-      email,
-      companyName,
-      contactNumber,
-      companyDetails,
-      address,
-      website
+    mutation{
+      updateCompanyInfo(companyId: "${companyId}", newCompanyDetails: {
+        companyName: "${companyName}",
+        contactNumber: "${contactNumber}",
+        companyDetails: "${companyDetails}",
+        address: "${address}",
+        website: "${website}"
+      }){
+        id,
+        email,
+        companyName,
+        contactNumber,
+        companyDetails,
+        address,
+        website
+      }
     }
-  }
+  `
+}
+
+export const companyCreatePost = (companyId: string, postContent: string) => {
+  return gql`
+    mutation{
+      companyCreatePost(companyId: "${companyId}", postContent: "${postContent}"){
+        id,
+        content,
+        likes,
+        date,
+        comments{ content },
+      }
+    }
+  `
+}
+
+export const companyLikesPost = (companyId: string, postId: string) => {
+  return gql`
+    mutation{
+      companyLikesPost(companyId: "${companyId}", postId: "${postId}"){
+        id,
+        content,
+        likes,
+        date,
+        comments{ content }
+      }
+    }
   `
 }

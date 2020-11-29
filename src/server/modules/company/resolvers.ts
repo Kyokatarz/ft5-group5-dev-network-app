@@ -18,5 +18,7 @@ export const resolvers: GraphQLResolver = {
         _args.companyId,
         _args.newCompanyDetails
       ),
+    companyCreatePost: (_parent, _args, _context) =>
+      companyServices.companyCreatePost(_args.companyId, _args.postContent),
   },
 }

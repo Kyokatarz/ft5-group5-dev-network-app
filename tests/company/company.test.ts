@@ -107,4 +107,46 @@ describe("Testing Company's GraphQL", () => {
     })
     expect(res2.data.updateCompanyInfo.companyName).toBe('New Name')
   })
+
+  it('should create a new post', async () => {
+    const res = await mutate({
+      mutation: requestStrings.createMockCompany(),
+    })
+    const companyId = res.data.createNewCompany.id
+
+    const res2 = await mutate({
+      mutation: requestStrings.companyCreatePost(
+        companyId,
+        'This is a test post'
+      ),
+    })
+    console.log(companyId)
+    console.log(res2)
+    expect(res2.data.companyCreatePost.content).toBe('This is a test post')
+  })
+  it('should let company like a post', async () => {
+    const res1 = await mutate({
+      mutation: requestStrings.createMockCompany(),
+    })
+    console.log('res1:', res1)
+    const companyId = res1.data.createNewCompany.id
+
+    const res2 = await mutate({
+      mutation: requestStrings.companyCreatePost(
+        companyId,
+        'This is a test post'
+      ),
+    })
+    console.log('res2:', res2)
+    expect(res2.data.companyCreatePost.content).toBe('This is a test post')
+    const postId = res2.data.companyCreatePost.id
+
+    const res3 = await mutate({
+      mutation: requestStrings.companyLikesPost(companyId, postId),
+    })
+    console.log('res3:', res3)
+    const expected = [companyId]
+    const likeArray = res3.data.companyLikesPost.likes
+    expect(likeArray).toEqual(expect.arrayContaining(expected))
+  })
 })
