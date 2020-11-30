@@ -20,7 +20,7 @@ describe('Testing user services', () => {
     await dbHelper.closeDatabase()
   })
 
-  it('should not signup user with incorrect email', async () => {
+  it('should successfully signup user', async () => {
     const signupUserMutation = requestStrings.createMockUser({
       email: 'test@test.com',
       password: 'password123',
@@ -29,7 +29,6 @@ describe('Testing user services', () => {
       mutation: signupUserMutation,
     })
     console.log(resp)
-    //expect(resp.data.signupUser).toMatchObject({ email: "test@test.com" })
+    expect(resp.data.signupUser).toMatchObject({ email: 'test@test.com' })
   })
 })
-//how to get status?
