@@ -3,8 +3,9 @@ import mongoose, { Document, Model, Schema } from 'mongoose'
 export type PostDocument = Document & {
   id: string
   content: string
-  likes: string[]
   date: Date
+  likes: string[]
+  onModel: 'company' | 'user'
   comments?: Array<{
     commentUserId: string
     text: string
@@ -17,15 +18,21 @@ const postSchema = new Schema({
   date: { type: Date, required: true },
   likes: [
     {
-      likedUsers: Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
+      refPath: 'onModel',
     },
   ],
   comments: [
     {
-      commentedUserId: Schema.Types.ObjectId,
+      commentedId: { type: Schema.Types.ObjectId, refPath: 'onModel' },
       text: String,
     },
   ],
+  onModel: {
+    type: String,
+    required: true,
+    enum: ['company', 'user'],
+  },
 })
 
 export default (mongoose.models.post as Model<PostDocument>) ||

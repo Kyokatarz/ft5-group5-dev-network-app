@@ -9,6 +9,7 @@ import {
   errorHandler,
 } from '../../helpers'
 import Post, { PostDocument } from '../../models/Post'
+import * as yupSchemas from './yupSchemas/yupSchemas'
 
 /*===========+
  |UNPROTECTED|
@@ -25,6 +26,15 @@ export const createNewCompany = async (
   const { email, password, companyName } = companyInfo
 
   try {
+    const valid = await yupSchemas.yupCompanyInfo.validate(
+      {
+        email,
+        password,
+        companyName,
+      },
+      { abortEarly: false }
+    )
+
     const companyExists = await Company.findOne({ email })
     if (companyExists) {
       throw IDENTIFICATION_DUPLICATED
@@ -76,6 +86,7 @@ export const companyCreatePost = async (
     const post = new Post({
       content: postContent,
       date: new Date(),
+      onModel: 'company',
     })
 
     const companyPosts = company.posts
@@ -121,13 +132,17 @@ export const updateCompanyInfo = async (
 export const CompanyLikesPost = async (companyId: string, postId: string) => {
   try {
     const company = await Company.findById(companyId)
+    if (!company) throw NOT_FOUND_ERROR
     const post = await Post.findById(postId)
     if (!post) throw NOT_FOUND_ERROR
-    if (!company) throw NOT_FOUND_ERROR
 
-    const companyAlreadyLikedPost = post.likes.find((id) => id === companyId)
+    const companyAlreadyLikedPost = post.likes.find(
+      (id) => id.toString() === companyId
+    )
+
+    console.log(companyAlreadyLikedPost)
     if (companyAlreadyLikedPost) {
-      post.likes = post.likes.filter((id) => id !== companyId)
+      post.likes = post.likes.filter((id) => id.toString() !== companyId)
       return await post.save()
     } else {
       post.likes.push(companyId)

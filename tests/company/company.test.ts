@@ -149,4 +149,29 @@ describe("Testing Company's GraphQL", () => {
     const likeArray = res3.data.companyLikesPost.likes
     expect(likeArray).toEqual(expect.arrayContaining(expected))
   })
+
+  it('should let company unlike a post', async () => {
+    const res1 = await mutate({
+      mutation: requestStrings.createMockCompany(),
+    })
+    const companyId = res1.data.createNewCompany.id
+
+    const res2 = await mutate({
+      mutation: requestStrings.companyCreatePost(
+        companyId,
+        'This is a test post'
+      ),
+    })
+    expect(res2.data.companyCreatePost.content).toBe('This is a test post')
+    const postId = res2.data.companyCreatePost.id
+    await mutate({
+      mutation: requestStrings.companyLikesPost(companyId, postId),
+    })
+    const res3 = await mutate({
+      mutation: requestStrings.companyLikesPost(companyId, postId),
+    })
+
+    const likeArray = res3.data.companyLikesPost.likes
+    expect(likeArray.length).toBe(0)
+  })
 })
