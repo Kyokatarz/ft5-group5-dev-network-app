@@ -1,8 +1,8 @@
 type Post {
-  id: String
-  content: String
-  date: String
-  likes: Int
+  id: String!
+  content: String!
+  date: String!
+  likes: [ID]
   comments: [Comment]
 }
 
@@ -15,4 +15,8 @@ type Comment {
   userId: String!
   content: String!
   likes: [String]
+}
+
+type ID {
+  id: String
 }

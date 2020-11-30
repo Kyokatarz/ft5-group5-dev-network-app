@@ -9,6 +9,7 @@ import {
   errorHandler,
 } from '../../helpers'
 import Post, { PostDocument } from '../../models/Post'
+import { companyLikesPost } from '../../../../tests/company/graphql-request-string'
 
 /*===========+
  |UNPROTECTED|
@@ -76,6 +77,7 @@ export const companyCreatePost = async (
     const post = new Post({
       content: postContent,
       date: new Date(),
+      onModel: 'company',
     })
 
     const companyPosts = company.posts
@@ -121,13 +123,17 @@ export const updateCompanyInfo = async (
 export const CompanyLikesPost = async (companyId: string, postId: string) => {
   try {
     const company = await Company.findById(companyId)
+    if (!company) throw NOT_FOUND_ERROR
     const post = await Post.findById(postId)
     if (!post) throw NOT_FOUND_ERROR
-    if (!company) throw NOT_FOUND_ERROR
 
-    const companyAlreadyLikedPost = post.likes.find((id) => id === companyId)
+    const companyAlreadyLikedPost = post.likes.find(
+      (id) => id.toString() === companyId
+    )
+
+    console.log(companyAlreadyLikedPost)
     if (companyAlreadyLikedPost) {
-      post.likes = post.likes.filter((id) => id !== companyId)
+      post.likes = post.likes.filter((id) => id.toString() !== companyId)
       return await post.save()
     } else {
       post.likes.push(companyId)
