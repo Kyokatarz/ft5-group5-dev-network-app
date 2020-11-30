@@ -33,7 +33,7 @@ export const signupUser = async (
       password: hashedPassword,
     })
     await user.save()
-    return { email, password }
+    return { email }
   } catch (err) {
     errorHandler(err)
   }
