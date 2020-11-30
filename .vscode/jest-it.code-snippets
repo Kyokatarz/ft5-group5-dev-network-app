@@ -22,7 +22,7 @@
 		"body": [
 			"it('should $1', async () => {",
 			"$2",
-			"}"
+			"})"
 		],
 		"description": "Create Jest it test"
 	}

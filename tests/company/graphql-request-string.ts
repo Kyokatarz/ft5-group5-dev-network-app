@@ -66,15 +66,18 @@ export const updateCompanyInfo = (
     website,
   } = newCompanyDetails
 
+  let string = ''
+  if (companyName) string += `companyName: "${companyName}",`
+  if (contactNumber) string += `contactNumber: "${contactNumber}",`
+  if (companyDetails) string += `companyDetails: "${companyDetails}",`
+  if (address) string += `address: "${address}",`
+  if (website) string += `website: "${website}",`
+  console.log('string123:', string)
   return gql`
     mutation{
       updateCompanyInfo(companyId: "${companyId}", newCompanyDetails: {
-        companyName: "${companyName}",
-        contactNumber: "${contactNumber}",
-        companyDetails: "${companyDetails}",
-        address: "${address}",
-        website: "${website}"
-      }){
+        ${string}
+        }){
         id,
         email,
         companyName,

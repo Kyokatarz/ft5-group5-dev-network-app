@@ -26,7 +26,7 @@ export const createNewCompany = async (
   const { email, password, companyName } = companyInfo
 
   try {
-    const valid = await yupSchemas.yupCompanyInfo.validate(
+    await yupSchemas.yupCompanyInfo.validate(
       {
         email,
         password,
@@ -114,6 +114,15 @@ export const updateCompanyInfo = async (
       address,
       website,
     } = newDetails
+
+    await yupSchemas.yupNewCompanyDetails.validate({
+      companyName,
+      contactNumber,
+      companyDetails,
+      address,
+      website,
+    })
+
     const company = await Company.findById(companyId)
 
     if (companyName) company.companyName = companyName
