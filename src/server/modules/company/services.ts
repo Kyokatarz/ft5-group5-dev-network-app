@@ -9,7 +9,7 @@ import {
   errorHandler,
 } from '../../helpers'
 import Post, { PostDocument } from '../../models/Post'
-import { companyLikesPost } from '../../../../tests/company/graphql-request-string'
+import * as yupSchemas from './yupSchemas/yupSchemas'
 
 /*===========+
  |UNPROTECTED|
@@ -26,6 +26,15 @@ export const createNewCompany = async (
   const { email, password, companyName } = companyInfo
 
   try {
+    const valid = await yupSchemas.yupCompanyInfo.validate(
+      {
+        email,
+        password,
+        companyName,
+      },
+      { abortEarly: false }
+    )
+
     const companyExists = await Company.findOne({ email })
     if (companyExists) {
       throw IDENTIFICATION_DUPLICATED
