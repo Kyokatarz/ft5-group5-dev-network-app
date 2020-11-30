@@ -10,14 +10,14 @@ import { connectDb } from './connectDb'
 
 dotenv.config()
 
-const combineSchemas = (): GraphQLSchema => {
+export const combineSchemas = (): GraphQLSchema => {
   const schemas: GraphQLSchema[] = []
   const folders = fs.readdirSync('./src/server/modules/')
 
   folders.forEach((folder) => {
     const { resolvers } = require(`./modules/${folder}/resolvers`)
     const typeDefs = importSchema(
-      `./src/server/modules/${folder}/schema.graphql`
+      `./src/server/modules/${folder}/index.graphql`
     )
     schemas.push(makeExecutableSchema({ typeDefs, resolvers }))
   })

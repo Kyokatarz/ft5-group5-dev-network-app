@@ -1,0 +1,14 @@
+#import Post from '../../post/index.graphql'
+
+#Types
+type User {
+  id: String!
+  email: String!
+  password: String!
+  firstName: String
+  lastName: String
+  image: String
+  # employmentStatus: EmploymentStatus
+  company: String
+  posts: [Post]
+}
