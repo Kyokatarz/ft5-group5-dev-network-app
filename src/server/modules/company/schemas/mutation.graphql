@@ -4,9 +4,11 @@
 #Mutation
 type Mutation {
   createNewCompany(companyInfo: CompanyInfo): Company
-  signIn(credentials: Credentials): Token
+  signInCompany(credentials: Credentials): Token
   updateCompanyInfo(
     companyId: String!
     newCompanyDetails: newCompanyDetails!
   ): Company
+  companyCreatePost(companyId: String, postContent: String): Post!
+  companyLikesPost(companyId: String, postId: String): Post!
 }

@@ -41,13 +41,13 @@ export const createNewCompany = async (
 
     await company.save()
 
-    return { email, companyName }
+    return { id: company.id, email, companyName }
   } catch (err) {
     errorHandler(err)
   }
 }
 //Sign in as a company
-export const signIn = async (companyInfo: CompanyDocument) => {
+export const signInCompany = async (companyInfo: CompanyDocument) => {
   const { email, password } = companyInfo
   const company = await Company.findOne({ email })
   if (!company) throw CREDENTIAL_ERROR
@@ -65,17 +65,17 @@ export const signIn = async (companyInfo: CompanyDocument) => {
  |Protected|
  +=========*/
 //Create a new post
-export const createPost = async (
+export const companyCreatePost = async (
   companyId: string,
-  postContent: PostDocument
+  postContent: string
 ): Promise<PostDocument> => {
-  const { content, date } = postContent
   try {
     const company = await Company.findById(companyId).exec()
     if (!company) throw NOT_FOUND_ERROR
+
     const post = new Post({
-      content,
-      date,
+      content: postContent,
+      date: new Date(),
     })
 
     const companyPosts = company.posts
@@ -112,6 +112,27 @@ export const updateCompanyInfo = async (
     if (website) company.website = website
     await company.save()
     return company
+  } catch (err) {
+    errorHandler(err)
+  }
+}
+
+//Company likes posts
+export const CompanyLikesPost = async (companyId: string, postId: string) => {
+  try {
+    const company = await Company.findById(companyId)
+    const post = await Post.findById(postId)
+    if (!post) throw NOT_FOUND_ERROR
+    if (!company) throw NOT_FOUND_ERROR
+
+    const companyAlreadyLikedPost = post.likes.find((id) => id === companyId)
+    if (companyAlreadyLikedPost) {
+      post.likes = post.likes.filter((id) => id !== companyId)
+      return await post.save()
+    } else {
+      post.likes.push(companyId)
+      return await post.save()
+    }
   } catch (err) {
     errorHandler(err)
   }

@@ -9,9 +9,9 @@ export const server = new ApolloServer({ schema: rootSchema })
 
 export const host = 'http://localhost:4000'
 
-export const startMockServer = async () => {
+export const startMockServer = async (): Promise<void> => {
   await server.listen()
 }
-export const stopMockServer = async () => {
+export const stopMockServer = async (): Promise<void> => {
   await server.stop()
 }

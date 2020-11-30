@@ -3,9 +3,16 @@ type Post {
   content: String
   date: String
   likes: Int
+  comments: [Comment]
 }
 
 type LikedUser {
   firstName: String!
   lastName: String!
+}
+
+type Comment {
+  userId: String!
+  content: String!
+  likes: [String]
 }
