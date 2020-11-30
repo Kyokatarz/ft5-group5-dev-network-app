@@ -2,7 +2,7 @@
 #import './types.graphql'
 
 type Mutation {
-  signupUser(user: UserSignupInput): String #check return type: User!
+  signupUser(user: UserSignupInput): User!
   loginUser(user: UserLoginInput): String
   logoutUser: String
   updateUserProfile(id: String, user: UserUpdateProfileInput): String

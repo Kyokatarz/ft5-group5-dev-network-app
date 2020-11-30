@@ -33,7 +33,7 @@ export const signupUser = async (
       password: hashedPassword,
     })
     await user.save()
-    return { email }
+    return { email } //TODO: fix when we have jwt
   } catch (err) {
     errorHandler(err)
   }
