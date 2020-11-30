@@ -1,11 +1,10 @@
 import * as requestStrings from './graphql-request-string'
 import { createTestClient } from 'apollo-server-testing'
-import { gql } from 'graphql-request'
 
 import * as dbHelper from '../db-helper'
 import { server } from '../startMockServer'
 
-const { mutate } = createTestClient(server)
+const { mutate, query } = createTestClient(server)
 
 describe('Testing user services', () => {
   beforeEach(async () => {
@@ -21,32 +20,83 @@ describe('Testing user services', () => {
     await dbHelper.closeDatabase()
   })
 
-  //   it('should successfully signup user', async () => {
-  //     const signupUserMutation = requestStrings.createMockUser({
-  //       email: 'test@test.com',
-  //       password: 'password123',
-  //     })
-  //     const resp = await mutate({
-  //       mutation: signupUserMutation,
-  //     })
-  //     console.log(resp)
-  //     expect(resp.data.signupUser).toMatchObject({ email: 'test@test.com' })
-  //   })
-  // })
-
   it('should successfully signup user', async () => {
-    const signupUser = gql`
-      mutation {
-        signupUser(user: { email: "test@test.com", password: "password123" }) {
-          email
-        }
-      }
-    `
+    const signupUserMutation = requestStrings.createMockUser()
     const res = await mutate({
-      mutation: signupUser,
+      mutation: signupUserMutation,
+    })
+    // console.log(res)
+    expect(res.data.signupUser).toHaveProperty('email')
+  })
+
+  it('should successfully login user', async () => {
+    //signup a user with default credentials
+    await mutate({
+      mutation: requestStrings.createMockUser(),
+    })
+    const loginUserMutation = requestStrings.loginMockUser({
+      email: 'userEmail@test.com',
+      password: 'userPassword',
+    })
+    const res = await mutate({
+      mutation: loginUserMutation,
+    })
+    expect(res.data.loginUser).toHaveProperty('email')
+    expect(res.data.loginUser).toHaveProperty('id')
+  })
+
+  it('should successfully get all users', async () => {
+    await mutate({
+      mutation: requestStrings.createMockUser(),
     })
 
+    await mutate({
+      mutation: requestStrings.createMockUser({
+        email: 'user1@test.com',
+        password: 'user1Password',
+      }),
+    })
+
+    await mutate({
+      mutation: requestStrings.createMockUser({
+        email: 'user2@test.com',
+        password: 'user2Password',
+      }),
+    })
+
+    await mutate({
+      mutation: requestStrings.createMockUser({
+        email: 'user3@test.com',
+        password: 'user3Password',
+      }),
+    })
+
+    const res = await query({
+      query: requestStrings.getAllMockUsers(),
+    })
+    expect(res.data.getAllUsers.length).toBe(4)
+  })
+
+  it('should successfully update user profile', async () => {
+    //signup a user with default credentials
+    const mockUser = await mutate({
+      mutation: requestStrings.createMockUser(),
+    })
+    console.log(mockUser.data.signupUser)
+    const updateUserProfileMutation = requestStrings.updateMockUserProfile(
+      mockUser.data.signupUser.id,
+      {
+        firstName: 'Bilbo',
+        lastName: 'Baggins',
+      }
+    )
+    console.log(updateUserProfileMutation)
+    const res = await mutate({
+      mutation: updateUserProfileMutation,
+    })
     console.log(res)
-    //expect(res.data.signupUser).toMatchObject({ email: 'test@test.com' })
+    expect(res.data.updateUserProfile.firstName).toBe('Bilbo')
   })
 })
+
+//TODO: test token and input validation

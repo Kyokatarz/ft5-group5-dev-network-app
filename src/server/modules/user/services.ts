@@ -33,7 +33,7 @@ export const signupUser = async (
       password: hashedPassword,
     })
     await user.save()
-    return { email } //TODO: fix when we have jwt
+    return { id: user.id, email } //TODO: fix when we have jwt
   } catch (err) {
     errorHandler(err)
   }
@@ -42,7 +42,7 @@ export const signupUser = async (
 export const loginUser = async (
   email: string,
   password: string
-): Promise<UserDocument> => {
+): Promise<Partial<UserDocument>> => {
   try {
     const user = await User.findOne({ email })
     if (!user) {
@@ -50,7 +50,7 @@ export const loginUser = async (
     }
     const match = await bcrypt.compare(password, user.password)
     if (!match) throw CREDENTIAL_ERROR
-    return user //TODO: fix when we have jwt
+    return { id: user.id, email } //TODO: fix when we have jwt
   } catch (err) {
     errorHandler(err)
   }

@@ -19,6 +19,7 @@ export const errorHandler = (err: string) => {
       throw new NotFoundError()
 
     default:
+      console.log(err)
       throw new InternalServerError()
   }
 }
