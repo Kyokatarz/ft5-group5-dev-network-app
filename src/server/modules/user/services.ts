@@ -4,9 +4,11 @@ import {
   errorHandler,
   IDENTIFICATION_DUPLICATED,
   CREDENTIAL_ERROR,
+  NOT_FOUND_ERROR,
 } from '../../helpers'
-import { UserDocument } from '../../models/User'
-import User from '../../models/User'
+import User, { UserDocument } from '../../models/User'
+import Post, { PostDocument } from '../../models/Post'
+import * as yupSchemas from './yupSchemas/yupSchemas'
 
 export const getUserById = async (userId: string): Promise<UserDocument> => {
   return await User.findById(userId).exec()
@@ -21,6 +23,14 @@ export const signupUser = async (
   password: string
 ): Promise<Partial<UserDocument>> => {
   try {
+    await yupSchemas.yupUserInfo.validate(
+      {
+        email,
+        password,
+      },
+      { abortEarly: false }
+    )
+
     const userExists = await User.findOne({ email })
     if (userExists) {
       throw IDENTIFICATION_DUPLICATED
@@ -33,7 +43,7 @@ export const signupUser = async (
       password: hashedPassword,
     })
     await user.save()
-    return { email, password }
+    return { id: user.id, email } //TODO: fix when we have jwt
   } catch (err) {
     errorHandler(err)
   }
@@ -42,7 +52,7 @@ export const signupUser = async (
 export const loginUser = async (
   email: string,
   password: string
-): Promise<UserDocument> => {
+): Promise<Partial<UserDocument>> => {
   try {
     const user = await User.findOne({ email })
     if (!user) {
@@ -50,7 +60,7 @@ export const loginUser = async (
     }
     const match = await bcrypt.compare(password, user.password)
     if (!match) throw CREDENTIAL_ERROR
-    return user //TODO: fix when we have jwt
+    return { id: user.id, email } //TODO: fix when we have jwt
   } catch (err) {
     errorHandler(err)
   }
@@ -61,16 +71,37 @@ export const updateUserProfile = async (
   update: Partial<UserDocument>
 ): Promise<UserDocument> => {
   try {
+    const {
+      firstName,
+      lastName,
+      email,
+      image,
+      employmentStatus,
+      company,
+    } = update
+
+    await yupSchemas.yupUserUpdate.validate(
+      {
+        firstName,
+        lastName,
+        email,
+        image,
+        employmentStatus,
+        company,
+      },
+      { abortEarly: false }
+    )
+
     const user = await User.findById(userId).select('-password')
     if (!user) {
       throw CREDENTIAL_ERROR
     }
-    if (update.firstName) user.firstName = update.firstName
-    if (update.lastName) user.lastName = update.lastName
-    if (update.email) user.email = update.email
-    if (update.image) user.image = update.image
-    if (update.employmentStatus) user.employmentStatus = update.employmentStatus
-    if (update.company) user.company = update.company
+    if (firstName) user.firstName = firstName
+    if (lastName) user.lastName = lastName
+    if (email) user.email = email
+    if (image) user.image = image
+    if (employmentStatus) user.employmentStatus = employmentStatus
+    if (company) user.company = company
     return user.save()
   } catch (err) {
     errorHandler(err)
@@ -81,18 +112,64 @@ export const forgotPasswordRequest = async (email: string) => {
   return
 }
 
-export const createUserPost = async () => {
+export const userCreatePost = async (
+  userId: string,
+  postContent: string
+): Promise<PostDocument> => {
+  try {
+    const user = await User.findById(userId)
+    if (!user) {
+      throw NOT_FOUND_ERROR
+    }
+
+    const post = new Post({
+      content: postContent,
+      date: new Date(),
+      onModel: 'user',
+    })
+
+    const userPosts = user.posts
+    userPosts.push(post)
+
+    await user.save()
+    await post.save()
+    return post
+  } catch (err) {
+    errorHandler(err)
+  }
+}
+
+export const userDeletePost = async (
+  userId: string,
+  postId: string
+): Promise<PostDocument> => {
+  try {
+    const user = await User.findById(userId)
+    if (!user) {
+      throw NOT_FOUND_ERROR
+    }
+
+    const post = await Post.findById(postId)
+    if (!post) {
+      throw NOT_FOUND_ERROR
+    }
+
+    //make sure the posts are on the right order
+    const userPosts = user.posts
+    userPosts.pop()
+
+    await user.save()
+    await post.save()
+    return post
+  } catch (err) {
+    errorHandler(err)
+  }
+}
+
+export const userCreateComment = async () => {
   return
 }
 
-export const deleteUserPost = async () => {
-  return
-}
-
-export const createUserComment = async () => {
-  return
-}
-
-export const deleteUserComment = async () => {
+export const userDeleteComment = async () => {
   return
 }

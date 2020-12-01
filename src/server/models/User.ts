@@ -2,7 +2,7 @@ import mongoose, { Document, Model, Schema } from 'mongoose'
 
 import { PostDocument } from './Post'
 
-enum EmploymentStatus {
+export enum EmploymentStatus {
   employed = 'EMPLOYED',
   openToWork = 'OPEN_TO_WORK',
   Freelancer = 'FREELANCER',
@@ -28,7 +28,7 @@ const userSchema = new Schema({
   image: String,
   employmentStatus: {
     type: String,
-    enum: ['EMPLOYED', 'OPEN_TO_WORK', 'FREELANCER'], // enum: Object.values(EmploymentStatus)
+    enum: Object.values(EmploymentStatus), //['EMPLOYED', 'OPEN_TO_WORK', 'FREELANCER']
   },
   company: String,
   posts: [

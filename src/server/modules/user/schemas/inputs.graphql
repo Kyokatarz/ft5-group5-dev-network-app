@@ -13,7 +13,7 @@ input UserUpdateProfileInput {
   firstName: String
   lastName: String
   image: String
-  # employmentStatus: EmploymentStatus
+  employmentStatus: EmploymentStatus
   company: String
 }
 
