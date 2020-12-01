@@ -94,6 +94,18 @@ export class InternalServerError extends CustomError {
   }
 }
 
+export class YupValidationError extends CustomError {
+  statusCode = 401
+
+  constructor(readonly message: string) {
+    super(message)
+    Object.setPrototypeOf(this, BadRequestError.prototype)
+  }
+
+  serialiseErrors(): SerialiseErrorsType {
+    return [{ message: this.message }]
+  }
+}
 //TODO: add request validation error class
 /** then we could use it like this:
  * serialiseErrors() {

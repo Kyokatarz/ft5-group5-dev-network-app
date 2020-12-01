@@ -14,6 +14,7 @@ describe("Testing Company's GraphQL", () => {
   afterEach(async () => {
     await dbHelper.clearDatabase()
   })
+
   afterAll(async () => {
     await dbHelper.closeDatabase()
   })
@@ -43,7 +44,19 @@ describe("Testing Company's GraphQL", () => {
     })
     expect(resp.errors[0].message).toBe('This email has already existed')
   })
+  it('should not create a company with wrong validation', async () => {
+    const res1 = await mutate({
+      mutation: requestStrings.createMockCompany({ email: 'notAnEmail' }),
+    })
+    expect(res1.errors[0].message).toBe('email must be a valid email')
 
+    const res2 = await mutate({
+      mutation: requestStrings.createMockCompany({ password: '123' }),
+    })
+    expect(res2.errors[0].message).toBe(
+      'password must be at least 8 characters'
+    )
+  })
   it('should get all companies', async () => {
     await mutate({
       mutation: requestStrings.createMockCompany({
@@ -97,11 +110,11 @@ describe("Testing Company's GraphQL", () => {
     })
     const companyId = res1.data.createNewCompany.id
 
-    console.log(res1.data.createNewCompany)
     const updateCompanyMutation = requestStrings.updateCompanyInfo(companyId, {
       companyName: 'New Name',
     })
 
+    console.log('res2:', updateCompanyMutation)
     const res2 = await mutate({
       mutation: updateCompanyMutation,
     })
@@ -148,5 +161,30 @@ describe("Testing Company's GraphQL", () => {
     const expected = [companyId]
     const likeArray = res3.data.companyLikesPost.likes
     expect(likeArray).toEqual(expect.arrayContaining(expected))
+  })
+
+  it('should let company unlike a post', async () => {
+    const res1 = await mutate({
+      mutation: requestStrings.createMockCompany(),
+    })
+    const companyId = res1.data.createNewCompany.id
+
+    const res2 = await mutate({
+      mutation: requestStrings.companyCreatePost(
+        companyId,
+        'This is a test post'
+      ),
+    })
+    expect(res2.data.companyCreatePost.content).toBe('This is a test post')
+    const postId = res2.data.companyCreatePost.id
+    await mutate({
+      mutation: requestStrings.companyLikesPost(companyId, postId),
+    })
+    const res3 = await mutate({
+      mutation: requestStrings.companyLikesPost(companyId, postId),
+    })
+
+    const likeArray = res3.data.companyLikesPost.likes
+    expect(likeArray.length).toBe(0)
   })
 })

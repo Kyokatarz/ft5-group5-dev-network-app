@@ -16,5 +16,9 @@ export const resolvers: GraphQLResolver = {
       userServices.loginUser(_args.user.email, _args.user.password),
     updateUserProfile: (_parents, _args, _context) =>
       userServices.updateUserProfile(_args.userId, _args.update),
+    userCreatePost: (_parents, _args, _context) =>
+      userServices.userCreatePost(_args.userId, _args.postContent),
+    userDeletePost: (_parents, _args, _context) =>
+      userServices.userDeletePost(_args.userId, _args.postId),
   },
 }

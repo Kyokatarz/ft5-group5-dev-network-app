@@ -20,5 +20,7 @@ export const resolvers: GraphQLResolver = {
       ),
     companyCreatePost: (_parent, _args, _context) =>
       companyServices.companyCreatePost(_args.companyId, _args.postContent),
+    companyLikesPost: (_parent, _args, _context) =>
+      companyServices.CompanyLikesPost(_args.companyId, _args.postId),
   },
 }

@@ -25,8 +25,29 @@ describe('Testing user services', () => {
     const res = await mutate({
       mutation: signupUserMutation,
     })
-    // console.log(res)
     expect(res.data.signupUser).toHaveProperty('email')
+  })
+
+  it('should not signup user with invalid email', async () => {
+    const signupUserMutation = requestStrings.createMockUser({
+      email: 'wrongemail',
+    })
+    const res = await mutate({
+      mutation: signupUserMutation,
+    })
+    expect(res.errors[0].message).toBe('email must be a valid email')
+  })
+
+  //goes back to default if a password is an empty string (e.g. '')
+  it('should not signup user with invalid password', async () => {
+    const signupUserMutation = requestStrings.createMockUser({
+      email: 'test@test.com',
+      password: 'test',
+    })
+    const res = await mutate({
+      mutation: signupUserMutation,
+    })
+    expect(res.errors[0].message).toBe('password must be at least 8 characters')
   })
 
   it('should successfully login user', async () => {
@@ -82,7 +103,7 @@ describe('Testing user services', () => {
     const mockUser = await mutate({
       mutation: requestStrings.createMockUser(),
     })
-    console.log(mockUser.data.signupUser)
+    // console.log(mockUser.data.signupUser)
     const updateUserProfileMutation = requestStrings.updateMockUserProfile(
       mockUser.data.signupUser.id,
       {
@@ -90,13 +111,29 @@ describe('Testing user services', () => {
         lastName: 'Baggins',
       }
     )
-    console.log(updateUserProfileMutation)
     const res = await mutate({
       mutation: updateUserProfileMutation,
     })
-    console.log(res)
     expect(res.data.updateUserProfile.firstName).toBe('Bilbo')
+    expect(res.data.updateUserProfile.lastName).toBe('Baggins')
+  })
+
+  it('should successfully create a new user post', async () => {
+    //signup a user with default credentials
+    const mockUser = await mutate({
+      mutation: requestStrings.createMockUser(),
+    })
+
+    const userCreatePostMutation = requestStrings.userCreateMockPost(
+      mockUser.data.signupUser.id,
+      'New post'
+    )
+    const res = await mutate({
+      mutation: userCreatePostMutation,
+    })
+    console.log(res)
+    expect(res.data.userCreatePost.content).toBe('New post')
   })
 })
 
-//TODO: test token and input validation
+//TODO: test token

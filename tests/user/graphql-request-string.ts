@@ -75,16 +75,19 @@ export const updateMockUserProfile = (
     company,
   } = update
 
+  let string = ''
+  if (email) string += `email: "${email}",`
+  if (firstName) string += `firstName: "${firstName}",`
+  if (lastName) string += `lastName: "${lastName}",`
+  if (image) string += `image: "${image}",`
+  if (company) string += `company: "${company}",`
+  console.log('testString:', string)
   return gql`
     mutation {
       updateUserProfile (
         userId: "${userId}",
-        update: {
-          email: "${email}",
-          firstName: "${firstName}",
-          lastName: "${lastName}",
-          image: "${image}",
-          company: "${company}"
+        update: { 
+          ${string}
         }){
           id,
           email,
@@ -94,6 +97,20 @@ export const updateMockUserProfile = (
           # employmentStatus,
           company
         }
+    }
+  `
+}
+
+export const userCreateMockPost = (userId: string, postContent: string) => {
+  return gql`
+    mutation{
+      userCreatePost(userId: "${userId}", postContent: "${postContent}"){
+        id,
+        content,
+        likes,
+        date,
+        comments{ content },
+      }
     }
   `
 }

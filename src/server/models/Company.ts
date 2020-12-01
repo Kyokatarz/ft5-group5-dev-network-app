@@ -24,7 +24,8 @@ export const companySchema = new Schema({
   address: String,
   posts: [
     {
-      id: Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
+      ref: 'Post',
     },
   ],
 })
