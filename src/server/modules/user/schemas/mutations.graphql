@@ -1,13 +1,13 @@
 type Mutation {
-  signupUser(user: UserSignupInput): String #check return type: User!
-  loginUser(user: UserLoginInput): String
+  signupUser(user: UserSignupInput): User!
+  loginUser(user: UserLoginInput): User!
   logoutUser: String
-  updateUserProfile(id: String, user: UserUpdateProfileInput): String
+  updateUserProfile(userId: String, update: UserUpdateProfileInput): User!
   forgotPassword(email: String!): String
-  # createPost(id: String, post: Post): String #check return type: Post!
-  createComment(id: String, commentObj: UserCreateCommentInput): String # not sure about that cause we need postId as well
+  userCreatePost(userId: String, postContent: String): Post!
+  userCreateComment(id: String, commentObj: UserCreateCommentInput): String # not sure about that cause we need postId as well
   connectToAnotherUser: String # todo
-  deletePost: String # todo
-  deleteComment: String # todo
-  discinnectFromAnotherUser: String # todo
+  userDeletePost: String # todo
+  userDeleteComment: String # todo
+  disconnectFromAnotherUser: String # todo
 }
