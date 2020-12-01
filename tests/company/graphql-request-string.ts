@@ -7,11 +7,11 @@ type CompanyOverride = {
 }
 
 type newCompanyDetails = {
-  companyName: string
-  contactNumber: string
-  companyDetails: string
-  address: string
-  website: string
+  companyName?: string
+  contactNumber?: string
+  companyDetails?: string
+  address?: string
+  website?: string
 }
 
 export const createMockCompany = (override?: CompanyOverride): string => {

@@ -1,6 +1,3 @@
-#import './inputs.graphql'
-#import './types.graphql'
-
 type Query {
   getUserById(id: String): User
   getAllUsers: [User]

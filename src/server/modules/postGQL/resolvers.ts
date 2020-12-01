@@ -1,5 +1,5 @@
 export const resolvers = {
   Query: {
-    sayHello: () => 'Hello',
+    testHello: () => 'Hello',
   },
 }

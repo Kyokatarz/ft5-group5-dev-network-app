@@ -1,4 +1,4 @@
-#import Post from '../../post/index.graphql'
+#import Post from '../../postGQL/schemas/types.graphql'
 
 #Types
 type Company {

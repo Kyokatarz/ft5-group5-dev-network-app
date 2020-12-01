@@ -1,3 +1,0 @@
-type Mutation {
-  postHello(name: String): String
-}
