@@ -11,7 +11,7 @@ export const CREDENTIAL_ERROR = 'CREDENTIAL_ERROR'
 export const NOT_FOUND_ERROR = 'NOT_FOUND_ERROR'
 export const VALIDATION_ERROR = 'ValidationError'
 
-export const errorHandler = (err: any) => {
+export const errorHandler = (err: any): void => {
   if (err.name === VALIDATION_ERROR) {
     throw new YupValidationError(err.errors.join(', '))
   }
@@ -23,7 +23,6 @@ export const errorHandler = (err: any) => {
       throw new CredentialError()
     case NOT_FOUND_ERROR:
       throw new NotFoundError()
-
     default:
       console.log(err)
       throw new InternalServerError()

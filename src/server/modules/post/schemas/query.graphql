@@ -1,0 +1,4 @@
+type Query {
+  getPostById(postId: String): Post
+  sayHello(name: String): String
+}

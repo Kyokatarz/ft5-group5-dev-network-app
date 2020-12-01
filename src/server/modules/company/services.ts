@@ -7,9 +7,14 @@ import {
   IDENTIFICATION_DUPLICATED,
   NOT_FOUND_ERROR,
   errorHandler,
+  BadRequestError,
 } from '../../helpers'
 import Post, { PostDocument } from '../../models/Post'
 import * as yupSchemas from './yupSchemas/yupSchemas'
+
+type Token = {
+  token: string
+}
 
 /*===========+
  |UNPROTECTED|
@@ -57,7 +62,9 @@ export const createNewCompany = async (
   }
 }
 //Sign in as a company
-export const signInCompany = async (companyInfo: CompanyDocument) => {
+export const signInCompany = async (
+  companyInfo: CompanyDocument
+): Promise<Token> => {
   const { email, password } = companyInfo
   const company = await Company.findOne({ email })
   if (!company) throw CREDENTIAL_ERROR
@@ -138,7 +145,10 @@ export const updateCompanyInfo = async (
 }
 
 //Company likes posts
-export const CompanyLikesPost = async (companyId: string, postId: string) => {
+export const CompanyLikesPost = async (
+  companyId: string,
+  postId: string
+): Promise<PostDocument> => {
   try {
     const company = await Company.findById(companyId)
     if (!company) throw NOT_FOUND_ERROR
@@ -157,6 +167,28 @@ export const CompanyLikesPost = async (companyId: string, postId: string) => {
       post.likes.push(companyId)
       return await post.save()
     }
+  } catch (err) {
+    errorHandler(err)
+  }
+}
+
+export const companyDeletesPost = async (
+  companyId: string,
+  postId: string
+): Promise<PostDocument> => {
+  try {
+    const company = await Company.findById(companyId)
+    if (!company) throw NOT_FOUND_ERROR
+
+    const companyHasPost = company.posts.find(
+      (postObj) => postObj.id.toString() === postId
+    )
+    if (!companyHasPost) throw new BadRequestError('Company did not post it')
+
+    const post = await Post.findByIdAndDelete(postId)
+    if (!post) throw NOT_FOUND_ERROR
+
+    return post
   } catch (err) {
     errorHandler(err)
   }

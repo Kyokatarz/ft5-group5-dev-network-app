@@ -1,6 +1,3 @@
-#import './types.graphql'
-#import './inputs.graphql'
-
 #Mutation
 type Mutation {
   createNewCompany(companyInfo: CompanyInfo): Company
@@ -11,4 +8,5 @@ type Mutation {
   ): Company
   companyCreatePost(companyId: String, postContent: String): Post!
   companyLikesPost(companyId: String, postId: String): Post!
+  companyDeletesPost(companyId: String, postId: String): Post!
 }

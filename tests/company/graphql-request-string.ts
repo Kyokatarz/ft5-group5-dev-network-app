@@ -6,6 +6,14 @@ type CompanyOverride = {
   companyName?: string
 }
 
+type newCompanyDetails = {
+  companyName: string
+  contactNumber: string
+  companyDetails: string
+  address: string
+  website: string
+}
+
 export const createMockCompany = (override?: CompanyOverride): string => {
   const email = override?.email || 'mockEmail@email.com'
   const password = override?.password || 'mockPassword'
@@ -56,7 +64,7 @@ export const signInCompany = (credentials: {
 
 export const updateCompanyInfo = (
   companyId: string,
-  newCompanyDetails: any
+  newCompanyDetails: newCompanyDetails
 ): string => {
   const {
     companyName,
@@ -90,7 +98,10 @@ export const updateCompanyInfo = (
   `
 }
 
-export const companyCreatePost = (companyId: string, postContent: string) => {
+export const companyCreatePost = (
+  companyId: string,
+  postContent: string
+): string => {
   return gql`
     mutation{
       companyCreatePost(companyId: "${companyId}", postContent: "${postContent}"){
@@ -104,7 +115,7 @@ export const companyCreatePost = (companyId: string, postContent: string) => {
   `
 }
 
-export const companyLikesPost = (companyId: string, postId: string) => {
+export const companyLikesPost = (companyId: string, postId: string): string => {
   return gql`
     mutation{
       companyLikesPost(companyId: "${companyId}", postId: "${postId}"){

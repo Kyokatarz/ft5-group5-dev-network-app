@@ -1,22 +1,3 @@
-type Post {
-  id: String!
-  content: String!
-  date: String!
-  likes: [ID]
-  comments: [Comment]
-}
-
-type LikedUser {
-  firstName: String!
-  lastName: String!
-}
-
-type Comment {
-  userId: String!
-  content: String!
-  likes: [String]
-}
-
-type ID {
-  id: String
-}
+#import Query from './schemas/query.graphql'
+#import Type from './schemas/types.graphql'
+#import Mutation from './schemas/mutation.graphql'
