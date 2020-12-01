@@ -1,3 +1,4 @@
 type Query {
   testHello: String
+  getPostById(postId: String): Post!
 }

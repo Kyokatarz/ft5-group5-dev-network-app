@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-type CompanyOverride = {
+export type CompanyOverride = {
   email?: string
   password?: string
   companyName?: string
@@ -10,11 +10,11 @@ type newCompanyDetails = {
   companyName?: string
   contactNumber?: string
   companyDetails?: string
-  address?: string
-  website?: string
+  address: string
+  website: string
 }
 
-export const createMockCompany = (override?: CompanyOverride): string => {
+export const createMockCompany = (override?: CompanyOverride) => {
   const email = override?.email || 'mockEmail@email.com'
   const password = override?.password || 'mockPassword'
   const companyName = override?.companyName || 'Kyo Company'
