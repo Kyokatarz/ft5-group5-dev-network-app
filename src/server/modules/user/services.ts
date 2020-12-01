@@ -71,6 +71,13 @@ export const updateUserProfile = async (
     if (update.image) user.image = update.image
     if (update.employmentStatus) user.employmentStatus = update.employmentStatus
     if (update.company) user.company = update.company
+    // user.firstName = update.firstName || user.firstName
+    // user.lastName = update.lastName || user.lastName
+    // user.email = update.email || user.email
+    // user.image = update.image || user.image
+    // user.employmentStatus = update.employmentStatus || user.employmentStatus
+    // user.company = update.company || user.company
+    // console.log(user)
     return user.save()
   } catch (err) {
     errorHandler(err)
