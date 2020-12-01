@@ -1,5 +1,7 @@
 import { gql } from 'graphql-request'
 
+import { EmploymentStatus } from '../../src/server/models/User'
+
 type UserOverride = {
   email?: string
   password?: string
@@ -10,7 +12,7 @@ type UserProfile = {
   firstName?: string
   lastName?: string
   image?: string
-  // employmentStatus?: string
+  employmentStatus?: EmploymentStatus
   company?: string
 }
 
@@ -71,7 +73,7 @@ export const updateMockUserProfile = (
     firstName,
     lastName,
     image,
-    // employmentStatus,
+    employmentStatus,
     company,
   } = update
 
@@ -80,6 +82,7 @@ export const updateMockUserProfile = (
   if (firstName) string += `firstName: "${firstName}",`
   if (lastName) string += `lastName: "${lastName}",`
   if (image) string += `image: "${image}",`
+  if (employmentStatus) string += `image: "${employmentStatus}",`
   if (company) string += `company: "${company}",`
   console.log('testString:', string)
   return gql`
@@ -94,7 +97,7 @@ export const updateMockUserProfile = (
           firstName,
           lastName,
           image,
-          # employmentStatus,
+          employmentStatus,
           company
         }
     }

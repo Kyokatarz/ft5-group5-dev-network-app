@@ -76,7 +76,7 @@ export const updateUserProfile = async (
       lastName,
       email,
       image,
-      // employmentStatus,
+      employmentStatus,
       company,
     } = update
 
@@ -86,7 +86,7 @@ export const updateUserProfile = async (
         lastName,
         email,
         image,
-        // employmentStatus,
+        employmentStatus,
         company,
       },
       { abortEarly: false }
@@ -100,7 +100,7 @@ export const updateUserProfile = async (
     if (lastName) user.lastName = lastName
     if (email) user.email = email
     if (image) user.image = image
-    //if (employmentStatus) user.employmentStatus = employmentStatus
+    if (employmentStatus) user.employmentStatus = employmentStatus
     if (company) user.company = company
     return user.save()
   } catch (err) {

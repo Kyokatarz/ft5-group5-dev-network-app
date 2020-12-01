@@ -2,7 +2,7 @@ import mongoose, { Document, Model, Schema } from 'mongoose'
 
 import { PostDocument } from './Post'
 
-enum EmploymentStatus {
+export enum EmploymentStatus {
   employed = 'EMPLOYED',
   openToWork = 'OPEN_TO_WORK',
   Freelancer = 'FREELANCER',
