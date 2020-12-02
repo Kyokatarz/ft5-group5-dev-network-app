@@ -11,9 +11,9 @@ export const resolvers: GraphQLResolver = {
 
   Mutation: {
     signupUser: (_parents, _args, _context) =>
-      userServices.signupUser(_args.user.email, _args.user.password),
+      userServices.signupUser(_args.user.email, _args.user.password, _context),
     loginUser: (_parent, _args, _context) =>
-      userServices.loginUser(_args.user.email, _args.user.password),
+      userServices.loginUser(_args.user.email, _args.user.password, _context),
     updateUserProfile: (_parents, _args, _context) =>
       userServices.updateUserProfile(_args.userId, _args.update),
     userCreatePost: (_parents, _args, _context) =>

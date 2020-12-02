@@ -12,9 +12,9 @@ export const resolvers: GraphQLResolver = {
   Mutation: {
     //Unprotected
     createNewCompany: (_parents, _args, _context) =>
-      companyServices.createNewCompany(_args.companyInfo),
+      companyServices.createNewCompany(_args.companyInfo, _context),
     signInCompany: (_parent, _args, _context) =>
-      companyServices.signInCompany(_args.credentials),
+      companyServices.signInCompany(_args.credentials, _context),
     updateCompanyInfo: (_parent, _args, _context) =>
       companyServices.updateCompanyInfo(
         _args.companyId,

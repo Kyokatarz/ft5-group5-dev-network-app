@@ -2,10 +2,12 @@ import bcrypt from 'bcryptjs'
 
 import {
   errorHandler,
+  setCookie,
   IDENTIFICATION_DUPLICATED,
   CREDENTIAL_ERROR,
   NOT_FOUND_ERROR,
 } from '../../helpers'
+import { GraphQLContext } from '../../types'
 import User, { UserDocument } from '../../models/User'
 import Post, { PostDocument } from '../../models/Post'
 import * as yupSchemas from './yupSchemas/yupSchemas'
@@ -20,7 +22,8 @@ export const getAllUsers = async (): Promise<UserDocument[]> => {
 
 export const signupUser = async (
   email: string,
-  password: string
+  password: string,
+  context: GraphQLContext
 ): Promise<Partial<UserDocument>> => {
   try {
     await yupSchemas.yupUserInfo.validate(
@@ -43,7 +46,10 @@ export const signupUser = async (
       password: hashedPassword,
     })
     await user.save()
-    return { id: user.id, email } //TODO: fix when we have jwt
+    console.log(context)
+    await setCookie(context, user.id)
+
+    return { id: user.id, email } //maybe we can only return 'Success'
   } catch (err) {
     errorHandler(err)
   }
@@ -51,7 +57,8 @@ export const signupUser = async (
 
 export const loginUser = async (
   email: string,
-  password: string
+  password: string,
+  context: GraphQLContext
 ): Promise<Partial<UserDocument>> => {
   try {
     const user = await User.findOne({ email })
@@ -60,7 +67,10 @@ export const loginUser = async (
     }
     const match = await bcrypt.compare(password, user.password)
     if (!match) throw CREDENTIAL_ERROR
-    return { id: user.id, email } //TODO: fix when we have jwt
+
+    await setCookie(context, user.id)
+
+    return { id: user.id, email } //maybe we can only return 'Success'
   } catch (err) {
     errorHandler(err)
   }

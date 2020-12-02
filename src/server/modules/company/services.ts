@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
 
+// import { Token } from '../../types'
 import { CompanyDocument } from '../../models/Company'
 import Company from '../../models/Company'
 import {
@@ -8,13 +9,11 @@ import {
   NOT_FOUND_ERROR,
   errorHandler,
   BadRequestError,
+  setCookie,
 } from '../../helpers'
+import { GraphQLContext } from '../../types'
 import Post, { PostDocument } from '../../models/Post'
 import * as yupSchemas from './yupSchemas/yupSchemas'
-
-type Token = {
-  token: string
-}
 
 /*===========+
  |UNPROTECTED|
@@ -26,7 +25,8 @@ export const getAllCompanies = async () => {
 
 //Create a new company account
 export const createNewCompany = async (
-  companyInfo: CompanyDocument
+  companyInfo: CompanyDocument,
+  context: GraphQLContext
 ): Promise<Partial<CompanyDocument>> => {
   const { email, password, companyName } = companyInfo
 
@@ -55,6 +55,7 @@ export const createNewCompany = async (
     })
 
     await company.save()
+    await setCookie(context, company.id)
 
     return { id: company.id, email, companyName }
   } catch (err) {
@@ -63,8 +64,9 @@ export const createNewCompany = async (
 }
 //Sign in as a company
 export const signInCompany = async (
-  companyInfo: CompanyDocument
-): Promise<Token> => {
+  companyInfo: CompanyDocument,
+  context: GraphQLContext
+): Promise<Partial<CompanyDocument>> => {
   const { email, password } = companyInfo
   const company = await Company.findOne({ email })
   if (!company) throw CREDENTIAL_ERROR
@@ -73,9 +75,9 @@ export const signInCompany = async (
   const match = await bcrypt.compare(password, hashedPassword)
   if (!match) throw CREDENTIAL_ERROR
 
-  return {
-    token: '//TODO:Token goes here',
-  }
+  await setCookie(context, company.id)
+
+  return { id: company.id, email }
 }
 
 /*=========+
