@@ -3,8 +3,8 @@ import mongoose from 'mongoose'
 const MONGO_URI =
   process.env.NODE_ENV === 'production'
     ? process.env.MONGO_URI
-    : // : process.env.MONGO_LOCAL_URI
-      process.env.MONGO_CLUSTER_URI
+    : process.env.MONGO_LOCAL_URI
+// : process.env.MONGO_CLUSTER_URI
 
 export const connectDb = async (): Promise<void> => {
   if (!process.env.JWT_KEY) {

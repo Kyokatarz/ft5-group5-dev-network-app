@@ -24,9 +24,13 @@ export const combineSchemas = (): GraphQLSchema => {
   return mergeSchemas({ schemas })
 }
 
+const context = (globalContext: any) => {
+  return globalContext
+}
+
 export const startServer = () => {
   const rootSchema = combineSchemas()
   connectDb()
-  const server = new ApolloServer({ schema: rootSchema })
+  const server = new ApolloServer({ schema: rootSchema, context: context })
   return server.createHandler({ path: '/api/v1/graphql' })
 }
