@@ -47,7 +47,7 @@ export const signupUser = async (
     })
     await user.save()
     console.log(context)
-    await setCookie(context, user.id)
+    await setCookie(context, { id: user.id })
 
     return { id: user.id, email } //maybe we can only return 'Success'
   } catch (err) {

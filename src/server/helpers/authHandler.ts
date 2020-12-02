@@ -4,8 +4,12 @@ import { NextApiRequestCookies } from 'next/dist/next-server/server/api-utils'
 
 import { GraphQLContext } from '../types'
 
+type Payload = {
+  [key: string]: any
+}
+
 /** JWT_KEY is checked before connecting to DB  */
-const generateJWT = (payload: string) => {
+const generateJWT = (payload: Payload) => {
   const token = jwt.sign(payload, process.env.JWT_KEY)
   return token
 }
@@ -24,7 +28,7 @@ export const getPayloadFromCookie = (cookie: NextApiRequestCookies) => {
   }
 }
 
-export const setCookie = async (context: GraphQLContext, payload?: string) => {
+export const setCookie = async (context: GraphQLContext, payload?: Payload) => {
   if (payload) {
     const token = generateJWT(payload)
     context.res.setHeader(
