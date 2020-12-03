@@ -6,6 +6,8 @@ import {
   IDENTIFICATION_DUPLICATED,
   CREDENTIAL_ERROR,
   NOT_FOUND_ERROR,
+  NO_TOKEN,
+  getPayloadFromJwt,
 } from '../../helpers'
 import { GraphQLContext } from '../../types'
 import User, { UserDocument } from '../../models/User'
@@ -46,7 +48,6 @@ export const signupUser = async (
       password: hashedPassword,
     })
     await user.save()
-    console.log(context)
     await setCookie(context, { id: user.id })
 
     return { id: user.id, email } //maybe we can only return 'Success'
@@ -77,7 +78,7 @@ export const loginUser = async (
 }
 
 export const updateUserProfile = async (
-  userId: string,
+  _context: GraphQLContext,
   update: Partial<UserDocument>
 ): Promise<UserDocument> => {
   try {
@@ -89,6 +90,16 @@ export const updateUserProfile = async (
       employmentStatus,
       company,
     } = update
+
+    const token = _context.cookie?.token
+
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    console.log('PAYLOAD:', payload)
+    const userId = payload.id
 
     await yupSchemas.yupUserUpdate.validate(
       {
@@ -123,10 +134,18 @@ export const forgotPasswordRequest = async (email: string) => {
 }
 
 export const userCreatePost = async (
-  userId: string,
+  _context: GraphQLContext,
   postContent: string
 ): Promise<PostDocument> => {
   try {
+    const token = _context.cookie?.token
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    const userId = payload.id
+
     const user = await User.findById(userId)
     if (!user) {
       throw NOT_FOUND_ERROR
@@ -150,10 +169,18 @@ export const userCreatePost = async (
 }
 
 export const userDeletePost = async (
-  userId: string,
+  _context: GraphQLContext,
   postId: string
 ): Promise<PostDocument> => {
   try {
+    const token = _context.cookie?.token
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    const userId = payload.id
+
     const user = await User.findById(userId)
     if (!user) {
       throw NOT_FOUND_ERROR

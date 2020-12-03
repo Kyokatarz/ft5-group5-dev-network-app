@@ -5,8 +5,10 @@ import { importSchema } from 'graphql-import'
 import { makeExecutableSchema, mergeSchemas } from 'graphql-tools'
 import { ApolloServer } from 'apollo-server-micro'
 import dotenv from 'dotenv'
+import cookie from 'cookie'
 
 import { connectDb } from './connectDb'
+import { GraphQLContext } from './types'
 
 dotenv.config()
 
@@ -24,8 +26,11 @@ export const combineSchemas = (): GraphQLSchema => {
   return mergeSchemas({ schemas })
 }
 
-const context = (globalContext: any) => {
-  return globalContext
+const context = (globalContext: GraphQLContext) => {
+  return {
+    ...globalContext,
+    cookie: cookie.parse(globalContext.req.headers.cookie || ''),
+  }
 }
 
 export const startServer = () => {

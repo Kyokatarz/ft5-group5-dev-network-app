@@ -1,12 +1,8 @@
 import jwt from 'jsonwebtoken'
 import { serialize } from 'cookie'
-import { NextApiRequestCookies } from 'next/dist/next-server/server/api-utils'
 
-import { GraphQLContext } from '../types'
-
-type Payload = {
-  [key: string]: any
-}
+import { GraphQLContext, Payload } from '../types'
+import { errorHandler } from './errorHandler'
 
 /** JWT_KEY is checked before connecting to DB  */
 const generateJWT = (payload: Payload) => {
@@ -14,17 +10,11 @@ const generateJWT = (payload: Payload) => {
   return token
 }
 
-export const getPayloadFromCookie = (cookie: NextApiRequestCookies) => {
-  if (Object.keys(cookie).length === 0) {
-    console.log('no cookie')
-    return undefined
-  }
+export const getPayloadFromJwt = (token: string) => {
   try {
-    const payload = jwt.verify(cookie.token, process.env.JWT_KEY)
-    return { loggedIn: true, payload }
+    return jwt.verify(token, process.env.JWT_KEY) as Payload
   } catch (err) {
-    console.log(err)
-    return { loggedIn: false }
+    errorHandler(err)
   }
 }
 

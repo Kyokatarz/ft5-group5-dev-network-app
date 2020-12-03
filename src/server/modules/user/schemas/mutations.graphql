@@ -10,4 +10,5 @@ type Mutation {
   userDeletePost: String # todo
   userDeleteComment: String # todo
   disconnectFromAnotherUser: String # todo
+  testCookie: String
 }
