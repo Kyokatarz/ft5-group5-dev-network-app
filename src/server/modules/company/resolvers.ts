@@ -1,5 +1,5 @@
-import { GraphQLResolver } from '../../../types'
 import { CompanyDocument } from '../../models/Company'
+import { GraphQLResolver } from '../../types'
 import * as companyServices from './services'
 
 export const resolvers: GraphQLResolver = {

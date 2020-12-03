@@ -2,7 +2,7 @@ import cookie from 'cookie'
 
 import * as userServices from './services'
 import { UserDocument } from '../../models/User'
-import { GraphQLResolver } from '../../types'
+import { GraphQLContext, GraphQLResolver } from '../../types'
 
 export const resolvers: GraphQLResolver = {
   Query: {
@@ -19,13 +19,13 @@ export const resolvers: GraphQLResolver = {
       userServices.loginUser(_args.user.email, _args.user.password, _context),
 
     //Protected
-    updateUserProfile: (_, _args, _context) =>
+    updateUserProfile: (_, _args, _context: GraphQLContext) =>
       userServices.updateUserProfile(_context, _args.update),
-    userCreatePost: (_, _args, _context) =>
+    userCreatePost: (_, _args, _context: GraphQLContext) =>
       userServices.userCreatePost(_context, _args.postContent),
-    userDeletePost: (_, _args, _context) =>
+    userDeletePost: (_, _args, _context: GraphQLContext) =>
       userServices.userDeletePost(_context, _args.postId),
-    testCookie: (_, _args, _context) => {
+    testCookie: (_, _args, _context: GraphQLContext) => {
       console.log('Heare', _context.cookie)
     },
   },
