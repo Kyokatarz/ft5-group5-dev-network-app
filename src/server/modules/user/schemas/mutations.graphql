@@ -2,10 +2,10 @@ type Mutation {
   signupUser(user: UserSignupInput): User!
   loginUser(user: UserLoginInput): User!
   logoutUser: String
-  updateUserProfile(userId: String, update: UserUpdateProfileInput): User!
+  updateUserProfile(update: UserUpdateProfileInput): User!
   forgotPassword(email: String!): String
-  userCreatePost(userId: String, postContent: String): Post!
-  userCreateComment(id: String, commentObj: UserCreateCommentInput): String # not sure about that cause we need postId as well
+  userCreatePost(postContent: String): Post!
+  userCreateComment(commentObj: UserCreateCommentInput): String # not sure about that cause we need postId as well
   connectToAnotherUser: String # todo
   userDeletePost: String # todo
   userDeleteComment: String # todo

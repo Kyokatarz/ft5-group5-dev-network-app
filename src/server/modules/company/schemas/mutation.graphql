@@ -2,11 +2,8 @@
 type Mutation {
   createNewCompany(companyInfo: CompanyInfo): Company
   signInCompany(credentials: Credentials): Token
-  updateCompanyInfo(
-    companyId: String!
-    newCompanyDetails: newCompanyDetails!
-  ): Company
-  companyCreatePost(companyId: String, postContent: String): Post!
-  companyLikesPost(companyId: String, postId: String): Post!
-  companyDeletesPost(companyId: String, postId: String): Post!
+  updateCompanyInfo(newCompanyDetails: newCompanyDetails!): Company
+  companyCreatePost(postContent: String): Post!
+  companyLikesPost(postId: String): Post!
+  companyDeletesPost(postId: String): Post!
 }

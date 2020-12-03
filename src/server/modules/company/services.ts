@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs'
 
-// import { Token } from '../../types'
 import { CompanyDocument } from '../../models/Company'
 import Company from '../../models/Company'
 import {
@@ -10,6 +9,8 @@ import {
   errorHandler,
   BadRequestError,
   setCookie,
+  getPayloadFromJwt,
+  NO_TOKEN,
 } from '../../helpers'
 import { GraphQLContext } from '../../types'
 import Post, { PostDocument } from '../../models/Post'
@@ -55,7 +56,7 @@ export const createNewCompany = async (
     })
 
     await company.save()
-    await setCookie(context, company.id)
+    await setCookie(context, { id: company.id })
 
     return { id: company.id, email, companyName }
   } catch (err) {
@@ -75,7 +76,7 @@ export const signInCompany = async (
   const match = await bcrypt.compare(password, hashedPassword)
   if (!match) throw CREDENTIAL_ERROR
 
-  await setCookie(context, company.id)
+  await setCookie(context, { id: company.id })
 
   return { id: company.id, email }
 }
@@ -85,10 +86,20 @@ export const signInCompany = async (
  +=========*/
 //Create a new post
 export const companyCreatePost = async (
-  companyId: string,
+  _context: GraphQLContext,
   postContent: string
 ): Promise<PostDocument> => {
   try {
+    const token = _context.cookie?.token
+
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    console.log('PAYLOAD:', payload)
+    const companyId = payload.id
+
     const company = await Company.findById(companyId).exec()
     if (!company) throw NOT_FOUND_ERROR
 
@@ -112,10 +123,19 @@ export const companyCreatePost = async (
 
 //Update Company Info
 export const updateCompanyInfo = async (
-  companyId: string,
+  _context: GraphQLContext,
   newDetails: Partial<CompanyDocument>
 ): Promise<CompanyDocument> => {
   try {
+    const token = _context.cookie?.token
+
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    const companyId = payload.id
+
     const {
       companyName,
       contactNumber,
@@ -132,7 +152,7 @@ export const updateCompanyInfo = async (
       website,
     })
 
-    const company = await Company.findById(companyId)
+    const company = await Company.findById(companyId).select('-password').exec()
 
     if (companyName) company.companyName = companyName
     if (contactNumber) company.contactNumber = contactNumber
@@ -148,10 +168,18 @@ export const updateCompanyInfo = async (
 
 //Company likes posts
 export const CompanyLikesPost = async (
-  companyId: string,
+  _context: GraphQLContext,
   postId: string
 ): Promise<PostDocument> => {
   try {
+    const token = _context.cookie?.token
+
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    const companyId = payload.id
     const company = await Company.findById(companyId)
     if (!company) throw NOT_FOUND_ERROR
     const post = await Post.findById(postId)
@@ -161,7 +189,6 @@ export const CompanyLikesPost = async (
       (id) => id.toString() === companyId
     )
 
-    console.log(companyAlreadyLikedPost)
     if (companyAlreadyLikedPost) {
       post.likes = post.likes.filter((id) => id.toString() !== companyId)
       return await post.save()
@@ -175,10 +202,18 @@ export const CompanyLikesPost = async (
 }
 
 export const companyDeletesPost = async (
-  companyId: string,
+  _context: GraphQLContext,
   postId: string
 ): Promise<PostDocument> => {
   try {
+    const token = _context.cookie?.token
+
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    const companyId = payload.id
     const company = await Company.findById(companyId)
     if (!company) throw NOT_FOUND_ERROR
 
