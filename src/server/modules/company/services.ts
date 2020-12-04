@@ -57,7 +57,6 @@ export const createNewCompany = async (
 
     await company.save()
     await setCookie(context, { id: company.id })
-
     return { id: company.id, email, companyName }
   } catch (err) {
     errorHandler(err)
@@ -127,6 +126,7 @@ export const updateCompanyInfo = async (
   newDetails: Partial<CompanyDocument>
 ): Promise<CompanyDocument> => {
   try {
+    console.log('before updating:', _context)
     const token = _context.cookie?.token
 
     if (!token) {

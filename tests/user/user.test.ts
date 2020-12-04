@@ -2,7 +2,7 @@ import * as requestStrings from './graphql-request-string'
 import { createTestClient } from 'apollo-server-testing'
 
 import * as dbHelper from '../db-helper'
-import { server } from '../startMockServer'
+import { server } from '../mockServer'
 
 const { mutate, query } = createTestClient(server)
 

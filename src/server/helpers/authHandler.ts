@@ -3,9 +3,10 @@ import { serialize } from 'cookie'
 
 import { GraphQLContext, Payload } from '../types'
 import { errorHandler } from './errorHandler'
+import { mockCookie } from '../../../tests/mockCookie'
 
 /** JWT_KEY is checked before connecting to DB  */
-const generateJWT = (payload: Payload) => {
+export const generateJWT = (payload: Payload) => {
   const token = jwt.sign(payload, process.env.JWT_KEY)
   return token
 }
@@ -19,18 +20,11 @@ export const getPayloadFromJwt = (token: string) => {
 }
 
 export const setCookie = async (context: GraphQLContext, payload?: Payload) => {
-  if (payload) {
-    const token = generateJWT(payload)
-    context.res.setHeader(
-      'Set-Cookie',
-      serialize('token', token, { httpOnly: true })
-    )
-  } else {
-    console.log('NO TOKEN')
-    //TODO: delete if we don't need it on the front end
-    context.res.setHeader(
-      'Set-Cookie',
-      serialize('token', '', { httpOnly: true })
-    )
-  }
+  let token
+  payload ? (token = generateJWT(payload)) : null
+  if (process.env.NODE_ENV === 'test') return mockCookie(context, token)
+  context.res.setHeader(
+    'Set-Cookie',
+    serialize('token', token || '', { httpOnly: true })
+  )
 }
