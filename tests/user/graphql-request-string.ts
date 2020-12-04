@@ -64,10 +64,7 @@ export const getAllMockUsers = (): string => {
   `
 }
 
-export const updateMockUserProfile = (
-  userId: string,
-  update: Partial<UserProfile>
-): string => {
+export const updateMockUserProfile = (update: Partial<UserProfile>): string => {
   const {
     email,
     firstName,
@@ -88,7 +85,6 @@ export const updateMockUserProfile = (
   return gql`
     mutation {
       updateUserProfile (
-        userId: "${userId}",
         update: { 
           ${string}
         }){
@@ -104,10 +100,10 @@ export const updateMockUserProfile = (
   `
 }
 
-export const userCreateMockPost = (userId: string, postContent: string) => {
+export const userCreateMockPost = (postContent: string) => {
   return gql`
     mutation{
-      userCreatePost(userId: "${userId}", postContent: "${postContent}"){
+      userCreatePost(postContent: "${postContent}"){
         id,
         content,
         likes,

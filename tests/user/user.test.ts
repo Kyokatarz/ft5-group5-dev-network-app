@@ -1,9 +1,11 @@
-import * as requestStrings from './graphql-request-string'
 import { createTestClient } from 'apollo-server-testing'
 
+import * as requestStrings from './graphql-request-string'
 import * as dbHelper from '../db-helper'
-import { server } from '../mockServer'
+import { createMockServer } from '../mockServer'
+import { generateJWT } from '../../src/server/helpers'
 
+const server = createMockServer()
 const { mutate, query } = createTestClient(server)
 
 describe('Testing user services', () => {
@@ -103,15 +105,22 @@ describe('Testing user services', () => {
     const mockUser = await mutate({
       mutation: requestStrings.createMockUser(),
     })
-    // console.log(mockUser.data.signupUser)
-    const updateUserProfileMutation = requestStrings.updateMockUserProfile(
-      mockUser.data.signupUser.id,
-      {
-        firstName: 'Bilbo',
-        lastName: 'Baggins',
-      }
-    )
-    const res = await mutate({
+
+    const userId = mockUser.data.signupUser.id
+    const token = generateJWT({ id: userId })
+
+    const contextServer = createMockServer({
+      cookie: { token },
+    })
+
+    const { mutate: mutateContext } = createTestClient(contextServer)
+
+    const updateUserProfileMutation = requestStrings.updateMockUserProfile({
+      firstName: 'Bilbo',
+      lastName: 'Baggins',
+    })
+
+    const res = await mutateContext({
       mutation: updateUserProfileMutation,
     })
     expect(res.data.updateUserProfile.firstName).toBe('Bilbo')
@@ -123,12 +132,18 @@ describe('Testing user services', () => {
     const mockUser = await mutate({
       mutation: requestStrings.createMockUser(),
     })
+    const userId = mockUser.data.signupUser.id
 
-    const userCreatePostMutation = requestStrings.userCreateMockPost(
-      mockUser.data.signupUser.id,
-      'New post'
-    )
-    const res = await mutate({
+    const token = generateJWT({ id: userId })
+
+    const contextServer = createMockServer({
+      cookie: { token },
+    })
+
+    const { mutate: mutateContext } = createTestClient(contextServer)
+
+    const userCreatePostMutation = requestStrings.userCreateMockPost('New post')
+    const res = await mutateContext({
       mutation: userCreatePostMutation,
     })
     console.log(res)
