@@ -1,13 +1,13 @@
 import Head from 'next/head'
-import Surprise from '../src/client/components/Surprise'
+import Home from '../src/client/components/Home'
 
-export default function Home(): JSX.Element {
+export default function HomePage(): JSX.Element {
   return (
     <div>
       <Head>
         <title>Developer Network</title>
       </Head>
-      <Surprise />
+      <Home />
     </div>
   )
 }
