@@ -1,10 +1,9 @@
-import { GraphQLResolver } from '../../../types'
 import { CompanyDocument } from '../../models/Company'
+import { GraphQLResolver } from '../../types'
 import * as companyServices from './services'
 
 export const resolvers: GraphQLResolver = {
   Query: {
-    //Unprotected
     getAllCompanies: (): Promise<CompanyDocument[]> =>
       companyServices.getAllCompanies(),
   },
@@ -12,19 +11,17 @@ export const resolvers: GraphQLResolver = {
   Mutation: {
     //Unprotected
     createNewCompany: (_parents, _args, _context) =>
-      companyServices.createNewCompany(_args.companyInfo),
+      companyServices.createNewCompany(_args.companyInfo, _context),
     signInCompany: (_parent, _args, _context) =>
-      companyServices.signInCompany(_args.credentials),
+      companyServices.signInCompany(_args.credentials, _context),
+    //Protected
     updateCompanyInfo: (_parent, _args, _context) =>
-      companyServices.updateCompanyInfo(
-        _args.companyId,
-        _args.newCompanyDetails
-      ),
+      companyServices.updateCompanyInfo(_context, _args.newCompanyDetails),
     companyCreatePost: (_parent, _args, _context) =>
-      companyServices.companyCreatePost(_args.companyId, _args.postContent),
+      companyServices.companyCreatePost(_context, _args.postContent),
     companyLikesPost: (_parent, _args, _context) =>
-      companyServices.CompanyLikesPost(_args.companyId, _args.postId),
+      companyServices.CompanyLikesPost(_context, _args.postId),
     companyDeletesPost: (_parent, _args, _context) =>
-      companyServices.companyDeletesPost,
+      companyServices.companyDeletesPost(_context, _args.postId),
   },
 }

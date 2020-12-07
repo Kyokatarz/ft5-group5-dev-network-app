@@ -8,13 +8,13 @@ import {
   NOT_FOUND_ERROR,
   errorHandler,
   BadRequestError,
+  setCookie,
+  getPayloadFromJwt,
+  NO_TOKEN,
 } from '../../helpers'
+import { GraphQLContext } from '../../types'
 import Post, { PostDocument } from '../../models/Post'
 import * as yupSchemas from './yupSchemas/yupSchemas'
-
-type Token = {
-  token: string
-}
 
 /*===========+
  |UNPROTECTED|
@@ -26,7 +26,8 @@ export const getAllCompanies = async () => {
 
 //Create a new company account
 export const createNewCompany = async (
-  companyInfo: CompanyDocument
+  companyInfo: CompanyDocument,
+  context: GraphQLContext
 ): Promise<Partial<CompanyDocument>> => {
   const { email, password, companyName } = companyInfo
 
@@ -55,7 +56,7 @@ export const createNewCompany = async (
     })
 
     await company.save()
-
+    await setCookie(context, { id: company.id })
     return { id: company.id, email, companyName }
   } catch (err) {
     errorHandler(err)
@@ -63,8 +64,9 @@ export const createNewCompany = async (
 }
 //Sign in as a company
 export const signInCompany = async (
-  companyInfo: CompanyDocument
-): Promise<Token> => {
+  companyInfo: CompanyDocument,
+  context: GraphQLContext
+): Promise<Partial<CompanyDocument>> => {
   const { email, password } = companyInfo
   const company = await Company.findOne({ email })
   if (!company) throw CREDENTIAL_ERROR
@@ -73,9 +75,9 @@ export const signInCompany = async (
   const match = await bcrypt.compare(password, hashedPassword)
   if (!match) throw CREDENTIAL_ERROR
 
-  return {
-    token: '//TODO:Token goes here',
-  }
+  await setCookie(context, { id: company.id })
+
+  return { id: company.id, email }
 }
 
 /*=========+
@@ -83,10 +85,20 @@ export const signInCompany = async (
  +=========*/
 //Create a new post
 export const companyCreatePost = async (
-  companyId: string,
+  _context: GraphQLContext,
   postContent: string
 ): Promise<PostDocument> => {
   try {
+    const token = _context.cookie?.token
+    console.log('context:', _context)
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    console.log('PAYLOAD:', payload)
+    const companyId = payload.id
+
     const company = await Company.findById(companyId).exec()
     if (!company) throw NOT_FOUND_ERROR
 
@@ -110,10 +122,20 @@ export const companyCreatePost = async (
 
 //Update Company Info
 export const updateCompanyInfo = async (
-  companyId: string,
+  _context: GraphQLContext,
   newDetails: Partial<CompanyDocument>
 ): Promise<CompanyDocument> => {
   try {
+    console.log('before updating:', _context)
+    const token = _context.cookie?.token
+
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    const companyId = payload.id
+
     const {
       companyName,
       contactNumber,
@@ -130,7 +152,7 @@ export const updateCompanyInfo = async (
       website,
     })
 
-    const company = await Company.findById(companyId)
+    const company = await Company.findById(companyId).select('-password').exec()
 
     if (companyName) company.companyName = companyName
     if (contactNumber) company.contactNumber = contactNumber
@@ -146,10 +168,18 @@ export const updateCompanyInfo = async (
 
 //Company likes posts
 export const CompanyLikesPost = async (
-  companyId: string,
+  _context: GraphQLContext,
   postId: string
 ): Promise<PostDocument> => {
   try {
+    const token = _context.cookie?.token
+
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    const companyId = payload.id
     const company = await Company.findById(companyId)
     if (!company) throw NOT_FOUND_ERROR
     const post = await Post.findById(postId)
@@ -159,7 +189,6 @@ export const CompanyLikesPost = async (
       (id) => id.toString() === companyId
     )
 
-    console.log(companyAlreadyLikedPost)
     if (companyAlreadyLikedPost) {
       post.likes = post.likes.filter((id) => id.toString() !== companyId)
       return await post.save()
@@ -173,10 +202,18 @@ export const CompanyLikesPost = async (
 }
 
 export const companyDeletesPost = async (
-  companyId: string,
+  _context: GraphQLContext,
   postId: string
 ): Promise<PostDocument> => {
   try {
+    const token = _context.cookie?.token
+
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    const companyId = payload.id
     const company = await Company.findById(companyId)
     if (!company) throw NOT_FOUND_ERROR
 
