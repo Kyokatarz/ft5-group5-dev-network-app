@@ -56,14 +56,13 @@ export const signInCompany = (credentials: {
         email: "${email}",
         password: "${password}"
       }){
-        token
+        email
       }
     }
   `
 }
 
 export const updateCompanyInfo = (
-  companyId: string,
   newCompanyDetails: newCompanyDetails
 ): string => {
   const {
@@ -83,7 +82,7 @@ export const updateCompanyInfo = (
   console.log('string123:', string)
   return gql`
     mutation{
-      updateCompanyInfo(companyId: "${companyId}", newCompanyDetails: {
+      updateCompanyInfo(, newCompanyDetails: {
         ${string}
         }){
         id,
@@ -98,13 +97,10 @@ export const updateCompanyInfo = (
   `
 }
 
-export const companyCreatePost = (
-  companyId: string,
-  postContent: string
-): string => {
+export const companyCreatePost = (postContent: string): string => {
   return gql`
     mutation{
-      companyCreatePost(companyId: "${companyId}", postContent: "${postContent}"){
+      companyCreatePost(postContent: "${postContent}"){
         id,
         content,
         likes,
@@ -115,10 +111,10 @@ export const companyCreatePost = (
   `
 }
 
-export const companyLikesPost = (companyId: string, postId: string): string => {
+export const companyLikesPost = (postId: string): string => {
   return gql`
     mutation{
-      companyLikesPost(companyId: "${companyId}", postId: "${postId}"){
+      companyLikesPost(postId: "${postId}"){
         id,
         content,
         likes,

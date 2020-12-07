@@ -2,8 +2,10 @@ import { createTestClient } from 'apollo-server-testing'
 
 import * as requestStrings from './graphql-request-string'
 import * as dbHelper from '../db-helper'
-import { server } from '../startMockServer'
+import { createMockServer } from '../mockServer'
+import { generateJWT } from '../../src/server/helpers/'
 
+const server = createMockServer()
 const { query, mutate } = createTestClient(server)
 
 describe("Testing Company's GraphQL", () => {
@@ -18,11 +20,6 @@ describe("Testing Company's GraphQL", () => {
   afterAll(async () => {
     await dbHelper.closeDatabase()
   })
-
-  it('should be equal to 2', () => {
-    expect(1 + 1).toBe(2)
-  })
-
   it('should create a company', async () => {
     const createCompanyMutation = requestStrings.createMockCompany({
       companyName: 'Test Company',
@@ -30,6 +27,7 @@ describe("Testing Company's GraphQL", () => {
     const resp = await mutate({
       mutation: createCompanyMutation,
     })
+    console.log(resp)
     expect(resp.data.createNewCompany.companyName).toBe('Test Company')
   })
 
@@ -42,8 +40,10 @@ describe("Testing Company's GraphQL", () => {
     const resp = await mutate({
       mutation: createCompanyMutation,
     })
+    console.log('res', Object.keys(resp.http.headers))
     expect(resp.errors[0].message).toBe('This email has already existed')
   })
+
   it('should not create a company with wrong validation', async () => {
     const res1 = await mutate({
       mutation: requestStrings.createMockCompany({ email: 'notAnEmail' }),
@@ -77,7 +77,6 @@ describe("Testing Company's GraphQL", () => {
     const res = await query({
       query: requestStrings.getAllCompanies(),
     })
-    console.log('res', res)
 
     expect(res.data.getAllCompanies.length).toBe(3)
   })
@@ -98,26 +97,25 @@ describe("Testing Company's GraphQL", () => {
     })
 
     const res = await mutate({ mutation: signInCompanyMutation })
-    console.log(res.data)
-    expect(res.data.signInCompany).toHaveProperty('token')
+    console.log(res)
+    expect(res.data.signInCompany.email).toBe('testEmail@email.com')
   })
 
   it('should update company info', async () => {
-    const createCompanyMutation = requestStrings.createMockCompany()
-    console.log(createCompanyMutation)
     const res1 = await mutate({
-      mutation: createCompanyMutation,
+      mutation: requestStrings.createMockCompany(),
     })
     const companyId = res1.data.createNewCompany.id
+    const token = generateJWT({ id: companyId })
 
-    const updateCompanyMutation = requestStrings.updateCompanyInfo(companyId, {
+    const updateCompanyMutation = requestStrings.updateCompanyInfo({
       companyName: 'New Name',
     })
 
-    console.log('res2:', updateCompanyMutation)
     const res2 = await mutate({
       mutation: updateCompanyMutation,
     })
+    console.log('res2:', res2)
     expect(res2.data.updateCompanyInfo.companyName).toBe('New Name')
   })
 
@@ -128,15 +126,23 @@ describe("Testing Company's GraphQL", () => {
     const companyId = res.data.createNewCompany.id
 
     const res2 = await mutate({
-      mutation: requestStrings.companyCreatePost(
-        companyId,
-        'This is a test post'
-      ),
+      mutation: requestStrings.companyCreatePost('This is a test post'),
     })
     console.log(companyId)
     console.log(res2)
     expect(res2.data.companyCreatePost.content).toBe('This is a test post')
   })
+
+  it('should not create a post without a token', async () => {
+    const contextServer = createMockServer({ cookie: {} })
+    //create a non context client
+    const { mutate: contextMutate } = createTestClient(contextServer)
+    const res = await contextMutate({
+      mutation: requestStrings.companyCreatePost('This is a test post'),
+    })
+    expect(res.errors[0].message).toBe('You are not authorised')
+  })
+
   it('should let company like a post', async () => {
     const res1 = await mutate({
       mutation: requestStrings.createMockCompany(),
@@ -144,18 +150,17 @@ describe("Testing Company's GraphQL", () => {
     console.log('res1:', res1)
     const companyId = res1.data.createNewCompany.id
 
+    const token = generateJWT({ id: companyId })
+
     const res2 = await mutate({
-      mutation: requestStrings.companyCreatePost(
-        companyId,
-        'This is a test post'
-      ),
+      mutation: requestStrings.companyCreatePost('This is a test post'),
     })
     console.log('res2:', res2)
     expect(res2.data.companyCreatePost.content).toBe('This is a test post')
     const postId = res2.data.companyCreatePost.id
 
     const res3 = await mutate({
-      mutation: requestStrings.companyLikesPost(companyId, postId),
+      mutation: requestStrings.companyLikesPost(postId),
     })
     console.log('res3:', res3)
     const expected = [companyId]
@@ -164,24 +169,21 @@ describe("Testing Company's GraphQL", () => {
   })
 
   it('should let company unlike a post', async () => {
-    const res1 = await mutate({
+    await mutate({
       mutation: requestStrings.createMockCompany(),
     })
-    const companyId = res1.data.createNewCompany.id
 
     const res2 = await mutate({
-      mutation: requestStrings.companyCreatePost(
-        companyId,
-        'This is a test post'
-      ),
+      mutation: requestStrings.companyCreatePost('This is a test post'),
     })
     expect(res2.data.companyCreatePost.content).toBe('This is a test post')
+
     const postId = res2.data.companyCreatePost.id
     await mutate({
-      mutation: requestStrings.companyLikesPost(companyId, postId),
+      mutation: requestStrings.companyLikesPost(postId),
     })
     const res3 = await mutate({
-      mutation: requestStrings.companyLikesPost(companyId, postId),
+      mutation: requestStrings.companyLikesPost(postId),
     })
 
     const likeArray = res3.data.companyLikesPost.likes

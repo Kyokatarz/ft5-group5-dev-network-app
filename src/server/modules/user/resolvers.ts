@@ -1,6 +1,8 @@
-import { GraphQLResolver } from '../../../types'
+import cookie from 'cookie'
+
 import * as userServices from './services'
 import { UserDocument } from '../../models/User'
+import { GraphQLContext, GraphQLResolver } from '../../types'
 
 export const resolvers: GraphQLResolver = {
   Query: {
@@ -10,15 +12,21 @@ export const resolvers: GraphQLResolver = {
   },
 
   Mutation: {
-    signupUser: (_parents, _args, _context) =>
-      userServices.signupUser(_args.user.email, _args.user.password),
-    loginUser: (_parent, _args, _context) =>
-      userServices.loginUser(_args.user.email, _args.user.password),
-    updateUserProfile: (_parents, _args, _context) =>
-      userServices.updateUserProfile(_args.userId, _args.update),
-    userCreatePost: (_parents, _args, _context) =>
-      userServices.userCreatePost(_args.userId, _args.postContent),
-    userDeletePost: (_parents, _args, _context) =>
-      userServices.userDeletePost(_args.userId, _args.postId),
+    //Unprotected
+    signupUser: (_, _args, _context) =>
+      userServices.signupUser(_args.user.email, _args.user.password, _context),
+    loginUser: (_, _args, _context) =>
+      userServices.loginUser(_args.user.email, _args.user.password, _context),
+
+    //Protected
+    updateUserProfile: (_, _args, _context: GraphQLContext) =>
+      userServices.updateUserProfile(_context, _args.update),
+    userCreatePost: (_, _args, _context: GraphQLContext) =>
+      userServices.userCreatePost(_context, _args.postContent),
+    userDeletePost: (_, _args, _context: GraphQLContext) =>
+      userServices.userDeletePost(_context, _args.postId),
+    testCookie: (_, _args, _context: GraphQLContext) => {
+      console.log('Heare', _context.cookie)
+    },
   },
 }

@@ -2,16 +2,22 @@ import bcrypt from 'bcryptjs'
 
 import {
   errorHandler,
+  setCookie,
   IDENTIFICATION_DUPLICATED,
   CREDENTIAL_ERROR,
   NOT_FOUND_ERROR,
+  NO_TOKEN,
+  getPayloadFromJwt,
 } from '../../helpers'
+import { GraphQLContext } from '../../types'
 import User, { UserDocument } from '../../models/User'
 import Post, { PostDocument } from '../../models/Post'
 import * as yupSchemas from './yupSchemas/yupSchemas'
 
 export const getUserById = async (userId: string): Promise<UserDocument> => {
-  return await User.findById(userId).exec()
+  const user = await User.findById(userId).select('-password').exec()
+  if (!user) throw NOT_FOUND_ERROR
+  return user
 }
 
 export const getAllUsers = async (): Promise<UserDocument[]> => {
@@ -20,7 +26,8 @@ export const getAllUsers = async (): Promise<UserDocument[]> => {
 
 export const signupUser = async (
   email: string,
-  password: string
+  password: string,
+  context: GraphQLContext
 ): Promise<Partial<UserDocument>> => {
   try {
     await yupSchemas.yupUserInfo.validate(
@@ -43,7 +50,9 @@ export const signupUser = async (
       password: hashedPassword,
     })
     await user.save()
-    return { id: user.id, email } //TODO: fix when we have jwt
+    await setCookie(context, { id: user.id })
+
+    return { id: user.id, email } //maybe we can only return 'Success'
   } catch (err) {
     errorHandler(err)
   }
@@ -51,23 +60,27 @@ export const signupUser = async (
 
 export const loginUser = async (
   email: string,
-  password: string
+  password: string,
+  context: GraphQLContext
 ): Promise<Partial<UserDocument>> => {
   try {
     const user = await User.findOne({ email })
     if (!user) {
-      throw IDENTIFICATION_DUPLICATED
+      throw CREDENTIAL_ERROR
     }
     const match = await bcrypt.compare(password, user.password)
     if (!match) throw CREDENTIAL_ERROR
-    return { id: user.id, email } //TODO: fix when we have jwt
+
+    await setCookie(context, { id: user.id })
+
+    return { id: user.id, email } //maybe we can only return 'Success'
   } catch (err) {
     errorHandler(err)
   }
 }
 
 export const updateUserProfile = async (
-  userId: string,
+  _context: GraphQLContext,
   update: Partial<UserDocument>
 ): Promise<UserDocument> => {
   try {
@@ -80,6 +93,12 @@ export const updateUserProfile = async (
       company,
     } = update
 
+    const token = _context.cookie?.token
+
+    if (!token) {
+      throw NO_TOKEN
+    }
+
     await yupSchemas.yupUserUpdate.validate(
       {
         firstName,
@@ -91,6 +110,9 @@ export const updateUserProfile = async (
       },
       { abortEarly: false }
     )
+    const payload = getPayloadFromJwt(token)
+    console.log('PAYLOAD:', payload)
+    const userId = payload.id
 
     const user = await User.findById(userId).select('-password')
     if (!user) {
@@ -113,10 +135,18 @@ export const forgotPasswordRequest = async (email: string) => {
 }
 
 export const userCreatePost = async (
-  userId: string,
+  _context: GraphQLContext,
   postContent: string
 ): Promise<PostDocument> => {
   try {
+    const token = _context.cookie?.token
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    const userId = payload.id
+
     const user = await User.findById(userId)
     if (!user) {
       throw NOT_FOUND_ERROR
@@ -140,10 +170,18 @@ export const userCreatePost = async (
 }
 
 export const userDeletePost = async (
-  userId: string,
+  _context: GraphQLContext,
   postId: string
 ): Promise<PostDocument> => {
   try {
+    const token = _context.cookie?.token
+    if (!token) {
+      throw NO_TOKEN
+    }
+
+    const payload = getPayloadFromJwt(token)
+    const userId = payload.id
+
     const user = await User.findById(userId)
     if (!user) {
       throw NOT_FOUND_ERROR
