@@ -90,7 +90,7 @@ export const companyCreatePost = async (
 ): Promise<PostDocument> => {
   try {
     const token = _context.cookie?.token
-
+    console.log('context:', _context)
     if (!token) {
       throw NO_TOKEN
     }

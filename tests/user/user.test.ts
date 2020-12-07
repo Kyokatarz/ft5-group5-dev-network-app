@@ -30,6 +30,20 @@ describe('Testing user services', () => {
     expect(res.data.signupUser).toHaveProperty('email')
   })
 
+  it('should get user by userId', async () => {
+    const res = await mutate({
+      mutation: requestStrings.createMockUser(),
+    })
+    expect(res.data.signupUser).toHaveProperty('id')
+    const userId = res.data.signupUser.id
+
+    const res2 = await query({
+      query: requestStrings.getUserById(userId),
+    })
+
+    expect(res2.data.getUserById.id).toBe(userId)
+  })
+
   it('should not signup user with invalid email', async () => {
     const signupUserMutation = requestStrings.createMockUser({
       email: 'wrongemail',
@@ -40,6 +54,11 @@ describe('Testing user services', () => {
     expect(res.errors[0].message).toBe('email must be a valid email')
   })
 
+  it('should not signup with duplicated email', async () => {
+    await mutate({ mutation: requestStrings.createMockUser() })
+    const res = await mutate({ mutation: requestStrings.createMockUser() })
+    expect(res.errors[0].message).toBe('This email has already existed')
+  })
   //goes back to default if a password is an empty string (e.g. '')
   it('should not signup user with invalid password', async () => {
     const signupUserMutation = requestStrings.createMockUser({

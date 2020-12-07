@@ -15,7 +15,9 @@ import Post, { PostDocument } from '../../models/Post'
 import * as yupSchemas from './yupSchemas/yupSchemas'
 
 export const getUserById = async (userId: string): Promise<UserDocument> => {
-  return await User.findById(userId).exec()
+  const user = await User.findById(userId).select('-password').exec()
+  if (!user) throw NOT_FOUND_ERROR
+  return user
 }
 
 export const getAllUsers = async (): Promise<UserDocument[]> => {
@@ -64,7 +66,7 @@ export const loginUser = async (
   try {
     const user = await User.findOne({ email })
     if (!user) {
-      throw IDENTIFICATION_DUPLICATED
+      throw CREDENTIAL_ERROR
     }
     const match = await bcrypt.compare(password, user.password)
     if (!match) throw CREDENTIAL_ERROR
@@ -97,10 +99,6 @@ export const updateUserProfile = async (
       throw NO_TOKEN
     }
 
-    const payload = getPayloadFromJwt(token)
-    console.log('PAYLOAD:', payload)
-    const userId = payload.id
-
     await yupSchemas.yupUserUpdate.validate(
       {
         firstName,
@@ -112,6 +110,9 @@ export const updateUserProfile = async (
       },
       { abortEarly: false }
     )
+    const payload = getPayloadFromJwt(token)
+    console.log('PAYLOAD:', payload)
+    const userId = payload.id
 
     const user = await User.findById(userId).select('-password')
     if (!user) {

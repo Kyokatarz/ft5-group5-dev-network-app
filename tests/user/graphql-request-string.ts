@@ -33,6 +33,14 @@ export const createMockUser = (override?: UserOverride): string => {
   `
 }
 
+export const getUserById = (userId: string): string => {
+  return gql`{
+    getUserById(id: "${userId}") {
+      id
+    }
+  }`
+}
+
 export const loginMockUser = (user: {
   email: string
   password: string

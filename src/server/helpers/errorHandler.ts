@@ -14,9 +14,10 @@ export const VALIDATION_ERROR = 'ValidationError'
 export const NO_TOKEN = 'NO_TOKEN'
 
 export const errorHandler = (err: any): void => {
-  if (err.name === VALIDATION_ERROR) {
+  if (err.name === VALIDATION_ERROR)
     throw new YupValidationError(err.errors.join(', '))
-  }
+
+  if (err.kind === 'ObjectId') throw new NotFoundError()
 
   switch (err) {
     case IDENTIFICATION_DUPLICATED:

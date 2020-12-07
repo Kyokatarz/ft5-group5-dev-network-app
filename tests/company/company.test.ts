@@ -108,19 +108,11 @@ describe("Testing Company's GraphQL", () => {
     const companyId = res1.data.createNewCompany.id
     const token = generateJWT({ id: companyId })
 
-    const contextServer = createMockServer({
-      cookie: {
-        token,
-      },
-    })
-
-    const { mutate: mutateContext } = createTestClient(contextServer)
-
     const updateCompanyMutation = requestStrings.updateCompanyInfo({
       companyName: 'New Name',
     })
 
-    const res2 = await mutateContext({
+    const res2 = await mutate({
       mutation: updateCompanyMutation,
     })
     console.log('res2:', res2)
@@ -132,20 +124,25 @@ describe("Testing Company's GraphQL", () => {
       mutation: requestStrings.createMockCompany(),
     })
     const companyId = res.data.createNewCompany.id
-    const token = generateJWT({ id: companyId })
 
-    const contextServer = createMockServer({
-      cookie: { token },
-    })
-
-    const { mutate: mutateContext } = createTestClient(contextServer)
-    const res2 = await mutateContext({
+    const res2 = await mutate({
       mutation: requestStrings.companyCreatePost('This is a test post'),
     })
     console.log(companyId)
     console.log(res2)
     expect(res2.data.companyCreatePost.content).toBe('This is a test post')
   })
+
+  it('should not create a post without a token', async () => {
+    const contextServer = createMockServer({ cookie: {} })
+    //create a non context client
+    const { mutate: contextMutate } = createTestClient(contextServer)
+    const res = await contextMutate({
+      mutation: requestStrings.companyCreatePost('This is a test post'),
+    })
+    expect(res.errors[0].message).toBe('You are not authorised')
+  })
+
   it('should let company like a post', async () => {
     const res1 = await mutate({
       mutation: requestStrings.createMockCompany(),
@@ -155,19 +152,14 @@ describe("Testing Company's GraphQL", () => {
 
     const token = generateJWT({ id: companyId })
 
-    const contextServer = createMockServer({
-      cookie: { token },
-    })
-
-    const { mutate: mutateContext } = createTestClient(contextServer)
-    const res2 = await mutateContext({
+    const res2 = await mutate({
       mutation: requestStrings.companyCreatePost('This is a test post'),
     })
     console.log('res2:', res2)
     expect(res2.data.companyCreatePost.content).toBe('This is a test post')
     const postId = res2.data.companyCreatePost.id
 
-    const res3 = await mutateContext({
+    const res3 = await mutate({
       mutation: requestStrings.companyLikesPost(postId),
     })
     console.log('res3:', res3)
@@ -177,28 +169,20 @@ describe("Testing Company's GraphQL", () => {
   })
 
   it('should let company unlike a post', async () => {
-    const res1 = await mutate({
+    await mutate({
       mutation: requestStrings.createMockCompany(),
     })
-    const companyId = res1.data.createNewCompany.id
-    const token = generateJWT({ id: companyId })
 
-    const contextServer = createMockServer({
-      cookie: { token },
-    })
-
-    const { mutate: mutateContext } = createTestClient(contextServer)
-
-    const res2 = await mutateContext({
+    const res2 = await mutate({
       mutation: requestStrings.companyCreatePost('This is a test post'),
     })
     expect(res2.data.companyCreatePost.content).toBe('This is a test post')
 
     const postId = res2.data.companyCreatePost.id
-    await mutateContext({
+    await mutate({
       mutation: requestStrings.companyLikesPost(postId),
     })
-    const res3 = await mutateContext({
+    const res3 = await mutate({
       mutation: requestStrings.companyLikesPost(postId),
     })
 
