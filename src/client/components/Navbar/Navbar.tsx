@@ -13,6 +13,10 @@ import LoginSignUp from '../LoginSignUp'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    root: {
+      marginBottom: 64,
+    },
+
     menuIcon: {
       marginRight: theme.spacing(2),
     },
