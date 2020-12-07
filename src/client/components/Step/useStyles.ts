@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, Theme } from '@material-ui/core/styles'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   step: {
     display: 'flex',
     flexDirection: 'column',
@@ -9,22 +9,23 @@ const useStyles = makeStyles({
     borderRadius: 3,
   },
   icon: {
-    margin: '5%',
-    color: '#74a353',
-    // width: 60,
-    // height: 60,
+    margin: 5,
+    color: theme.palette.primary.light,
+    fontSize: 64,
+    // width: 64,
+    // height: 64,
   },
   title: {
     textAlign: 'center',
     fontSize: '1.5rem',
     color: '#74a353',
     textTransform: 'uppercase',
-    margin: '5%',
+    margin: 5,
   },
   text: {
-    textAlign: 'center',
+    textAlign: 'justify',
     fontSize: '1.5rem',
   },
-})
+}))
 
 export default useStyles
