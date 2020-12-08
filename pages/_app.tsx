@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import {
@@ -8,8 +8,11 @@ import {
   ThemeProvider,
 } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
+
 import theme from '../src/theme'
 import Navbar from '../src/client/components/Navbar'
+import { AuthUserContext } from '../src/client/context/auth'
+import { userState, userReducer } from '../src/client/reducers/user'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function MyApp(props: any) {
   const classes = useStyles()
   const { Component, pageProps } = props
+  const [state, dispatch] = useReducer(userReducer, userState)
 
   React.useEffect(() => {
     // Remove the server-side injected CSS.
@@ -43,10 +47,12 @@ export default function MyApp(props: any) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Navbar />
-        <main className={classes.content}>
-          <Component {...pageProps} />
-        </main>
+        <AuthUserContext.Provider value={{ state, dispatch }}>
+          <Navbar />
+          <main className={classes.content}>
+            <Component {...pageProps} />
+          </main>
+        </AuthUserContext.Provider>
       </ThemeProvider>
     </React.Fragment>
   )

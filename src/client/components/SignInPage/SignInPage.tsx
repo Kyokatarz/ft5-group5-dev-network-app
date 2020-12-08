@@ -11,15 +11,69 @@ import {
 } from '@material-ui/core'
 import Link from 'next/link'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import React, { FormEvent } from 'react'
+import React, { FormEvent, ChangeEvent, useState, useContext } from 'react'
+import request, { gql } from 'graphql-request'
 
+type InitialStateType = {
+  email: string
+  password: string
+  isSubmitting: boolean
+  errorMessage: string | null
+}
+
+import { AuthUserContext } from '../../context/auth'
 import useStyles from './useStyles'
 
-export default function SignIn() {
+export default function SignIn(): JSX.Element {
   const classes = useStyles()
 
-  const submitHandler = (event: FormEvent) => {
+  const initialState: InitialStateType = {
+    email: '',
+    password: '',
+    isSubmitting: true,
+    errorMessage: null,
+  }
+
+  const { dispatch } = useContext(AuthUserContext)
+  const [data, setData] = useState(initialState)
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const submitHandler = async (event: FormEvent) => {
     event.preventDefault()
+    setData({
+      ...data,
+      isSubmitting: true,
+      errorMessage: null,
+    })
+
+    try {
+      const res = await request(
+        '/api/v1/graphql',
+        gql`
+      mutation {
+        loginUser(user: {
+          email: "${data.email}", 
+          password: "${data.password}"
+          }) {
+            id, 
+            email
+          }
+        }
+      `
+      )
+      await dispatch({
+        type: 'LOGIN',
+        payload: res, //TODO: check if we need a json object
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
@@ -42,6 +96,8 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            value={data.email}
+            onChange={handleInputChange}
           />
           <TextField
             variant="outlined"
@@ -53,6 +109,8 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={data.password}
+            onChange={handleInputChange}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
