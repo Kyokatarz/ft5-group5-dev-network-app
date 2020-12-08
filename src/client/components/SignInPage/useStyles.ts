@@ -11,6 +11,12 @@ export default makeStyles((theme) => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
+  container: {
+    marginTop: 64,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),

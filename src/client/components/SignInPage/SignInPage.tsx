@@ -6,7 +6,6 @@ import {
   Container,
   FormControlLabel,
   Grid,
-  makeStyles,
   TextField,
   Typography,
 } from '@material-ui/core'
@@ -24,7 +23,7 @@ export default function SignIn() {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" className={classes.container}>
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />

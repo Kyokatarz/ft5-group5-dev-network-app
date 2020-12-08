@@ -14,7 +14,7 @@ import Navbar from '../src/client/components/Navbar'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     content: {
-      marginTop: 64,
+      minHeight: '90vh',
     },
   })
 )

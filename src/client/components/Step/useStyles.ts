@@ -6,6 +6,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     // maxHeight: "80%",
+    minHeight: '50vh',
     borderRadius: 3,
   },
   icon: {
@@ -17,8 +18,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   title: {
     textAlign: 'center',
-    fontSize: '1.5rem',
-    color: '#74a353',
+    fontSize: '1.8rem',
+    color: theme.palette.primary.main,
     textTransform: 'uppercase',
     margin: 5,
   },

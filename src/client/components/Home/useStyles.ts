@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
   },
   container: {
-    height: '100vh',
+    minHeight: '100vh',
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
@@ -53,11 +53,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   title: {
     fontSize: '3rem',
-    color: 'gray',
+    color: theme.palette.primary.light,
   },
   subTitle: {
     fontSize: '2rem',
-    color: 'gray',
+    color: 'white',
   },
   button: {
     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
@@ -73,12 +73,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   stepsContainer: {
-    height: '50%',
-    width: '90%',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, 30%)',
-    gridGap: '5%',
-    margin: '3%',
+    // height: '50%',
+    // width: '90%',
+    // display: 'grid',
+    // gridTemplateColumns: 'repeat(3, 30%)',
+    // gridGap: '5%',
+    // margin: '3%',
+    [theme.breakpoints.down('md')]: {
+      marginTop: 10,
+    },
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }))
 

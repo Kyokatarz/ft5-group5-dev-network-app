@@ -1,4 +1,4 @@
-import Button from '@material-ui/core/Button'
+import { Button, Grid } from '@material-ui/core'
 import TouchAppTwoToneIcon from '@material-ui/icons/TouchAppTwoTone'
 import PeopleAltTwoToneIcon from '@material-ui/icons/PeopleAltTwoTone'
 import TrendingUpTwoToneIcon from '@material-ui/icons/TrendingUpTwoTone'
@@ -39,15 +39,15 @@ const Home = (): JSX.Element => {
         </div>
       </div>
       <div className={classes.container} id="getting-started">
-        <div className={classes.stepsContainer}>
-          <Step icon={iconOne} title="Sign Up" text={stepOneText} />
-          <Step icon={iconTwo} title="Get Connected" text={stepTwoText} />
+        <Grid container className={classes.stepsContainer} spacing={2}>
+          <Step icon={iconOne} title="1. Sign Up" text={stepOneText} />
+          <Step icon={iconTwo} title="2. Get Connected" text={stepTwoText} />
           <Step
             icon={iconThree}
-            title="Boost Your Career"
+            title="3. Boost Your Career"
             text={stepThreeText}
           />
-        </div>
+        </Grid>
         <Link href="/signup">
           <Button className={classes.button}>SIGN UP NOW</Button>
         </Link>
