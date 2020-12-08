@@ -12,7 +12,7 @@ export default makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   container: {
-    marginTop: 64,
+    marginTop: theme.spacing(8),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

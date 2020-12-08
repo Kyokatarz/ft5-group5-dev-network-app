@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    textAlign: 'center',
     flexDirection: 'column',
   },
   container: {
@@ -79,9 +80,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     // gridTemplateColumns: 'repeat(3, 30%)',
     // gridGap: '5%',
     // margin: '3%',
+
     [theme.breakpoints.down('md')]: {
       marginTop: 10,
     },
+    marginBottom: 10,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
