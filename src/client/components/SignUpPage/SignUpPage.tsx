@@ -3,15 +3,23 @@ import {
   Avatar,
   makeStyles,
   Button,
-  Checkbox,
-  FormControlLabel,
   Grid,
-  TextField,
   Typography,
 } from '@material-ui/core'
+import * as yup from 'yup'
 import React, { FormEvent } from 'react'
 import Link from 'next/link'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import { Formik, Form, Field } from 'formik'
+import { TextField } from 'formik-material-ui'
+import request from 'graphql-request'
+
+import { host, signUpUser } from '../../helpers/graphql-request-string'
+
+const signUpYupSchema = yup.object().shape({
+  email: yup.string().email(),
+  password: yup.string().min(8).max(255),
+})
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -21,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   container: {
+    marginTop: theme.spacing(8),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -48,11 +57,20 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp() {
   const classes = useStyles()
 
-  const submitHandler = (event: FormEvent) => {
-    event.preventDefault()
+  const submitHandler = async ({
+    email,
+    password,
+    lastName,
+    firstName,
+  }: any) => {
+    const res = await request(
+      host,
+      signUpUser(email, password, lastName, firstName)
+    )
+    console.log(res)
   }
   return (
-    <Container component="section" maxWidth="xs">
+    <Container component="section" maxWidth="xs" className={classes.container}>
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -60,80 +78,89 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate onSubmit={submitHandler}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
+        <Formik
+          initialValues={{
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+          }}
+          onSubmit={(values) => submitHandler(values)}
+          validationSchema={signUpYupSchema}
+        >
+          <Form className={classes.form}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Field
+                  component={TextField}
+                  autoComplete="fname"
+                  name="firstName"
+                  variant="outlined"
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Field
+                  component={TextField}
+                  variant="outlined"
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="lname"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Field
+                  component={TextField}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Field
+                  component={TextField}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign Up
+            </Button>
+
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link href="/login">
+                  <Typography className={classes.link} variant="body2">
+                    Already have an account? Sign in
+                  </Typography>
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="/login">
-                <Typography className={classes.link} variant="body2">
-                  Already have an account? Sign in
-                </Typography>
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
+          </Form>
+        </Formik>
       </div>
     </Container>
   )
