@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import * as yup from 'yup'
-import React, { FormEvent } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { Formik, Form, Field } from 'formik'

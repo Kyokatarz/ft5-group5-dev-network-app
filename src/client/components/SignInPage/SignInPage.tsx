@@ -58,7 +58,7 @@ export default function SignIn(): JSX.Element {
         '/api/v1/graphql',
         logInUser(data.email, data.password)
       )
-      console.log(state)
+      console.log(res)
       await dispatch({
         type: 'LOGIN',
         payload: res, //TODO: check if we need a json object

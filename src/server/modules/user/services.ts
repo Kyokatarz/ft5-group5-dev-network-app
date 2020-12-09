@@ -13,6 +13,7 @@ import { GraphQLContext } from '../../types'
 import User, { UserDocument } from '../../models/User'
 import Post, { PostDocument } from '../../models/Post'
 import * as yupSchemas from './yupSchemas/yupSchemas'
+import { logInUserArgs, signUpUserArgs } from '../../types/user'
 
 export const getUserById = async (userId: string): Promise<UserDocument> => {
   const user = await User.findById(userId).select('-password').exec()
@@ -25,11 +26,11 @@ export const getAllUsers = async (): Promise<UserDocument[]> => {
 }
 
 export const signupUser = async (
-  email: string,
-  password: string,
-  context: GraphQLContext
+  context: GraphQLContext,
+  _args: signUpUserArgs
 ): Promise<Partial<UserDocument>> => {
   try {
+    const { email, password, lastName, firstName } = _args
     await yupSchemas.yupUserInfo.validate(
       {
         email,
@@ -46,24 +47,26 @@ export const signupUser = async (
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
     const user = new User({
+      lastName,
+      firstName,
       email,
       password: hashedPassword,
     })
     await user.save()
     await setCookie(context, { id: user.id })
 
-    return { id: user.id, email } //maybe we can only return 'Success'
+    return { id: user.id, email, firstName, lastName } //maybe we can only return 'Success'
   } catch (err) {
     errorHandler(err)
   }
 }
 
 export const loginUser = async (
-  email: string,
-  password: string,
-  context: GraphQLContext
+  context: GraphQLContext,
+  _args: logInUserArgs
 ): Promise<Partial<UserDocument>> => {
   try {
+    const { email, password } = _args
     const user = await User.findOne({ email })
     if (!user) {
       throw CREDENTIAL_ERROR
@@ -73,7 +76,7 @@ export const loginUser = async (
 
     await setCookie(context, { id: user.id })
 
-    return { id: user.id, email } //maybe we can only return 'Success'
+    return user //maybe we can only return 'Success'
   } catch (err) {
     errorHandler(err)
   }

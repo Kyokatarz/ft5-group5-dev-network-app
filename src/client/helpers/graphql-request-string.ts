@@ -22,6 +22,8 @@ export const signUpUser = (
       }){
         id
         email,
+        firstName,
+        lastName
       }
     }
   `
@@ -34,8 +36,10 @@ export const logInUser = (email: string, password: string) => {
         email: "${email}",
         password: "${password}"
       }){
-        id,
-        email
+        id
+        email,
+        firstName,
+        lastName
       }
     }
   `
