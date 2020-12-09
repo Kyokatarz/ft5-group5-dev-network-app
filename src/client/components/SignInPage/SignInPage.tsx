@@ -14,15 +14,16 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import React, { FormEvent, ChangeEvent, useState, useContext } from 'react'
 import request, { gql } from 'graphql-request'
 
+import { AuthUserContext } from '../../context/auth'
+import useStyles from './useStyles'
+import { logInUser } from '../../helpers/graphql-request-string'
+
 type InitialStateType = {
   email: string
   password: string
   isSubmitting: boolean
   errorMessage: string | null
 }
-
-import { AuthUserContext } from '../../context/auth'
-import useStyles from './useStyles'
 
 export default function SignIn(): JSX.Element {
   const classes = useStyles()
@@ -34,7 +35,7 @@ export default function SignIn(): JSX.Element {
     errorMessage: null,
   }
 
-  const { dispatch } = useContext(AuthUserContext)
+  const { state, dispatch } = useContext(AuthUserContext)
   const [data, setData] = useState(initialState)
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -55,18 +56,9 @@ export default function SignIn(): JSX.Element {
     try {
       const res = await request(
         '/api/v1/graphql',
-        gql`
-      mutation {
-        loginUser(user: {
-          email: "${data.email}", 
-          password: "${data.password}"
-          }) {
-            id, 
-            email
-          }
-        }
-      `
+        logInUser(data.email, data.password)
       )
+      console.log(state)
       await dispatch({
         type: 'LOGIN',
         payload: res, //TODO: check if we need a json object

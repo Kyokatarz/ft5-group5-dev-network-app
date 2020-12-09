@@ -1,4 +1,10 @@
-import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
+import {
+  Button,
+  createStyles,
+  makeStyles,
+  Theme,
+  Typography,
+} from '@material-ui/core'
 import Link from 'next/link'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -12,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2),
     },
     buttonRight: {
-      marginLeft: theme.spacing(2),
+      marginLeft: theme.spacing(4),
     },
   })
 )
@@ -24,14 +30,14 @@ const LoginSignUp = () => {
     <ul className={classes.buttonsContainer}>
       <li>
         <Link href="/login">
-          <Button color="inherit">Login</Button>
+          <Typography color="inherit">Login</Typography>
         </Link>
       </li>
       <li>
         <Link href="/signup">
-          <Button color="inherit" className={classes.buttonRight}>
-            SignUp
-          </Button>
+          <Typography color="inherit" className={classes.buttonRight}>
+            Sign Up
+          </Typography>
         </Link>
       </li>
     </ul>

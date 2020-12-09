@@ -26,3 +26,17 @@ export const signUpUser = (
     }
   `
 }
+
+export const logInUser = (email: string, password: string) => {
+  return gql`
+    mutation {
+      loginUser(user: {
+        email: "${email}",
+        password: "${password}"
+      }){
+        id,
+        email
+      }
+    }
+  `
+}

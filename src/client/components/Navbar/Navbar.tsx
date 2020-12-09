@@ -9,8 +9,11 @@ import {
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import Link from 'next/link'
-import React from 'react'
+import React, { useContext } from 'react'
+
+import { AuthUserContext } from '../../context/auth'
 import LoginSignUp from '../LoginSignUp'
+import NavBarLinks from '../NavbarLinks'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 const Navbar = () => {
+  const { state, dispatch } = useContext(AuthUserContext)
   const classes = useStyles()
 
   return (
@@ -41,7 +45,8 @@ const Navbar = () => {
             App Name
           </Typography>
         </Link>
-        <LoginSignUp />
+        {!state.isLoggedIn && <LoginSignUp />}
+        {state.isLoggedIn && <NavBarLinks />}
       </Toolbar>
     </AppBar>
   )
