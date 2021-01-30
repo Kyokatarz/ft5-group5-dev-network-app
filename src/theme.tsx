@@ -8,6 +8,7 @@ const theme = createMuiTheme({
       '@global': {
         html: {
           scrollBehavior: 'smooth',
+          overflowX: 'hidden',
         },
       },
     },

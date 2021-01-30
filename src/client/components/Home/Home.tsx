@@ -51,7 +51,6 @@ const Home = (): JSX.Element => {
         <Link href="/signup">
           <Button className={classes.button}>SIGN UP NOW</Button>
         </Link>
-        <Button> Test </Button>
       </div>
     </div>
   )

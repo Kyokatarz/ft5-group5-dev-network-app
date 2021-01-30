@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function MyApp(props: any) {
+export default function MyApp(props: any): JSX.Element {
   const classes = useStyles()
   const { Component, pageProps } = props
   const [state, dispatch] = useReducer(userReducer, userState)

@@ -10,7 +10,7 @@ export const signUpUser = (
   password: string,
   firstName?: string,
   lastName?: string
-) => {
+): string => {
   let string = `email: "${email}", password: "${password}",`
   if (firstName) string += `firstName: "${firstName}"`
   if (lastName) string += `lastName: "${lastName}"`
@@ -29,7 +29,7 @@ export const signUpUser = (
   `
 }
 
-export const logInUser = (email: string, password: string) => {
+export const logInUser = (email: string, password: string): string => {
   return gql`
     mutation {
       loginUser(user: {
@@ -40,6 +40,20 @@ export const logInUser = (email: string, password: string) => {
         email,
         firstName,
         lastName
+        image
+        employmentStatus
+        company
+        posts{
+          id,
+          content,
+          date,
+          likes,
+          comments{ 
+            userId,
+            content,
+            likes
+          }
+        }
       }
     }
   `
