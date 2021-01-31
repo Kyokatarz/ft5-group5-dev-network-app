@@ -10,7 +10,10 @@ export const userState: UserStateType = {
   token: null,
 }
 
-export const userReducer = (state: UserStateType, action: any) => {
+export const userReducer = (
+  state: UserStateType,
+  action: any
+): UserStateType => {
   switch (action.type) {
     case 'LOGIN':
       console.log('logging in user')
