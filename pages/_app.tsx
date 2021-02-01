@@ -12,6 +12,7 @@ import theme from '../src/theme'
 import Navbar from '../src/client/components/Navbar'
 import { AuthUserContext } from '../src/client/context/auth'
 import { userState, userReducer } from '../src/client/reducers/user'
+import { useThunk } from '../src/client/hooks/useThunk'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +26,7 @@ export default function MyApp(props: any): JSX.Element {
   const classes = useStyles()
   const { Component, pageProps } = props
   const [state, dispatch] = useReducer(userReducer, userState)
-
+  const dispatchAsync = useThunk(dispatch)
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side')
@@ -46,7 +47,7 @@ export default function MyApp(props: any): JSX.Element {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <AuthUserContext.Provider value={{ state, dispatch }}>
+        <AuthUserContext.Provider value={{ state, dispatch, dispatchAsync }}>
           <Navbar />
           <main className={classes.content}>
             <Component {...pageProps} />

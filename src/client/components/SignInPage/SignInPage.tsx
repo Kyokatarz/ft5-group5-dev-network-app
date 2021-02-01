@@ -12,11 +12,10 @@ import {
 import Link from 'next/link'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import React, { FormEvent, ChangeEvent, useState, useContext } from 'react'
-import request, { gql } from 'graphql-request'
 
 import { AuthUserContext } from '../../context/auth'
 import useStyles from './useStyles'
-import { logInUser } from '../../helpers/graphql-request-string'
+import { sendRequestToSignUserIn } from '../../action/user'
 
 type InitialStateType = {
   email: string
@@ -35,7 +34,7 @@ export default function SignIn(): JSX.Element {
     errorMessage: null,
   }
 
-  const { state, dispatch } = useContext(AuthUserContext)
+  const { state, dispatchAsync } = useContext(AuthUserContext)
   const [data, setData] = useState(initialState)
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,25 +46,8 @@ export default function SignIn(): JSX.Element {
 
   const submitHandler = async (event: FormEvent) => {
     event.preventDefault()
-    setData({
-      ...data,
-      isSubmitting: true,
-      errorMessage: null,
-    })
-
-    try {
-      const res = await request(
-        '/api/v1/graphql',
-        logInUser(data.email, data.password)
-      )
-      console.log(res)
-      await dispatch({
-        type: 'LOGIN',
-        payload: res, //TODO: check if we need a json object
-      })
-    } catch (err) {
-      console.log(err)
-    }
+    console.log('clicked')
+    dispatchAsync(sendRequestToSignUserIn(data.email, data.password))
   }
 
   return (
@@ -77,7 +59,7 @@ export default function SignIn(): JSX.Element {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate onSubmit={submitHandler}>
+        <form className={classes.form} onSubmit={submitHandler}>
           <TextField
             variant="outlined"
             margin="normal"

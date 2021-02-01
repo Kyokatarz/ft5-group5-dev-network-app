@@ -1,3 +1,5 @@
+import { UserActions } from '../../types'
+
 export type UserStateType = {
   isLoggedIn: boolean
   user: any
@@ -12,7 +14,7 @@ export const userState: UserStateType = {
 
 export const userReducer = (
   state: UserStateType,
-  action: any
+  action: UserActions
 ): UserStateType => {
   switch (action.type) {
     case 'LOGIN':
@@ -22,8 +24,7 @@ export const userReducer = (
       return {
         ...state,
         isLoggedIn: true,
-        user: action.payload.user,
-        token: action.payload.token,
+        user: action.payload,
       }
     case 'LOGOUT':
       localStorage.clear()

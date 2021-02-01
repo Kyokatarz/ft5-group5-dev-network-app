@@ -34,10 +34,7 @@ export type Comment = {
 //Actions
 export type logUserIn = {
   type: typeof LOGIN
-  payload: {
-    email: string
-    password: string
-  }
+  payload: UserProfile
 }
 
 export type logUserOut = {
