@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-server-micro'
 import { SerialiseErrorsType } from '../types'
 
 /** a generic guard class to protect the custom errors structure 
@@ -7,23 +8,11 @@ import { SerialiseErrorsType } from '../types'
       <li key={e.message}>{e.message}</li>
     ))}
 */
-export abstract class CustomError extends Error {
-  abstract statusCode: number
-
-  constructor(readonly message: string) {
-    super(message)
-    Object.setPrototypeOf(this, CustomError.prototype)
-  }
-
-  abstract serialiseErrors(): { message: string; field?: string }[]
-}
 
 /** errors */
-export class BadRequestError extends CustomError {
-  statusCode = 400
-
+export class BadRequestError extends ApolloError {
   constructor(readonly message: string) {
-    super(message)
+    super(message, '400')
     Object.setPrototypeOf(this, BadRequestError.prototype)
   }
 
@@ -32,11 +21,9 @@ export class BadRequestError extends CustomError {
   }
 }
 
-export class DatabaseConnectionError extends CustomError {
-  statusCode = 500
-
+export class DatabaseConnectionError extends ApolloError {
   constructor() {
-    super('Error connecting to DB')
+    super('Error connecting to DB', '500')
     Object.setPrototypeOf(this, DatabaseConnectionError.prototype)
   }
 
@@ -45,11 +32,9 @@ export class DatabaseConnectionError extends CustomError {
   }
 }
 
-export class NotAuthorisedError extends CustomError {
-  statusCode = 401
-
+export class NotAuthorisedError extends ApolloError {
   constructor() {
-    super('You are not authorised')
+    super('You are not authorised', '401')
     Object.setPrototypeOf(this, NotAuthorisedError.prototype)
   }
 
@@ -58,11 +43,9 @@ export class NotAuthorisedError extends CustomError {
   }
 }
 
-export class NotFoundError extends CustomError {
-  statusCode = 404
-
+export class NotFoundError extends ApolloError {
   constructor() {
-    super("Whatever you are looking for, it's not there")
+    super("Whatever you are looking for, it's not there", '404')
   }
 
   serialiseErrors(): SerialiseErrorsType {
@@ -70,11 +53,9 @@ export class NotFoundError extends CustomError {
   }
 }
 
-export class CredentialError extends CustomError {
-  statusCode = 401
-
+export class CredentialError extends ApolloError {
   constructor() {
-    super('Invalid credentials')
+    super('Invalid credentials', '401')
   }
 
   serialiseErrors(): SerialiseErrorsType {
@@ -82,7 +63,7 @@ export class CredentialError extends CustomError {
   }
 }
 
-export class InternalServerError extends CustomError {
+export class InternalServerError extends ApolloError {
   statusCode = 500
 
   constructor() {
@@ -94,11 +75,9 @@ export class InternalServerError extends CustomError {
   }
 }
 
-export class YupValidationError extends CustomError {
-  statusCode = 401
-
+export class YupValidationError extends ApolloError {
   constructor(readonly message: string) {
-    super(message)
+    super(message, '400')
     Object.setPrototypeOf(this, BadRequestError.prototype)
   }
 
@@ -106,7 +85,6 @@ export class YupValidationError extends CustomError {
     return [{ message: this.message }]
   }
 }
-//TODO: add request validation error class
 /** then we could use it like this:
  * serialiseErrors() {
     return this.errors.map(e => {
