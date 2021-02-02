@@ -15,7 +15,7 @@ import React, { FormEvent, ChangeEvent, useState, useContext } from 'react'
 
 import { AuthUserContext } from '../../context/auth'
 import useStyles from './useStyles'
-import { sendRequestToSignUserIn } from '../../action/user'
+import { sendRequestToSignUserIn } from '../../actions/user'
 
 type InitialStateType = {
   email: string

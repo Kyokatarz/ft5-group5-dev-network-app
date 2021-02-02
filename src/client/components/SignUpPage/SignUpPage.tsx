@@ -14,7 +14,7 @@ import { TextField } from 'formik-material-ui'
 
 import { AuthUserContext } from '../../context/auth'
 import { useContext } from 'react'
-import { sendRequestToSignUserUp } from '../../action/user'
+import { sendRequestToSignUserUp } from '../../actions/user'
 
 const signUpYupSchema = yup.object().shape({
   email: yup.string().email(),

@@ -26,10 +26,7 @@ const Home = (): JSX.Element => {
   return (
     <div className={classes.root}>
       <div className={clsx(classes.container, classes.relative)}>
-        <img
-          src="https://dev-network.s3.eu-north-1.amazonaws.com/altumcode-dC6Pb2JdAqs-unsplash.jpg"
-          className={classes.image}
-        />
+        <img src="https://i.imgur.com/4WTfei1.jpg" className={classes.image} />
         <div className={classes.overlay}>
           <h1 className={classes.title}>APP NAME HERE</h1>
           <h2 className={classes.subTitle}>Boost your career in 3 steps</h2>
