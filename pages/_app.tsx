@@ -1,4 +1,5 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useContext } from 'react'
+import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import {
   createStyles,
@@ -36,6 +37,10 @@ export default function MyApp(props: any): JSX.Element {
     }
   }, [])
 
+  React.useEffect(() => {
+    console.log(props)
+  })
+
   return (
     <React.Fragment>
       <Head>
@@ -57,4 +62,12 @@ export default function MyApp(props: any): JSX.Element {
       </ThemeProvider>
     </React.Fragment>
   )
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  return {
+    props: {
+      trueOrFalse: true,
+    },
+  }
 }
