@@ -27,6 +27,7 @@ export default function MyApp(props: any): JSX.Element {
   const { Component, pageProps } = props
   const [state, dispatch] = useReducer(userReducer, userState)
   const dispatchAsync = useThunk(dispatch)
+
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side')

@@ -7,14 +7,14 @@ import {
   Typography,
 } from '@material-ui/core'
 import * as yup from 'yup'
-import React from 'react'
 import Link from 'next/link'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
-import request from 'graphql-request'
 
-import { host, signUpUser } from '../../helpers/graphql-request-string'
+import { AuthUserContext } from '../../context/auth'
+import { useContext } from 'react'
+import { sendRequestToSignUserUp } from '../../action/user'
 
 const signUpYupSchema = yup.object().shape({
   email: yup.string().email(),
@@ -56,18 +56,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles()
-
-  const submitHandler = async ({
-    email,
-    password,
-    lastName,
-    firstName,
-  }: any) => {
-    const res = await request(
-      host,
-      signUpUser(email, password, lastName, firstName)
-    )
-    console.log(res)
+  const { dispatchAsync } = useContext(AuthUserContext)
+  const submitHandler = async (data: any) => {
+    const { email, password, lastName, firstName } = data
+    dispatchAsync(sendRequestToSignUserUp(email, password, lastName, firstName))
   }
   return (
     <Container component="section" maxWidth="xs" className={classes.container}>
