@@ -1,5 +1,4 @@
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { relative } from 'path'
 //https://stackoverflow.com/questions/44717164/unable-to-import-svg-files-in-typescript
 // import * as bg from './bg.svg'
 // const bg = './bg.svg'
