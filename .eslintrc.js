@@ -22,6 +22,7 @@ module.exports = {
     //Suppress missing React Import errors - Not required in NextJS
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.ts', '.tsx'] }], //should add ".ts" if typescript project
+    'react/prop-types': 'off',
     "semi": ["error", "never"],
     "@typescript-eslint/explicit-module-boundary-types": 'off',
     "@typescript-eslint/no-explicit-any": "off",
