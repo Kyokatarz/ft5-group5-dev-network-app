@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core'
 import React, { useState } from 'react'
 
-import CreatePostModal from '../CreatePostModal/CreatePostModal'
+import CreatePostModal from '../CreatePostModal/'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

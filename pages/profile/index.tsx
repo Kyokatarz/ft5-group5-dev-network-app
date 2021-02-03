@@ -1,8 +1,7 @@
-import React from 'react'
-import ProfilePage from '../../src/client/components/ProfilePage'
+import DashboardPage from '../../src/client/components/ProfilePage'
 
 const index = () => {
-  return <ProfilePage />
+  return <DashboardPage />
 }
 
 export default index
