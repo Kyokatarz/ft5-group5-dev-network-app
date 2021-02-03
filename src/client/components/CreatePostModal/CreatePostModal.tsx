@@ -10,8 +10,6 @@ import {
   makeStyles,
   Modal,
   TextField,
-  Theme,
-  Typography,
   Divider,
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
@@ -25,7 +23,7 @@ type CreatePostModalProps = {
   closeModal: () => void
 }
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     modal: {
       width: '100%',
