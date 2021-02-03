@@ -85,3 +85,21 @@ export const checkCookie = () => {
     }
   `
 }
+
+export const userCreatePost = (content: string) => {
+  return gql`
+    mutation {
+      userCreatePost(postContent: "${content}"){
+        id,
+        content,
+        date,
+        likes,
+        comments{
+          userId,
+          content,
+          likes
+        }
+      }
+    }
+  `
+}

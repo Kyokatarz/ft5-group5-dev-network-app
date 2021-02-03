@@ -12,10 +12,13 @@ import {
   TextField,
   Theme,
   Typography,
+  Divider,
 } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
-import Divider from '@material-ui/core/Divider'
-import React from 'react'
+import React, { FormEvent, useContext, useState } from 'react'
+
+import { requestUserCreatePost } from '../../actions/user'
+import { AuthUserContext } from '../../context/auth'
 
 type CreatePostModalProps = {
   modalState: boolean
@@ -33,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     card: {
-      width: '35vw',
+      minWidth: '35vw',
       height: 'auto',
     },
     textField: {
@@ -51,14 +54,25 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
   closeModal,
 }) => {
   const classes = useStyles()
+  const { dispatchAsync } = useContext(AuthUserContext)
+  const [content, setContent] = useState('')
+  const submitHandler = (event: FormEvent) => {
+    event.preventDefault()
+
+    dispatchAsync(requestUserCreatePost(content))
+    closeModal()
+    setContent('')
+    console.log(content)
+  }
+
   return (
-    <Modal open={true} onClose={closeModal} className={classes.modal}>
+    <Modal open={modalState} onClose={closeModal} className={classes.modal}>
       {/* TODO: CHANGE LATER */}
       <Card className={classes.card}>
         <CardHeader
           title="Create a new post"
           action={
-            <IconButton>
+            <IconButton onClick={closeModal}>
               <CloseIcon color="secondary" />
             </IconButton>
           }
@@ -72,27 +86,33 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
             </Grid>
             <Grid item xs={11}>
               {/* Grid container for the TextField and Button */}
-              <Grid container spacing={1}>
-                <Grid item xs={12}>
-                  <TextField
-                    multiline
-                    variant="outlined"
-                    InputLabelProps={{ shrink: true }}
-                    label="What's on your mind?"
-                    className={classes.textField}
-                    rows={5}
-                  />
+              <form onSubmit={submitHandler}>
+                <Grid container spacing={1}>
+                  <Grid item xs={12}>
+                    <TextField
+                      multiline
+                      variant="outlined"
+                      InputLabelProps={{ shrink: true }}
+                      label="What's on your mind?"
+                      className={classes.textField}
+                      rows={5}
+                      required
+                      value={content}
+                      onChange={(event) => setContent(event.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      variant="contained"
+                      className={classes.postButton}
+                      color="primary"
+                      type="submit"
+                    >
+                      Post
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    variant="contained"
-                    className={classes.postButton}
-                    color="primary"
-                  >
-                    Post
-                  </Button>
-                </Grid>
-              </Grid>
+              </form>
             </Grid>
           </Grid>
         </CardContent>

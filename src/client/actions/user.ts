@@ -7,6 +7,7 @@ import {
   host,
   logInUser,
   signUpUser,
+  userCreatePost,
 } from '../helpers/graphql-request-string'
 
 export const signUserIn = (payload: UserProfile): UserActions => {
@@ -19,11 +20,11 @@ export const signUserIn = (payload: UserProfile): UserActions => {
 export const sendRequestToSignUserIn = (email: string, password: string) => {
   return async (dispatch: Dispatch<UserActions>) => {
     try {
-      const res = await request(host, logInUser(email, password))
-      console.log(JSON.stringify(res, null, 2))
+      const resp = await request(host, logInUser(email, password))
+      console.log(JSON.stringify(resp, null, 2))
       dispatch({
         type: 'LOGIN',
-        payload: res,
+        payload: resp,
       })
     } catch (err) {
       console.error(err)
@@ -39,12 +40,12 @@ export const sendRequestToSignUserUp = (
 ) => {
   return async (dispatch: Dispatch<any>) => {
     try {
-      const res = await request(
+      const resp = await request(
         host,
         signUpUser(email, password, lastName, firstName)
       )
-      dispatch(signUserIn(res))
-      console.log(res)
+      dispatch(signUserIn(resp))
+      console.log(resp)
     } catch (err) {
       console.error(err)
     }
@@ -52,8 +53,23 @@ export const sendRequestToSignUserUp = (
 }
 
 export const requestCheckCookie = () => {
-  return async (dispatch: Dispatch<any>) => {
-    const resp = await request(host, checkCookie())
-    console.log(resp)
+  return async () => {
+    try {
+      const resp = await request(host, checkCookie())
+      console.log(resp)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
+export const requestUserCreatePost = (content: string) => {
+  return async () => {
+    try {
+      const resp = await request(host, userCreatePost(content))
+      console.log(resp)
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
