@@ -1,5 +1,4 @@
-import React, { useReducer, useContext } from 'react'
-import { GetServerSidePropsContext } from 'next'
+import React, { useReducer, useEffect } from 'react'
 import Head from 'next/head'
 import {
   createStyles,
@@ -14,6 +13,8 @@ import Navbar from '../src/client/components/Navbar'
 import { AuthUserContext } from '../src/client/context/auth'
 import { userState, userReducer } from '../src/client/reducers/user'
 import { useThunk } from '../src/client/hooks/useThunk'
+import { checkCookie } from '../src/client/helpers/graphql-request-string'
+import { requestCheckCookie } from '../src/client/actions/user'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,8 +39,8 @@ export default function MyApp(props: any): JSX.Element {
   }, [])
 
   React.useEffect(() => {
-    console.log(props)
-  })
+    dispatchAsync(requestCheckCookie() as any)
+  }, [])
 
   return (
     <React.Fragment>
@@ -62,12 +63,4 @@ export default function MyApp(props: any): JSX.Element {
       </ThemeProvider>
     </React.Fragment>
   )
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  return {
-    props: {
-      trueOrFalse: true,
-    },
-  }
 }

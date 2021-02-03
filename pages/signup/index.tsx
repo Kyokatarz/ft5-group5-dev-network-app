@@ -6,3 +6,7 @@ const SignUp = () => {
 }
 
 export default SignUp
+
+export async function getStaticProps(context: any) {
+  return { props: { data: 'data' } }
+}

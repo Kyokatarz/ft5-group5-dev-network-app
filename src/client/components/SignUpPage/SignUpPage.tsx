@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core'
 import * as yup from 'yup'
 import Link from 'next/link'
+import { useEffect } from 'react'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
@@ -54,13 +55,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function SignUp() {
+export default function SignUpPage(props) {
   const classes = useStyles()
   const { dispatchAsync } = useContext(AuthUserContext)
   const submitHandler = async (data: any) => {
     const { email, password, lastName, firstName } = data
     dispatchAsync(sendRequestToSignUserUp(email, password, lastName, firstName))
   }
+  useEffect(() => {
+    console.log(props)
+  })
+
   return (
     <Container component="section" maxWidth="xs" className={classes.container}>
       <div className={classes.paper}>

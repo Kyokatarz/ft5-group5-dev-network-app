@@ -16,9 +16,13 @@ import * as yupSchemas from './yupSchemas/yupSchemas'
 import { logInUserArgs, signUpUserArgs } from '../../types/user'
 
 export const getUserById = async (userId: string): Promise<UserDocument> => {
-  const user = await User.findById(userId).select('-password').exec()
-  if (!user) throw NOT_FOUND_ERROR
-  return user
+  try {
+    const user = await User.findById(userId).select('-password').exec()
+    if (!user) throw NOT_FOUND_ERROR
+    return user
+  } catch (err) {
+    errorHandler(err)
+  }
 }
 
 export const getAllUsers = async (): Promise<UserDocument[]> => {
@@ -213,4 +217,21 @@ export const userCreateComment = async () => {
 
 export const userDeleteComment = async () => {
   return
+}
+
+export const checkCookieAndRetrieveUser = async (_context: GraphQLContext) => {
+  try {
+    console.log(`[${new Date().toLocaleString()}] ` + 'Checking cookie ')
+    console.log(_context.cookie.token)
+    if (!_context.cookie.token) throw NO_TOKEN
+    const token = _context.cookie.token
+    const payload = getPayloadFromJwt(token)
+    const userId = payload.id
+    console.log(userId)
+
+    const user = await User.findById(userId).select('-password').exec()
+    return user
+  } catch (err) {
+    errorHandler(err)
+  }
 }

@@ -2,7 +2,12 @@ import { Dispatch } from 'react'
 import request from 'graphql-request'
 
 import { LOGIN, UserActions, UserProfile } from '../types'
-import { host, logInUser, signUpUser } from '../helpers/graphql-request-string'
+import {
+  checkCookie,
+  host,
+  logInUser,
+  signUpUser,
+} from '../helpers/graphql-request-string'
 
 export const signUserIn = (payload: UserProfile): UserActions => {
   return {
@@ -32,7 +37,7 @@ export const sendRequestToSignUserUp = (
   lastName: string,
   firstName: string
 ) => {
-  return async (dispatch: Dispatch<UserActions>) => {
+  return async (dispatch: Dispatch<any>) => {
     try {
       const res = await request(
         host,
@@ -43,5 +48,12 @@ export const sendRequestToSignUserUp = (
     } catch (err) {
       console.error(err)
     }
+  }
+}
+
+export const requestCheckCookie = () => {
+  return async (dispatch: Dispatch<any>) => {
+    const resp = await request(host, checkCookie())
+    console.log(resp)
   }
 }

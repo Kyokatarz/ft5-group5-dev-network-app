@@ -1,4 +1,5 @@
 type Query {
   getUserById(id: String): User
   getAllUsers: [User]
+  checkCookieAndRetrieveUser: User
 }

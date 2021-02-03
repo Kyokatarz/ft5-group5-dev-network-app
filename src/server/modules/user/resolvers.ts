@@ -9,6 +9,8 @@ export const resolvers: GraphQLResolver = {
     getUserById: (_parents, _args, _context): Promise<UserDocument> =>
       services.getUserById(_args.id),
     getAllUsers: (): Promise<UserDocument[]> => services.getAllUsers(),
+    checkCookieAndRetrieveUser: (_, _args, _context) =>
+      services.checkCookieAndRetrieveUser(_context),
   },
 
   Mutation: {
@@ -16,7 +18,6 @@ export const resolvers: GraphQLResolver = {
     signupUser: (_, _args, _context) =>
       services.signupUser(_context, _args.user),
     loginUser: (_, _args, _context) => services.loginUser(_context, _args.user),
-
     //Protected
     updateUserProfile: (_, _args, _context: GraphQLContext) =>
       services.updateUserProfile(_context, _args.update),

@@ -58,3 +58,30 @@ export const logInUser = (email: string, password: string): string => {
     }
   `
 }
+
+export const checkCookie = () => {
+  return gql`
+    query {
+      checkCookieAndRetrieveUser {
+        id
+        email
+        firstName
+        lastName
+        image
+        employmentStatus
+        company
+        posts {
+          id
+          content
+          date
+          likes
+          comments {
+            userId
+            content
+            likes
+          }
+        }
+      }
+    }
+  `
+}
