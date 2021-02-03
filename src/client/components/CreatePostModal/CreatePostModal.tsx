@@ -34,7 +34,7 @@ const useStyles = makeStyles(() =>
     },
 
     card: {
-      minWidth: '35vw',
+      minWidth: '45vw',
       height: 'auto',
     },
     textField: {
@@ -56,7 +56,6 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
   const [content, setContent] = useState('')
   const submitHandler = (event: FormEvent) => {
     event.preventDefault()
-
     dispatchAsync(requestUserCreatePost(content))
     closeModal()
     setContent('')
