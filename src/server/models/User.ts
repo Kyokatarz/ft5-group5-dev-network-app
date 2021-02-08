@@ -33,7 +33,8 @@ const userSchema = new Schema({
   company: String,
   posts: [
     {
-      id: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'post',
     },
   ],
 })
