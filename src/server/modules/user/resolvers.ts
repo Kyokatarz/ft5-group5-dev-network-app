@@ -11,6 +11,7 @@ export const resolvers: GraphQLResolver = {
     getAllUsers: (): Promise<UserDocument[]> => services.getAllUsers(),
     checkCookieAndRetrieveUser: (_, _args, _context) =>
       services.checkCookieAndRetrieveUser(_context),
+    logOut: (_, _args, _context) => services.logOut(_context),
   },
 
   Mutation: {

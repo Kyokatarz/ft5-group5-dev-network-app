@@ -1,5 +1,5 @@
 type Post {
-  id: String!
+  _id: String!
   content: String!
   date: String!
   likes: [String]

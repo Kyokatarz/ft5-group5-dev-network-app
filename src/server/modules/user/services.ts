@@ -146,6 +146,7 @@ export const userCreatePost = async (
   postContent: string
 ): Promise<PostDocument> => {
   try {
+    console.log('OKAY')
     const token = _context.cookie?.token
     if (!token) {
       throw NO_TOKEN
@@ -166,10 +167,12 @@ export const userCreatePost = async (
     })
 
     const userPosts = user.posts
-    userPosts.push(post)
+    console.log(post._id)
+    userPosts.push(post._id)
 
     await user.save()
     await post.save()
+
     return post
   } catch (err) {
     errorHandler(err)
@@ -224,14 +227,22 @@ export const checkCookieAndRetrieveUser = async (_context: GraphQLContext) => {
     console.log(`[${new Date().toLocaleString()}] ` + 'Checking cookie ')
     console.log(_context.cookie.token)
     if (!_context.cookie.token) throw NO_TOKEN
+
     const token = _context.cookie.token
     const payload = getPayloadFromJwt(token)
     const userId = payload.id
     console.log(userId)
 
-    const user = await User.findById(userId).select('-password').exec()
+    const user = await User.findById(userId).select('-password')
+    const a = await user.populate('posts').execPopulate()
+
+    console.log(a)
     return user
   } catch (err) {
     errorHandler(err)
   }
+}
+
+export const logOut = async (_context: GraphQLContext) => {
+  setCookie(_context)
 }
