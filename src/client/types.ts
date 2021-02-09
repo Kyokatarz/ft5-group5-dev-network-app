@@ -12,7 +12,7 @@ export type UserProfile = {
   image: string
   employmentStatus: string
   company: string
-  post: Post[]
+  posts: Post[]
 }
 
 //A post:
@@ -24,7 +24,7 @@ export type Post = {
   comments: Comment[]
 }
 
-//A profile
+//A comment
 export type Comment = {
   userId: string
   content: string
@@ -42,3 +42,9 @@ export type logUserOut = {
 }
 
 export type UserActions = logUserIn | logUserOut
+
+//States:
+export type UserState = {
+  isLoggedIn: boolean
+  user: UserProfile
+}

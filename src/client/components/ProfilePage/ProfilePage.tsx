@@ -2,6 +2,8 @@ import CreatePost from '../CreatePost'
 import Head from 'next/head'
 
 import ProfileBar from '../ProfileBar'
+import React from 'react'
+import ProfilePostContainer from '../ProfilePostContainer'
 
 const ProfilePage = () => {
   return (
@@ -11,6 +13,7 @@ const ProfilePage = () => {
       </Head>
       <ProfileBar />
       <CreatePost />
+      <ProfilePostContainer />
     </>
   )
 }

@@ -9,9 +9,9 @@ import {
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import Link from 'next/link'
-import React, { useContext } from 'react'
+import React from 'react'
 
-import { AuthUserContext } from '../../context/auth'
+import useUserContext from '../../hooks/useUserContext'
 import LoginSignUp from '../LoginSignUp'
 import NavBarLinks from '../NavbarLinks'
 
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 const Navbar = () => {
-  const { state, dispatch } = useContext(AuthUserContext)
+  const { state } = useUserContext()
   const classes = useStyles()
 
   return (

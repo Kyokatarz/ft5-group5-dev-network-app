@@ -53,9 +53,10 @@ export const sendRequestToSignUserUp = (
 }
 
 export const requestCheckCookie = () => {
-  return async () => {
+  return async (dispatch: Dispatch<any>) => {
     try {
       const resp = await request(host, checkCookie())
+      dispatch(signUserIn(resp.checkCookieAndRetrieveUser))
       console.log(resp)
     } catch (err) {
       console.error(err)

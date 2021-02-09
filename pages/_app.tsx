@@ -13,7 +13,6 @@ import Navbar from '../src/client/components/Navbar'
 import { AuthUserContext } from '../src/client/context/auth'
 import { userState, userReducer } from '../src/client/reducers/user'
 import { useThunk } from '../src/client/hooks/useThunk'
-import { checkCookie } from '../src/client/helpers/graphql-request-string'
 import { requestCheckCookie } from '../src/client/actions/user'
 
 const useStyles = makeStyles((theme: Theme) =>
