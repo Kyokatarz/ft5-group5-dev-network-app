@@ -22,6 +22,8 @@ export type Post = {
   date: string
   likes: string[]
   comments: Comment[]
+  firstName: string
+  lastName: string
 }
 
 //A comment

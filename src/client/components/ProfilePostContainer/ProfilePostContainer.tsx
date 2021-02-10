@@ -1,3 +1,4 @@
+import { Grid } from '@material-ui/core'
 import React from 'react'
 
 import useUserContext from '../../hooks/useUserContext'
@@ -9,18 +10,21 @@ const ProfilePostContainer = () => {
     console.log(state)
   })
   return (
-    <div>
+    <Grid container direction="column">
       {state.user?.posts?.map((post) => (
-        <SinglePost
-          id={post.id}
-          likes={post.likes}
-          content={post.content}
-          date={post.date}
-          comments={post.comments}
-          key={post.id}
-        />
+        <Grid item key={post.id}>
+          <SinglePost
+            id={post.id}
+            likes={post.likes}
+            content={post.content}
+            date={post.date}
+            comments={post.comments}
+            firstName={state.user.firstName}
+            lastName={state.user.lastName}
+          />
+        </Grid>
       )) || 'Empty'}
-    </div>
+    </Grid>
   )
 }
 

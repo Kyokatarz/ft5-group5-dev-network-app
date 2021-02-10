@@ -23,7 +23,7 @@ const NavBarLinks = () => {
   return (
     <ul className={classes.container}>
       <li>
-        <Link href="/dashboard">
+        <Link href="/profile">
           <Typography>Profile</Typography>
         </Link>
       </li>
