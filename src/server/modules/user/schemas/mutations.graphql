@@ -5,6 +5,7 @@ type Mutation {
   updateUserProfile(update: UserUpdateProfileInput): User!
   forgotPassword(email: String!): String
   userCreatePost(postContent: String): Post!
+  userLikePost(postId: String): Post!
   userCreateComment(commentObj: UserCreateCommentInput): String # not sure about that cause we need postId as well
   connectToAnotherUser: String # todo
   userDeletePost: String # todo

@@ -8,13 +8,15 @@ import {
   Divider,
   Grid,
 } from '@material-ui/core'
-import React from 'react'
+import React, { useState } from 'react'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp'
 import ThumbUpTwoToneIcon from '@material-ui/icons/ThumbUpTwoTone'
 import CommentIcon from '@material-ui/icons/Sms'
 import CommentTwoToneIcon from '@material-ui/icons/CommentTwoTone'
 
 import { Comment } from '../../types'
+import useUserContext from '../../hooks/useUserContext'
+import { sendRequestToLikePost } from '../../actions/user'
 
 type SinglePostProps = {
   id: string
@@ -27,20 +29,34 @@ type SinglePostProps = {
 }
 
 const SinglePost: React.FC<SinglePostProps> = ({
-  id,
+  id: postId,
   likes,
   content,
-  date,
+  date: dateString,
   comments,
   firstName,
   lastName,
 }) => {
+  const { dispatchAsync, state } = useUserContext()
+  const userId = state.user.id
+  const date = new Date(Number(dateString))
+
+  const [liked, setLiked] = useState(likes.includes(userId))
+  const [numberOfLikes, setNumberOfLikes] = useState(likes.length)
+
+  const onLikePost = () => {
+    dispatchAsync(sendRequestToLikePost(postId))
+    liked
+      ? setNumberOfLikes(numberOfLikes - 1)
+      : setNumberOfLikes(numberOfLikes + 1)
+    setLiked(!liked)
+  }
   return (
     <Card>
       <CardHeader
         avatar={<Avatar>K</Avatar>}
         title={`${firstName} ${lastName}` || 'Unnamed User'}
-        subheader={new Date(Number(date)).toLocaleString()}
+        subheader={date.toDateString() + ', ' + date.toLocaleTimeString()}
       />
       <Divider variant="middle" />
       <CardContent>
@@ -48,7 +64,7 @@ const SinglePost: React.FC<SinglePostProps> = ({
         <Divider />
         <Grid container spacing={1}>
           <Grid item>
-            {likes.length}
+            {numberOfLikes}
             <ThumbUpIcon />
           </Grid>
           <Grid item>
@@ -57,10 +73,15 @@ const SinglePost: React.FC<SinglePostProps> = ({
           </Grid>
         </Grid>
 
+        <Divider />
         <CardActions>
           <Grid container>
             <Grid item xs={6}>
-              <Button fullWidth>
+              <Button
+                fullWidth
+                color={liked ? 'primary' : 'default'}
+                onClick={onLikePost}
+              >
                 <ThumbUpTwoToneIcon />
                 Like
               </Button>

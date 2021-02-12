@@ -103,3 +103,13 @@ export const userCreatePost = (content: string) => {
     }
   `
 }
+
+export const userLikePost = (postId: string) => {
+  return gql`
+    mutation{
+      userLikePost(postId: "${postId}"){
+        likes
+      }
+    }
+  `
+}

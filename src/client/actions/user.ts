@@ -8,7 +8,8 @@ import {
   logInUser,
   signUpUser,
   userCreatePost,
-} from '../helpers/graphql-request-string'
+  userLikePost,
+} from '../helpers/gql-string-factory'
 
 export const signUserIn = (payload: UserProfile): UserActions => {
   return {
@@ -68,6 +69,17 @@ export const requestUserCreatePost = (content: string) => {
   return async () => {
     try {
       const resp = await request(host, userCreatePost(content))
+      console.log(resp)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
+export const sendRequestToLikePost = (postId: string) => {
+  return async () => {
+    try {
+      const resp = await request(host, userLikePost(postId))
       console.log(resp)
     } catch (err) {
       console.error(err)

@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       width: '80vw',
       height: 115,
+      margin: 5,
       marginTop: theme.spacing(9),
       display: 'flex',
       alignItems: 'center',

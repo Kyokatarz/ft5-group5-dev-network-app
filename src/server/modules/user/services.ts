@@ -179,6 +179,33 @@ export const userCreatePost = async (
   }
 }
 
+export const userLikePost = async (
+  _context: GraphQLContext,
+  postId: string
+): Promise<PostDocument> => {
+  try {
+    const token = _context.cookie?.token
+    if (!token) throw NO_TOKEN
+
+    const userId = getPayloadFromJwt(token).id
+    const post = await Post.findById(postId)
+    if (!post) throw NOT_FOUND_ERROR
+
+    const user = await User.findById(userId)
+    if (!user) throw NOT_FOUND_ERROR
+    if (post.likes.includes(userId)) {
+      const index = post.likes.indexOf(userId)
+      post.likes.splice(index, 1)
+    } else {
+      post.likes.push(userId)
+    }
+    await post.save()
+    return post
+  } catch (err) {
+    errorHandler(err)
+  }
+}
+
 export const userDeletePost = async (
   _context: GraphQLContext,
   postId: string

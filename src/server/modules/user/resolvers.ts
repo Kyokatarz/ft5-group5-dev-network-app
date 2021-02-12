@@ -1,5 +1,3 @@
-import cookie from 'cookie'
-
 import * as services from './services'
 import { UserDocument } from '../../models/User'
 import { GraphQLContext, GraphQLResolver } from '../../types'
@@ -26,6 +24,8 @@ export const resolvers: GraphQLResolver = {
       services.userCreatePost(_context, _args.postContent),
     userDeletePost: (_, _args, _context: GraphQLContext) =>
       services.userDeletePost(_context, _args.postId),
+    userLikePost: (_, _args, _context: GraphQLContext) =>
+      services.userLikePost(_context, _args.postId),
     testCookie: (_, _args, _context: GraphQLContext) => {
       console.log('Heare', _context.cookie)
     },

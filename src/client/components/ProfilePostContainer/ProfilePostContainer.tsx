@@ -10,7 +10,7 @@ const ProfilePostContainer = () => {
     console.log(state)
   })
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" spacing={1}>
       {state.user?.posts?.map((post) => (
         <Grid item key={post.id}>
           <SinglePost
