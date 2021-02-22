@@ -7,6 +7,7 @@ import {
   host,
   logInUser,
   signUpUser,
+  userCreateComment,
   userCreatePost,
   userLikePost,
 } from '../helpers/gql-string-factory'
@@ -80,6 +81,17 @@ export const sendRequestToLikePost = (postId: string) => {
   return async () => {
     try {
       const resp = await request(host, userLikePost(postId))
+      console.log(resp)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
+export const sendRequestToComment = (postId: string, content: string) => {
+  return async () => {
+    try {
+      const resp = await request(host, userCreateComment(postId, content))
       console.log(resp)
     } catch (err) {
       console.error(err)

@@ -6,11 +6,13 @@ export type PostDocument = Document & {
   date: Date
   likes: string[]
   onModel: 'company' | 'user'
-  comments?: Array<{
-    commentUserId: string
-    text: string
-    avatar: string
-  }>
+  comments?: Comment[]
+}
+
+export type Comment = {
+  userId: string
+  content: string
+  likes?: string[]
 }
 
 const postSchema = new Schema({
@@ -24,8 +26,8 @@ const postSchema = new Schema({
   ],
   comments: [
     {
-      commentedId: { type: Schema.Types.ObjectId, refPath: 'onModel' },
-      text: String,
+      userId: { type: Schema.Types.ObjectId, refPath: 'onModel' },
+      content: String,
     },
   ],
   onModel: {

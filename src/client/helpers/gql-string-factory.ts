@@ -113,3 +113,23 @@ export const userLikePost = (postId: string) => {
     }
   `
 }
+
+export const userCreateComment = (postId: string, content: string) => {
+  return gql`
+    mutation {
+      userCreateComment(
+        commentObj: { content: "${content}", postId: "${postId}" }
+      ) {
+        id
+        content
+        date
+        likes
+        comments {
+          userId
+          content
+          likes
+        }
+      }
+    }
+  `
+}

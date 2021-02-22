@@ -2,6 +2,7 @@ import * as services from './services'
 import { UserDocument } from '../../models/User'
 import { GraphQLContext, GraphQLResolver } from '../../types'
 
+//User resolver
 export const resolvers: GraphQLResolver = {
   Query: {
     getUserById: (_parents, _args, _context): Promise<UserDocument> =>
@@ -20,12 +21,19 @@ export const resolvers: GraphQLResolver = {
     //Protected
     updateUserProfile: (_, _args, _context: GraphQLContext) =>
       services.updateUserProfile(_context, _args.update),
+
     userCreatePost: (_, _args, _context: GraphQLContext) =>
       services.userCreatePost(_context, _args.postContent),
+
+    userCreateComment: (_, _args, _context: GraphQLContext) =>
+      services.userCreateComment(_context, _args.commentObj),
+
     userDeletePost: (_, _args, _context: GraphQLContext) =>
       services.userDeletePost(_context, _args.postId),
+
     userLikePost: (_, _args, _context: GraphQLContext) =>
       services.userLikePost(_context, _args.postId),
+
     testCookie: (_, _args, _context: GraphQLContext) => {
       console.log('Heare', _context.cookie)
     },

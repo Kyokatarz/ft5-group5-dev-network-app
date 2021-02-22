@@ -17,6 +17,8 @@ import CommentTwoToneIcon from '@material-ui/icons/CommentTwoTone'
 import { Comment } from '../../types'
 import useUserContext from '../../hooks/useUserContext'
 import { sendRequestToLikePost } from '../../actions/user'
+import CommentBox from '../CommentBox'
+import CommentContainer from '../CommentContainer/CommentContainer'
 
 type SinglePostProps = {
   id: string
@@ -58,7 +60,6 @@ const SinglePost: React.FC<SinglePostProps> = ({
         title={`${firstName} ${lastName}` || 'Unnamed User'}
         subheader={date.toDateString() + ', ' + date.toLocaleTimeString()}
       />
-      <Divider variant="middle" />
       <CardContent>
         {content}
         <Divider />
@@ -95,6 +96,9 @@ const SinglePost: React.FC<SinglePostProps> = ({
           </Grid>
         </CardActions>
         <Divider />
+        <CommentBox postId={postId} />
+        <Divider />
+        <CommentContainer comments={comments} />
       </CardContent>
     </Card>
   )

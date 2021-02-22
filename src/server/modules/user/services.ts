@@ -241,8 +241,30 @@ export const userDeletePost = async (
   }
 }
 
-export const userCreateComment = async () => {
-  return
+export const userCreateComment = async (
+  _context: GraphQLContext,
+  commentObj: { content: string; postId: string }
+) => {
+  try {
+    const token = _context.cookie?.token
+    const payload = getPayloadFromJwt(token)
+    const userId = payload.id
+
+    if (!token) throw NO_TOKEN
+
+    const { content, postId } = commentObj
+    const post = await Post.findById(postId)
+    if (!post) throw NOT_FOUND_ERROR
+
+    post.comments.push({
+      userId,
+      content,
+    })
+    await post.save()
+    return post
+  } catch (err) {
+    errorHandler(err)
+  }
 }
 
 export const userDeleteComment = async () => {
