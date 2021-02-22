@@ -12,6 +12,7 @@ export const CREDENTIAL_ERROR = 'CREDENTIAL_ERROR'
 export const NOT_FOUND_ERROR = 'NOT_FOUND_ERROR'
 export const VALIDATION_ERROR = 'ValidationError'
 export const NO_TOKEN = 'NO_TOKEN'
+export const NOT_AUTHORISED_ERROR = 'NOT_AUTHORISED_ERROR'
 
 export const errorHandler = (err: any): void => {
   if (err.name === VALIDATION_ERROR)
@@ -27,6 +28,8 @@ export const errorHandler = (err: any): void => {
     case NOT_FOUND_ERROR:
       throw new NotFoundError()
     case NO_TOKEN:
+      throw new NotAuthorisedError()
+    case NOT_AUTHORISED_ERROR:
       throw new NotAuthorisedError()
     default:
       console.log(err)

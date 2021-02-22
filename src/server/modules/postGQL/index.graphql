@@ -1,2 +1,3 @@
 #import Query from './schemas/queries.graphql'
 #import Type from './schemas/types.graphql'
+#import Mutation from './schemas/mutation.graphql'

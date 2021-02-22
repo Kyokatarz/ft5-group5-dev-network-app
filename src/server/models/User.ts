@@ -17,7 +17,7 @@ export type UserDocument = Document & {
   image?: string
   employmentStatus?: EmploymentStatus
   company?: string
-  posts?: PostDocument[]
+  posts?: string[]
 }
 
 const userSchema = new Schema({
