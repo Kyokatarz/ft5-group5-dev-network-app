@@ -28,6 +28,7 @@ export type Post = {
 
 //A comment
 export type Comment = {
+  id: string
   userId: string
   content: string
   likes: string[]

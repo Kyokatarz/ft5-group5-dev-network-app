@@ -219,10 +219,6 @@ export const userCreateComment = async (
   }
 }
 
-export const userDeleteComment = async () => {
-  return
-}
-
 export const checkCookieAndRetrieveUser = async (_context: GraphQLContext) => {
   try {
     const token = getTokenFromContext(_context)

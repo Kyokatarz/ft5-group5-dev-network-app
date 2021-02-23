@@ -3,5 +3,5 @@ export type Token = {
 }
 
 export type Payload = {
-  [key: string]: any
+  id: string
 }

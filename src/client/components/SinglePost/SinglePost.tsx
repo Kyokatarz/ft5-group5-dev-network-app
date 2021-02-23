@@ -152,7 +152,7 @@ const SinglePost: React.FC<SinglePostProps> = ({
         <Divider />
         <CommentBox postId={postId} />
         <Divider />
-        <CommentContainer comments={comments} />
+        <CommentContainer comments={comments} postId={postId} />
       </CardContent>
     </Card>
   )

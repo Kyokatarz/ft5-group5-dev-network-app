@@ -76,6 +76,7 @@ export const checkCookie = () => {
           date
           likes
           comments {
+            id
             userId
             content
             likes
@@ -139,6 +140,19 @@ export const deletePost = (postId: string) => {
   return gql`
     mutation {
       deletePost(postId: "${postId}") {
+        content
+      }
+    }
+  `
+}
+
+export const deleteComment = (postId: string, commentId: string) => {
+  return gql`
+    mutation {
+      deleteComment(
+        postId: "${postId}"
+        commentId: "${commentId}"
+      ) {
         content
       }
     }

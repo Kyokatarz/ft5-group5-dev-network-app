@@ -5,17 +5,23 @@ import SingleComment from '../SingleComment'
 
 type CommentContainerProps = {
   comments: Comment[]
+  postId: string
 }
 
-const CommentContainer: React.FC<CommentContainerProps> = ({ comments }) => {
+const CommentContainer: React.FC<CommentContainerProps> = ({
+  comments,
+  postId,
+}) => {
   return (
     <div>
       {comments.map((comment) => (
         <SingleComment
+          postId={postId}
+          commentId={comment.id}
           userId={comment.userId}
           content={comment.content}
           likes={comment.likes}
-          key={Math.random()}
+          key={comment.id}
         />
       ))}
     </div>
