@@ -35,4 +35,4 @@ const CommentBox: React.FC<CommentBoxProps> = ({ postId }) => {
   )
 }
 
-export default CommentBox
+export default React.memo(CommentBox)

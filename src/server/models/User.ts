@@ -9,7 +9,7 @@ export enum EmploymentStatus {
 }
 
 export type UserDocument = Document & {
-  id: string
+  id: mongoose.Schema.Types.ObjectId
   email: string
   password: string
   firstName?: string

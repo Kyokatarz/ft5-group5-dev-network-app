@@ -8,8 +8,6 @@ type Mutation {
   userLikePost(postId: String): Post!
   userCreateComment(commentObj: UserCreateCommentInput): Post! # not sure about that cause we need postId as well
   connectToAnotherUser: String # todo
-  userDeletePost: String # todo
-  userDeleteComment: String # todo
   disconnectFromAnotherUser: String # todo
   testCookie: String
 }

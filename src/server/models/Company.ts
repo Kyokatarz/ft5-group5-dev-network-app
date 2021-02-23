@@ -3,7 +3,7 @@ import mongoose, { Document, Model, Schema } from 'mongoose'
 import { PostDocument } from './Post'
 
 export type CompanyDocument = Document & {
-  id: string
+  id: mongoose.Types.ObjectId
   email: string
   password: string
   companyName: string

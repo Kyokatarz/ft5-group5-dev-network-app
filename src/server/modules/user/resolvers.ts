@@ -28,9 +28,6 @@ export const resolvers: GraphQLResolver = {
     userCreateComment: (_, _args, _context: GraphQLContext) =>
       services.userCreateComment(_context, _args.commentObj),
 
-    userDeletePost: (_, _args, _context: GraphQLContext) =>
-      services.userDeletePost(_context, _args.postId),
-
     userLikePost: (_, _args, _context: GraphQLContext) =>
       services.userLikePost(_context, _args.postId),
 

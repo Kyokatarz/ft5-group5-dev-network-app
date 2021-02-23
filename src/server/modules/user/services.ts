@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs'
+import mongoose from 'mongoose'
 
 import {
   errorHandler,
@@ -6,8 +7,10 @@ import {
   IDENTIFICATION_DUPLICATED,
   CREDENTIAL_ERROR,
   NOT_FOUND_ERROR,
-  NO_TOKEN,
   getPayloadFromJwt,
+  findUserById,
+  findPostById,
+  getTokenFromContext,
 } from '../../helpers'
 import { GraphQLContext } from '../../types'
 import User, { UserDocument } from '../../models/User'
@@ -30,7 +33,7 @@ export const getAllUsers = async (): Promise<UserDocument[]> => {
 }
 
 export const signupUser = async (
-  context: GraphQLContext,
+  _context: GraphQLContext,
   _args: signUpUserArgs
 ): Promise<Partial<UserDocument>> => {
   try {
@@ -57,7 +60,7 @@ export const signupUser = async (
       password: hashedPassword,
     })
     await user.save()
-    await setCookie(context, { id: user.id })
+    await setCookie(_context, { id: user.id })
 
     return { id: user.id, email, firstName, lastName } //maybe we can only return 'Success'
   } catch (err) {
@@ -100,11 +103,7 @@ export const updateUserProfile = async (
       company,
     } = update
 
-    const token = _context.cookie?.token
-
-    if (!token) {
-      throw NO_TOKEN
-    }
+    const token = getTokenFromContext(_context)
 
     await yupSchemas.yupUserUpdate.validate(
       {
@@ -146,19 +145,11 @@ export const userCreatePost = async (
   postContent: string
 ): Promise<PostDocument> => {
   try {
-    console.log('OKAY')
-    const token = _context.cookie?.token
-    if (!token) {
-      throw NO_TOKEN
-    }
-
+    const token = getTokenFromContext(_context)
     const payload = getPayloadFromJwt(token)
     const userId = payload.id
 
-    const user = await User.findById(userId)
-    if (!user) {
-      throw NOT_FOUND_ERROR
-    }
+    const user = await findUserById(userId)
 
     const post = new Post({
       content: postContent,
@@ -166,8 +157,8 @@ export const userCreatePost = async (
       onModel: 'user',
     })
 
+    //Save post to user
     const userPosts = user.posts
-    console.log(post._id)
     userPosts.push(post._id)
 
     await user.save()
@@ -181,21 +172,19 @@ export const userCreatePost = async (
 
 export const userLikePost = async (
   _context: GraphQLContext,
-  postId: string
+  postId: mongoose.Types.ObjectId
 ): Promise<PostDocument> => {
   try {
-    const token = _context.cookie?.token
-    if (!token) throw NO_TOKEN
-
+    const token = getTokenFromContext(_context)
     const userId = getPayloadFromJwt(token).id
-    const post = await Post.findById(postId)
-    if (!post) throw NOT_FOUND_ERROR
+    const post = await findPostById(postId)
+    const user = await findUserById(userId)
 
-    const user = await User.findById(userId)
-    if (!user) throw NOT_FOUND_ERROR
-    if (post.likes.includes(userId)) {
-      const index = post.likes.indexOf(userId)
-      post.likes.splice(index, 1)
+    const postLikes = [...post.likes].map((like) => like.toString())
+    if (postLikes.includes(userId.toString())) {
+      post.likes = postLikes
+        .filter((id) => id !== userId)
+        .map((id) => mongoose.Types.ObjectId(id))
     } else {
       post.likes.push(userId)
     }
@@ -206,57 +195,20 @@ export const userLikePost = async (
   }
 }
 
-export const userDeletePost = async (
-  _context: GraphQLContext,
-  postId: string
-): Promise<PostDocument> => {
-  try {
-    const token = _context.cookie?.token
-    if (!token) {
-      throw NO_TOKEN
-    }
-
-    const payload = getPayloadFromJwt(token)
-    const userId = payload.id
-
-    const user = await User.findById(userId)
-    if (!user) {
-      throw NOT_FOUND_ERROR
-    }
-
-    const post = await Post.findById(postId)
-    if (!post) {
-      throw NOT_FOUND_ERROR
-    }
-
-    //make sure the posts are on the right order
-    const userPosts = user.posts
-    userPosts.pop()
-
-    await user.save()
-    await post.save()
-    return post
-  } catch (err) {
-    errorHandler(err)
-  }
-}
-
 export const userCreateComment = async (
   _context: GraphQLContext,
-  commentObj: { content: string; postId: string }
+  commentObj: { content: string; postId: mongoose.Types.ObjectId }
 ) => {
   try {
-    const token = _context.cookie?.token
+    const token = getTokenFromContext(_context)
     const payload = getPayloadFromJwt(token)
     const userId = payload.id
 
-    if (!token) throw NO_TOKEN
-
     const { content, postId } = commentObj
-    const post = await Post.findById(postId)
-    if (!post) throw NOT_FOUND_ERROR
+    const post = await findPostById(postId)
 
     post.comments.push({
+      id: mongoose.Types.ObjectId(),
       userId,
       content,
     })
@@ -273,19 +225,13 @@ export const userDeleteComment = async () => {
 
 export const checkCookieAndRetrieveUser = async (_context: GraphQLContext) => {
   try {
-    console.log(`[${new Date().toLocaleString()}] ` + 'Checking cookie ')
-    console.log(_context.cookie.token)
-    if (!_context.cookie.token) throw NO_TOKEN
-
-    const token = _context.cookie.token
+    const token = getTokenFromContext(_context)
     const payload = getPayloadFromJwt(token)
     const userId = payload.id
     console.log(userId)
 
     const user = await User.findById(userId).select('-password')
-    const a = await user.populate('posts').execPopulate()
-
-    console.log(a)
+    await user.populate('posts').execPopulate()
     return user
   } catch (err) {
     errorHandler(err)

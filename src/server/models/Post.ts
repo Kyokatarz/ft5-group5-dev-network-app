@@ -1,18 +1,19 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
 
 export type PostDocument = Document & {
-  id: string
+  id: mongoose.Types.ObjectId
   content: string
   date: Date
-  likes: string[]
+  likes: mongoose.Types.ObjectId[]
   onModel: 'company' | 'user'
   comments?: Comment[]
 }
 
 export type Comment = {
-  userId: string
+  id: mongoose.Types.ObjectId
+  userId: mongoose.Types.ObjectId
   content: string
-  likes?: string[]
+  likes?: mongoose.Types.ObjectId[]
 }
 
 const postSchema = new Schema({
@@ -26,6 +27,7 @@ const postSchema = new Schema({
   ],
   comments: [
     {
+      id: { type: Schema.Types.ObjectId, required: true },
       userId: { type: Schema.Types.ObjectId, refPath: 'onModel' },
       content: String,
     },

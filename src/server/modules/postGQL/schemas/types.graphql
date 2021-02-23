@@ -12,6 +12,7 @@ type LikedUser {
 }
 
 type Comment {
+  id: String!
   userId: String!
   content: String!
   likes: [String]

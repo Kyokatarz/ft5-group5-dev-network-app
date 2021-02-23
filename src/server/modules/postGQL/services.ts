@@ -1,42 +1,28 @@
 import {
   errorHandler,
+  findPostById,
+  findUserById,
   getPayloadFromJwt,
   NOT_AUTHORISED_ERROR,
   NOT_FOUND_ERROR,
-  NO_TOKEN,
 } from '../../helpers'
+import { getTokenFromContext } from '../../helpers/'
 import Post from '../../models/Post'
-import User from '../../models/User'
 import { GraphQLContext } from '../../types'
-
-export const getPostById = async (postId: string) => {
-  try {
-    const post = await Post.findById(postId)
-    if (!post) return NOT_FOUND_ERROR
-
-    return post
-  } catch (err) {
-    errorHandler(err)
-  }
-}
 
 export const deletePost = async (
   _context: GraphQLContext,
   _args: { postId: string }
 ) => {
   try {
-    const { postId } = _args
-    const token = _context.cookie?.token
-    if (!token) throw NO_TOKEN
-
+    const token = getTokenFromContext(_context)
     const userId = getPayloadFromJwt(token).id
-
-    const user = await User.findById(userId)
-    if (!user) throw NOT_FOUND_ERROR
+    const user = await findUserById(userId)
 
     const userPosts = [...user.posts].map((id) => id.toString())
 
-    console.log(userPosts)
+    const { postId } = _args
+
     if (!userPosts.includes(postId))
       //if the user is trying to delete a post that's not theirs, deny it
       throw NOT_AUTHORISED_ERROR
@@ -51,4 +37,27 @@ export const deletePost = async (
   } catch (err) {
     errorHandler(err)
   }
+}
+
+export const deleteComment = async (_context: any, _args: any) => {
+  try {
+    const { postId, commentId } = _args
+    const token = getTokenFromContext(_context)
+    const userId = getPayloadFromJwt(token).id
+
+    const post = await findPostById(postId)
+    const postComments = [...post.comments]
+    const foundComment = postComments.find(
+      (comment) => comment.id === commentId
+    )
+    if (!foundComment) throw NOT_FOUND_ERROR
+    if (!foundComment.userId !== userId) throw NOT_AUTHORISED_ERROR
+
+    post.comments = postComments.filter((comment) => comment.id !== commentId)
+    await post.save()
+    return post
+  } catch (err) {
+    errorHandler(err)
+  }
+  return
 }

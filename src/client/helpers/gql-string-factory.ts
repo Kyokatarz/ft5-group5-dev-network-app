@@ -125,6 +125,7 @@ export const userCreateComment = (postId: string, content: string) => {
         date
         likes
         comments {
+          id
           userId
           content
           likes
