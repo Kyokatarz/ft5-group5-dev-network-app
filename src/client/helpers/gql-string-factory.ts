@@ -133,3 +133,13 @@ export const userCreateComment = (postId: string, content: string) => {
     }
   `
 }
+
+export const deletePost = (postId: string) => {
+  return gql`
+    mutation {
+      deletePost(postId: "${postId}") {
+        content
+      }
+    }
+  `
+}
