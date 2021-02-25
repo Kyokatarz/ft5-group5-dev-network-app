@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardHeader,
+  Divider,
   Grid,
   IconButton,
   Popover,
@@ -76,6 +77,8 @@ const SingleComment: React.FC<SingleCommentProps> = ({
           {commentId}
           {content}
           {likes?.length || 0}
+          <Divider />
+          <Button size="small">Like</Button>
         </Grid>
       </Grid>
     </Card>

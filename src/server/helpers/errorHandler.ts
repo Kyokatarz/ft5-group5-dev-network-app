@@ -5,6 +5,7 @@ import {
   NotAuthorisedError,
   NotFoundError,
   YupValidationError,
+  NotLoggedInError,
 } from './errors'
 
 export const IDENTIFICATION_DUPLICATED = 'IDENTIFICATION_DUPLICATED'
@@ -15,6 +16,7 @@ export const NO_TOKEN = 'NO_TOKEN'
 export const NOT_AUTHORISED_ERROR = 'NOT_AUTHORISED_ERROR'
 
 export const errorHandler = (err: any): void => {
+  console.error(err)
   if (err.name === VALIDATION_ERROR)
     throw new YupValidationError(err.errors.join(', '))
 
@@ -28,11 +30,11 @@ export const errorHandler = (err: any): void => {
     case NOT_FOUND_ERROR:
       throw new NotFoundError()
     case NO_TOKEN:
-      throw new NotAuthorisedError()
+      console.log('Error in ErrorHandler')
+      throw new NotLoggedInError()
     case NOT_AUTHORISED_ERROR:
       throw new NotAuthorisedError()
     default:
-      console.log(err)
       throw new InternalServerError()
   }
 }

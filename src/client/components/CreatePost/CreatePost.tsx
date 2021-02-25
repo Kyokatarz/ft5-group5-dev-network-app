@@ -13,10 +13,8 @@ import CreatePostModal from '../CreatePostModal/'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      width: '80vw',
       height: 115,
-      margin: 5,
-      marginTop: theme.spacing(9),
+      marginBottom: theme.spacing(1),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

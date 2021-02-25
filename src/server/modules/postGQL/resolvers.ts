@@ -11,5 +11,8 @@ export const resolvers: GraphQLResolver = {
 
     deleteComment: (_parents: any, _args: any, _context: any) =>
       postServices.deleteComment(_context, _args),
+
+    likeComment: (_parents: any, _args: any, _context: any) =>
+      postServices.likeComment(_context, _args),
   },
 }

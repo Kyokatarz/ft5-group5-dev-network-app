@@ -34,8 +34,7 @@ export class DatabaseConnectionError extends ApolloError {
 
 export class NotAuthorisedError extends ApolloError {
   constructor() {
-    super('You are not authorised', '401')
-    Object.setPrototypeOf(this, NotAuthorisedError.prototype)
+    super('You are not authorised', '403')
   }
 
   serialiseErrors(): SerialiseErrorsType {
@@ -79,6 +78,16 @@ export class YupValidationError extends ApolloError {
   constructor(readonly message: string) {
     super(message, '400')
     Object.setPrototypeOf(this, BadRequestError.prototype)
+  }
+
+  serialiseErrors(): SerialiseErrorsType {
+    return [{ message: this.message }]
+  }
+}
+
+export class NotLoggedInError extends ApolloError {
+  constructor() {
+    super('You are not logged in', '401')
   }
 
   serialiseErrors(): SerialiseErrorsType {

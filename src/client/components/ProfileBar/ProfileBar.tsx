@@ -16,10 +16,8 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 150,
     },
     container: {
-      width: '20vw',
       height: '100vh',
-      margin: theme.spacing(1),
-      marginTop: theme.spacing(8),
+      marginLeft: theme.spacing(1),
     },
   })
 )

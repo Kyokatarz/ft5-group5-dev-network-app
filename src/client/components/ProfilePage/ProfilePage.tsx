@@ -4,16 +4,33 @@ import Head from 'next/head'
 import ProfileBar from '../ProfileBar'
 import React from 'react'
 import ProfilePostContainer from '../ProfilePostContainer'
+import { createStyles, Grid, makeStyles, Theme } from '@material-ui/core'
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      marginTop: theme.spacing(9),
+    },
+  })
+)
 
 const ProfilePage = () => {
+  const classes = useStyles()
   return (
     <>
       <Head>
         <title>Profile</title>
       </Head>
-      <ProfileBar />
-      <CreatePost />
-      <ProfilePostContainer />
+      <Grid container className={classes.container} spacing={1}>
+        <Grid item xs={3}>
+          <ProfileBar />
+        </Grid>
+
+        <Grid item xs={7}>
+          <CreatePost />
+          <ProfilePostContainer />
+        </Grid>
+      </Grid>
     </>
   )
 }

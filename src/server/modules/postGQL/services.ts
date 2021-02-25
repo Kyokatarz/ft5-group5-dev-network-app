@@ -1,3 +1,5 @@
+import mongoose from 'mongoose'
+
 import {
   errorHandler,
   findPostById,
@@ -59,5 +61,39 @@ export const deleteComment = async (_context: any, _args: any) => {
   } catch (err) {
     errorHandler(err)
   }
-  return
+}
+
+export const likeComment = async (
+  _context: any,
+  _args: { postId: mongoose.Types.ObjectId; commentId: mongoose.Types.ObjectId }
+) => {
+  try {
+    const { postId, commentId } = _args
+    const token = getTokenFromContext(_context)
+    const userId = mongoose.Types.ObjectId(getPayloadFromJwt(token).id)
+
+    const post = await findPostById(postId)
+    const postComments = [...post.comments]
+    const foundComment = postComments.find(
+      (comment) => comment.id === commentId
+    )
+    if (!foundComment) throw NOT_FOUND_ERROR
+    const foundCommentIndex = postComments.indexOf(foundComment)
+    console.log('post', post)
+    // If the user has already liked the comment, unlike it.
+    if (!foundComment.likes.includes(userId)) {
+      console.log('111111111111')
+      post.comments[foundCommentIndex].likes.push(userId)
+    } else {
+      console.log('2222222222222')
+      post.comments[foundCommentIndex].likes = postComments[
+        foundCommentIndex
+      ].likes.filter((id) => id.toString() !== userId.toString())
+    }
+
+    await post.save()
+    return post
+  } catch (err) {
+    errorHandler(err)
+  }
 }

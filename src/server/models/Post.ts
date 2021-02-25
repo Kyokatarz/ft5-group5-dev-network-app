@@ -27,9 +27,9 @@ const postSchema = new Schema({
   ],
   comments: [
     {
-      id: { type: Schema.Types.ObjectId, required: true },
       userId: { type: Schema.Types.ObjectId, refPath: 'onModel' },
       content: String,
+      likes: [{ type: Schema.Types.ObjectId, refPath: 'onModel' }],
     },
   ],
   onModel: {

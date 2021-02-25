@@ -186,7 +186,7 @@ export const userLikePost = async (
         .filter((id) => id !== userId)
         .map((id) => mongoose.Types.ObjectId(id))
     } else {
-      post.likes.push(userId)
+      post.likes.push(mongoose.Types.ObjectId(userId))
     }
     await post.save()
     return post
@@ -208,10 +208,11 @@ export const userCreateComment = async (
     const post = await findPostById(postId)
 
     post.comments.push({
-      id: mongoose.Types.ObjectId(),
-      userId,
+      id: new mongoose.Types.ObjectId(),
+      userId: mongoose.Types.ObjectId(userId),
       content,
     })
+    console.log(post.comments)
     await post.save()
     return post
   } catch (err) {
@@ -228,6 +229,7 @@ export const checkCookieAndRetrieveUser = async (_context: GraphQLContext) => {
 
     const user = await User.findById(userId).select('-password')
     await user.populate('posts').execPopulate()
+    console.log(user)
     return user
   } catch (err) {
     errorHandler(err)
