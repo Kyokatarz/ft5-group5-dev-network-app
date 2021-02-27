@@ -1,4 +1,4 @@
-import { Avatar, TextField } from '@material-ui/core'
+import { Avatar, Grid, TextField } from '@material-ui/core'
 import React, { FormEvent, useState } from 'react'
 import { sendRequestToComment } from '../../actions/user'
 import useUserContext from '../../hooks/useUserContext'
@@ -20,18 +20,24 @@ const CommentBox: React.FC<CommentBoxProps> = ({ postId }) => {
     console.log(commentText)
   })
   return (
-    <div>
-      <Avatar alt="avatar" src="https://i.imgur.com/WgXR4f7.jpg" />
-      <form onSubmit={onSubmitComment}>
-        <TextField
-          variant="outlined"
-          size="small"
-          placeholder="Write a comment..."
-          value={commentText}
-          onChange={(event) => setCommentText(event.target.value)}
-        />
-      </form>
-    </div>
+    <Grid container>
+      <Grid item xs={1}>
+        <Avatar alt="avatar" src="https://i.imgur.com/WgXR4f7.jpg" />
+      </Grid>
+      <Grid item xs={7}>
+        <form onSubmit={onSubmitComment}>
+          <TextField
+            multiline
+            fullWidth
+            variant="outlined"
+            size="small"
+            placeholder="Write a comment..."
+            value={commentText}
+            onChange={(event) => setCommentText(event.target.value)}
+          />
+        </form>
+      </Grid>
+    </Grid>
   )
 }
 

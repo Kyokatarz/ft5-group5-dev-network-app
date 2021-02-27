@@ -5,6 +5,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Container,
   createStyles,
   Divider,
   Grid,
@@ -12,6 +13,7 @@ import {
   makeStyles,
   Popover,
   Theme,
+  Typography,
 } from '@material-ui/core'
 import React, { useState } from 'react'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp'
@@ -40,6 +42,16 @@ type SinglePostProps = {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    postContent: {
+      minHeight: '10vh',
+    },
+    likeAndCommentDisplay: {
+      paddingLeft: '30px',
+      paddingRight: '30px',
+      height: '50px',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
     dangerButton: {
       color: theme.palette.error.main,
     },
@@ -86,74 +98,74 @@ const SinglePost: React.FC<SinglePostProps> = ({
 
   return (
     <Card>
-      <CardHeader
-        avatar={<Avatar>K</Avatar>}
-        title={`${firstName} ${lastName}` || 'Unnamed User'}
-        subheader={date.toDateString() + ', ' + date.toLocaleTimeString()}
-        action={
-          <IconButton onClick={onMoreOptionsClick}>
-            <MoreOptionsIcon />
-          </IconButton>
-        }
-      />
-      <Popover
-        open={!!anchorPopoverEl}
-        onClose={handleMoreOptionsClose}
-        anchorEl={anchorPopoverEl}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <Button className={classes.dangerButton} onClick={onDeletePostClick}>
-          <DeletePostIcon />
-          Delete Post
-        </Button>
-      </Popover>
-      <CardContent>
-        {content}
-        <Divider />
-        <Grid container spacing={1}>
-          <Grid item>
-            {numberOfLikes}
-            <ThumbUpIcon />
-          </Grid>
-          <Grid item>
-            {comments.length}
-            <CommentIcon />
-          </Grid>
-        </Grid>
+      <Container>
+        <CardHeader
+          avatar={<Avatar>K</Avatar>}
+          title={`${firstName} ${lastName}` || 'Unnamed User'}
+          subheader={date.toDateString() + ', ' + date.toLocaleTimeString()}
+          action={
+            <IconButton onClick={onMoreOptionsClick}>
+              <MoreOptionsIcon />
+            </IconButton>
+          }
+        />
+        <Popover
+          open={!!anchorPopoverEl}
+          onClose={handleMoreOptionsClose}
+          anchorEl={anchorPopoverEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          <Button className={classes.dangerButton} onClick={onDeletePostClick}>
+            <DeletePostIcon />
+            Delete Post
+          </Button>
+        </Popover>
+        <CardContent>
+          <Container className={classes.postContent}>
+            <Typography variant="body1">{content}</Typography>
+          </Container>
 
-        <Divider />
-        <CardActions>
-          <Grid container>
-            <Grid item xs={6}>
-              <Button
-                fullWidth
-                color={liked ? 'primary' : 'default'}
-                onClick={onLikePost}
-              >
-                <ThumbUpTwoToneIcon />
-                Like
-              </Button>
+          <Grid container spacing={1} className={classes.likeAndCommentDisplay}>
+            <Grid item>
+              {numberOfLikes}
+              <ThumbUpIcon />
             </Grid>
-            <Grid item xs={6}>
-              <Button fullWidth>
-                <CommentTwoToneIcon />
-                Comment
-              </Button>
+            <Grid item>
+              {comments.length} {comments.length <= 1 ? 'Comment' : 'Comments'}
             </Grid>
           </Grid>
-        </CardActions>
-        <Divider />
-        <CommentBox postId={postId} />
-        <Divider />
-        <CommentContainer comments={comments} postId={postId} />
-      </CardContent>
+          <Divider />
+          <CardActions>
+            <Grid container>
+              <Grid item xs={6}>
+                <Button
+                  fullWidth
+                  color={liked ? 'primary' : 'default'}
+                  onClick={onLikePost}
+                >
+                  <ThumbUpTwoToneIcon /> Like
+                </Button>
+              </Grid>
+              <Grid item xs={6}>
+                <Button fullWidth>
+                  <CommentTwoToneIcon /> Comment
+                </Button>
+              </Grid>
+            </Grid>
+          </CardActions>
+          <Divider variant="middle" />
+          <CommentBox postId={postId} />
+          <Divider />
+          <CommentContainer comments={comments} postId={postId} />
+        </CardContent>
+      </Container>
     </Card>
   )
 }
