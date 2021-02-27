@@ -158,3 +158,16 @@ export const deleteComment = (postId: string, commentId: string) => {
     }
   `
 }
+
+export const likeComment = (postId: string, commentId: string) => {
+  return gql`
+    mutation {
+      likeComment(
+        postId: "${postId}"
+        commentId: "${commentId}"
+      ) {
+        content
+      }
+    }
+  `
+}

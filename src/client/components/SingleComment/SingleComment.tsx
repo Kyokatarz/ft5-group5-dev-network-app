@@ -10,14 +10,18 @@ import {
 } from '@material-ui/core'
 import React, { useState } from 'react'
 import DeleteCommentIcon from '@material-ui/icons/DeleteOutlineOutlined'
+import LikeIcon from '@material-ui/icons/ThumbUpAltOutlined'
 
 import MoreOptionsIcon from '@material-ui/icons/MoreHoriz'
-import { sendRequestToDeleteComment } from '../../actions/post'
+import {
+  sendRequestToDeleteComment,
+  sendRequestToLikeComment,
+} from '../../actions/post'
 import useUserContext from '../../hooks/useUserContext'
 
 type SingleCommentProps = {
   postId: string
-  userId: string
+  commentUserId: string
   commentId: string
   likes: string[]
   content: string
@@ -30,7 +34,19 @@ const SingleComment: React.FC<SingleCommentProps> = ({
   content,
 }) => {
   const [anchorPopoverEl, setAnchorPopoverEl] = useState(null)
-  const { dispatchAsync } = useUserContext()
+  const { dispatchAsync, state } = useUserContext()
+  const userId = state.user.id
+
+  const [isLikedComment, setIsLikedComment] = useState(likes.includes(userId))
+  const [numberOfLikes, setNumberOfLikes] = useState(likes?.length || 0)
+
+  const onLikeComment = () => {
+    dispatchAsync(sendRequestToLikeComment(postId, commentId))
+    isLikedComment
+      ? setNumberOfLikes(numberOfLikes - 1)
+      : setNumberOfLikes(numberOfLikes + 1)
+    setIsLikedComment(!isLikedComment)
+  }
 
   const onMoreOptionsClick = (event: React.MouseEvent) => {
     setAnchorPopoverEl(event.currentTarget)
@@ -72,13 +88,20 @@ const SingleComment: React.FC<SingleCommentProps> = ({
           Delete Comment
         </Button>
       </Popover>
-      <Grid container>
+      <Grid container direction="column">
+        <Grid item>{content}</Grid>
         <Grid item>
-          {commentId}
-          {content}
-          {likes?.length || 0}
-          <Divider />
-          <Button size="small">Like</Button>
+          {numberOfLikes} <LikeIcon />
+        </Grid>
+        <Divider />
+        <Grid item>
+          <Button
+            size="small"
+            color={isLikedComment ? 'primary' : 'default'}
+            onClick={onLikeComment}
+          >
+            Like
+          </Button>
         </Grid>
       </Grid>
     </Card>
