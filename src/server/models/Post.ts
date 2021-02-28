@@ -11,7 +11,7 @@ export type PostDocument = Document & {
 
 export type Comment = {
   id: mongoose.Types.ObjectId
-  userId: mongoose.Types.ObjectId
+  user: mongoose.Types.ObjectId
   content: string
   likes?: mongoose.Types.ObjectId[]
 }
@@ -27,7 +27,7 @@ const postSchema = new Schema({
   ],
   comments: [
     {
-      userId: { type: Schema.Types.ObjectId, refPath: 'onModel' },
+      user: { type: Schema.Types.ObjectId, refPath: 'onModel' },
       content: String,
       likes: [{ type: Schema.Types.ObjectId, refPath: 'onModel' }],
     },

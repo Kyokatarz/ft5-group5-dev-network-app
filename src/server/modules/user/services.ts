@@ -209,7 +209,7 @@ export const userCreateComment = async (
 
     post.comments.push({
       id: new mongoose.Types.ObjectId(),
-      userId: mongoose.Types.ObjectId(userId),
+      user: mongoose.Types.ObjectId(userId),
       content,
     })
     console.log(post.comments)
@@ -228,8 +228,18 @@ export const checkCookieAndRetrieveUser = async (_context: GraphQLContext) => {
     console.log(userId)
 
     const user = await User.findById(userId).select('-password')
-    await user.populate('posts').execPopulate()
-    console.log(user)
+    if (!user) throw NOT_FOUND_ERROR
+    await user
+      .populate({
+        path: 'posts',
+        populate: {
+          path: 'comments.user',
+          select: 'firstName lastName',
+        },
+      })
+      .execPopulate()
+
+    console.log(JSON.stringify(user, undefined, 2))
     return user
   } catch (err) {
     errorHandler(err)

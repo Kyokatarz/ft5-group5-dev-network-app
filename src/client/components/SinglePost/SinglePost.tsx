@@ -18,7 +18,6 @@ import {
 import React, { useState } from 'react'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp'
 import ThumbUpTwoToneIcon from '@material-ui/icons/ThumbUpTwoTone'
-import CommentIcon from '@material-ui/icons/Sms'
 import CommentTwoToneIcon from '@material-ui/icons/CommentTwoTone'
 import MoreOptionsIcon from '@material-ui/icons/MoreHoriz'
 import DeletePostIcon from '@material-ui/icons/DeleteOutlineOutlined'

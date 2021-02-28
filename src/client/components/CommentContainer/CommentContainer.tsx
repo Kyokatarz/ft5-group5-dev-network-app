@@ -18,7 +18,7 @@ const CommentContainer: React.FC<CommentContainerProps> = ({
         <SingleComment
           postId={postId}
           commentId={comment.id}
-          commentUserId={comment.userId}
+          commentUserId={comment.id}
           content={comment.content}
           likes={comment.likes}
           key={comment.id}

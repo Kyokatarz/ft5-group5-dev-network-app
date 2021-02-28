@@ -29,7 +29,11 @@ export type Post = {
 //A comment
 export type Comment = {
   id: string
-  userId: string
+  user: {
+    id: string
+    firstName: string
+    lastName: string
+  }
   content: string
   likes: string[]
 }

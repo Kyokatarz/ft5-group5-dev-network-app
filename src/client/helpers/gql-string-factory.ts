@@ -49,7 +49,7 @@ export const logInUser = (email: string, password: string): string => {
           date,
           likes,
           comments{ 
-            userId,
+            user,
             content,
             likes
           }
@@ -77,7 +77,7 @@ export const checkCookie = () => {
           likes
           comments {
             id
-            userId
+            user
             content
             likes
           }
@@ -96,7 +96,7 @@ export const userCreatePost = (content: string) => {
         date,
         likes,
         comments{
-          userId,
+          user,
           content,
           likes
         }
@@ -127,7 +127,7 @@ export const userCreateComment = (postId: string, content: string) => {
         likes
         comments {
           id
-          userId
+          user
           content
           likes
         }

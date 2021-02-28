@@ -53,7 +53,7 @@ export const deleteComment = async (_context: any, _args: any) => {
       (comment) => comment.id === commentId
     )
     if (!foundComment) throw NOT_FOUND_ERROR
-    if (foundComment.userId.toString() !== userId) throw NOT_AUTHORISED_ERROR
+    if (foundComment.user.toString() !== userId) throw NOT_AUTHORISED_ERROR
 
     post.comments = postComments.filter((comment) => comment.id !== commentId)
     await post.save()

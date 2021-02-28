@@ -27,7 +27,6 @@ const CommentBox: React.FC<CommentBoxProps> = ({ postId }) => {
       <Grid item xs={7}>
         <form onSubmit={onSubmitComment}>
           <TextField
-            multiline
             fullWidth
             variant="outlined"
             size="small"
