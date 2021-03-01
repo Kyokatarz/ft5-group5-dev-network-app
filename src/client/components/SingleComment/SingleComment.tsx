@@ -25,6 +25,8 @@ type SingleCommentProps = {
   commentId: string
   likes: string[]
   content: string
+  firstName: string
+  lastName: string
 }
 
 const SingleComment: React.FC<SingleCommentProps> = ({
@@ -32,6 +34,8 @@ const SingleComment: React.FC<SingleCommentProps> = ({
   commentId,
   likes,
   content,
+  firstName,
+  lastName,
 }) => {
   const [anchorPopoverEl, setAnchorPopoverEl] = useState(null)
   const { dispatchAsync, state } = useUserContext()
@@ -69,6 +73,7 @@ const SingleComment: React.FC<SingleCommentProps> = ({
             <MoreOptionsIcon fontSize="small" />
           </IconButton>
         }
+        title={firstName + ' ' + lastName}
       />
       <Popover
         open={!!anchorPopoverEl}

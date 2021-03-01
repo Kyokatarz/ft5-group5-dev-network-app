@@ -10,6 +10,7 @@ import {
   userCreateComment,
   userCreatePost,
   userLikePost,
+  logOut,
 } from '../helpers/gql-string-factory'
 
 export const signUserIn = (payload: UserProfile): UserActions => {
@@ -93,6 +94,16 @@ export const sendRequestToComment = (postId: string, content: string) => {
     try {
       const resp = await request(host, userCreateComment(postId, content))
       console.log(resp)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
+export const sendRequestToLogOut = () => {
+  return async () => {
+    try {
+      await request(host, logOut())
     } catch (err) {
       console.error(err)
     }

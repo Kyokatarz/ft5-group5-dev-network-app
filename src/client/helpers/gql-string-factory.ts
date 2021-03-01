@@ -43,17 +43,7 @@ export const logInUser = (email: string, password: string): string => {
         image
         employmentStatus
         company
-        posts{
-          id,
-          content,
-          date,
-          likes,
-          comments{ 
-            user,
-            content,
-            likes
-          }
-        }
+        
       }
     }
   `
@@ -77,7 +67,10 @@ export const checkCookie = () => {
           likes
           comments {
             id
-            user
+            user {
+              firstName
+              lastName
+            }
             content
             likes
           }
@@ -95,11 +88,6 @@ export const userCreatePost = (content: string) => {
         content,
         date,
         likes,
-        comments{
-          user,
-          content,
-          likes
-        }
       }
     }
   `
@@ -125,12 +113,7 @@ export const userCreateComment = (postId: string, content: string) => {
         content
         date
         likes
-        comments {
-          id
-          user
-          content
-          likes
-        }
+
       }
     }
   `
@@ -168,6 +151,14 @@ export const likeComment = (postId: string, commentId: string) => {
       ) {
         content
       }
+    }
+  `
+}
+
+export const logOut = () => {
+  return gql`
+    query {
+      logOut
     }
   `
 }

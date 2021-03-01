@@ -1,6 +1,8 @@
 import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core'
 import React from 'react'
 import Link from 'next/link'
+import useUserContext from '../../hooks/useUserContext'
+import { sendRequestToLogOut } from '../../actions/user'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,6 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const NavBarLinks = () => {
   const classes = useStyles()
+  const { dispatchAsync } = useUserContext()
   return (
     <ul className={classes.container}>
       <li>
@@ -32,6 +35,7 @@ const NavBarLinks = () => {
           <Typography>Dashboard</Typography>
         </Link>
       </li>
+      <li onClick={() => dispatchAsync(sendRequestToLogOut())}>Logout</li>
     </ul>
   )
 }
