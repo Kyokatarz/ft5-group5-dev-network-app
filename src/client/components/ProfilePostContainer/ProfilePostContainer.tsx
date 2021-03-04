@@ -11,7 +11,7 @@ const ProfilePostContainer = () => {
   })
   return (
     <Grid container direction="column" spacing={1}>
-      {state.user?.posts?.map((post) => (
+      {state.user?.posts?.reverse().map((post) => (
         <Grid item key={post.id}>
           <SinglePost
             id={post.id}

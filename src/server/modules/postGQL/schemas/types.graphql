@@ -19,6 +19,7 @@ type Comment {
 }
 
 type CommentUser {
+  id: String!
   firstName: String!
   lastName: String!
 }

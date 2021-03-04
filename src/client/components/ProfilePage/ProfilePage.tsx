@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       marginTop: theme.spacing(9),
     },
+    profileBarAnchor: {
+      position: 'relative',
+    },
   })
 )
 
@@ -22,7 +25,7 @@ const ProfilePage = () => {
         <title>Profile</title>
       </Head>
       <Grid container className={classes.container} spacing={1}>
-        <Grid item xs={3}>
+        <Grid item xs={3} className={classes.profileBarAnchor}>
           <ProfileBar />
         </Grid>
 

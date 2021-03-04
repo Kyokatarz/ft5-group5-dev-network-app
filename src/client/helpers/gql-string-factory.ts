@@ -68,6 +68,7 @@ export const checkCookie = () => {
           comments {
             id
             user {
+              id
               firstName
               lastName
             }

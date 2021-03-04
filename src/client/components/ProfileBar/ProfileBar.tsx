@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       height: '100vh',
       marginLeft: theme.spacing(1),
+      position: 'fixed',
+      top: theme.spacing(9),
+      left: 0,
     },
   })
 )

@@ -1,4 +1,11 @@
-import { Avatar, Grid, TextField } from '@material-ui/core'
+import {
+  Avatar,
+  createStyles,
+  Grid,
+  makeStyles,
+  TextField,
+  Theme,
+} from '@material-ui/core'
 import React, { FormEvent, useState } from 'react'
 import { sendRequestToComment } from '../../actions/user'
 import useUserContext from '../../hooks/useUserContext'
@@ -7,7 +14,16 @@ type CommentBoxProps = {
   postId: string
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    commentBoxContainer: {
+      marginTop: theme.spacing(1),
+    },
+  })
+)
+
 const CommentBox: React.FC<CommentBoxProps> = ({ postId }) => {
+  const classes = useStyles()
   const { dispatchAsync } = useUserContext()
   const [commentText, setCommentText] = useState('')
   const onSubmitComment = (event: FormEvent) => {
@@ -20,11 +36,11 @@ const CommentBox: React.FC<CommentBoxProps> = ({ postId }) => {
     console.log(commentText)
   })
   return (
-    <Grid container>
+    <Grid container className={classes.commentBoxContainer}>
       <Grid item xs={1}>
         <Avatar alt="avatar" src="https://i.imgur.com/WgXR4f7.jpg" />
       </Grid>
-      <Grid item xs={7}>
+      <Grid item xs={10}>
         <form onSubmit={onSubmitComment}>
           <TextField
             fullWidth

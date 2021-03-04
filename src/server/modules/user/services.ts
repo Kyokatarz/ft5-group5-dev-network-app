@@ -234,7 +234,7 @@ export const checkCookieAndRetrieveUser = async (_context: GraphQLContext) => {
         path: 'posts',
         populate: {
           path: 'comments.user',
-          select: 'firstName lastName',
+          select: 'firstName lastName ',
         },
       })
       .execPopulate()

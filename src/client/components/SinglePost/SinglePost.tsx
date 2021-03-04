@@ -42,7 +42,7 @@ type SinglePostProps = {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     postContent: {
-      minHeight: '10vh',
+      height: 70,
     },
     likeAndCommentDisplay: {
       paddingLeft: '30px',
@@ -51,8 +51,16 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
     },
+    numberOfLikesContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
     dangerButton: {
       color: theme.palette.error.main,
+    },
+    icons: {
+      margin: 5,
     },
   })
 )
@@ -132,9 +140,10 @@ const SinglePost: React.FC<SinglePostProps> = ({
           </Container>
 
           <Grid container spacing={1} className={classes.likeAndCommentDisplay}>
-            <Grid item>
-              {numberOfLikes}
-              <ThumbUpIcon />
+            <Grid item className={classes.numberOfLikesContainer}>
+              <Typography>{numberOfLikes}</Typography>
+
+              <ThumbUpIcon className={classes.icons} />
             </Grid>
             <Grid item>
               {comments.length} {comments.length <= 1 ? 'Comment' : 'Comments'}
@@ -149,19 +158,18 @@ const SinglePost: React.FC<SinglePostProps> = ({
                   color={liked ? 'primary' : 'default'}
                   onClick={onLikePost}
                 >
-                  <ThumbUpTwoToneIcon /> Like
+                  <ThumbUpTwoToneIcon className={classes.icons} /> Like
                 </Button>
               </Grid>
               <Grid item xs={6}>
                 <Button fullWidth>
-                  <CommentTwoToneIcon /> Comment
+                  <CommentTwoToneIcon className={classes.icons} /> Comment
                 </Button>
               </Grid>
             </Grid>
           </CardActions>
           <Divider variant="middle" />
           <CommentBox postId={postId} />
-          <Divider />
           <CommentContainer comments={comments} postId={postId} />
         </CardContent>
       </Container>
