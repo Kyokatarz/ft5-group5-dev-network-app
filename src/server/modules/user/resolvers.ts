@@ -6,7 +6,7 @@ import { GraphQLContext, GraphQLResolver } from '../../types'
 export const resolvers: GraphQLResolver = {
   Query: {
     getUserById: (_parents, _args, _context): Promise<UserDocument> =>
-      services.getUserById(_args.id),
+      services.getUserById(_args.userId),
     getAllUsers: (): Promise<UserDocument[]> => services.getAllUsers(),
     checkCookieAndRetrieveUser: (_, _args, _context) =>
       services.checkCookieAndRetrieveUser(_context),

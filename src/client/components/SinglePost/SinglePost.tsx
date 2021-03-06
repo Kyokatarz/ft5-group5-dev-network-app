@@ -35,8 +35,8 @@ type SinglePostProps = {
   content: string
   date: string
   comments: Comment[]
-  lastName: string
-  firstName: string
+  profileLastName: string
+  profileFirstName: string
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -71,12 +71,12 @@ const SinglePost: React.FC<SinglePostProps> = ({
   content,
   date: dateString,
   comments,
-  firstName,
-  lastName,
+  profileLastName,
+  profileFirstName,
 }) => {
   const classes = useStyles()
   const { dispatchAsync, state } = useUserContext()
-  const userId = state.user.id
+  const userId = state.user?.id
   const date = new Date(Number(dateString))
 
   const [liked, setLiked] = useState(likes.includes(userId))
@@ -108,7 +108,11 @@ const SinglePost: React.FC<SinglePostProps> = ({
       <Container>
         <CardHeader
           avatar={<Avatar>K</Avatar>}
-          title={`${firstName} ${lastName}` || 'Unnamed User'}
+          title={
+            profileFirstName && profileLastName
+              ? `${profileFirstName} ${profileLastName}`
+              : 'Unnamed User'
+          }
           subheader={date.toDateString() + ', ' + date.toLocaleTimeString()}
           action={
             <IconButton onClick={onMoreOptionsClick}>

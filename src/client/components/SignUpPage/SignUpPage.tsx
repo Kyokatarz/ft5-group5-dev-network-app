@@ -55,16 +55,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function SignUpPage(props) {
+export default function SignUpPage() {
   const classes = useStyles()
   const { dispatchAsync } = useContext(AuthUserContext)
   const submitHandler = async (data: any) => {
     const { email, password, lastName, firstName } = data
     dispatchAsync(sendRequestToSignUserUp(email, password, lastName, firstName))
   }
-  useEffect(() => {
-    console.log(props)
-  })
 
   return (
     <Container component="section" maxWidth="xs" className={classes.container}>

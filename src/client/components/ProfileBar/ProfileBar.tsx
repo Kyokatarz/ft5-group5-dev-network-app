@@ -9,6 +9,11 @@ import {
 } from '@material-ui/core'
 import React from 'react'
 
+type ProfileBarProps = {
+  profileFirstName: string
+  profileLastName: string
+}
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     avatar: {
@@ -25,7 +30,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const ProfileBar = () => {
+const ProfileBar: React.FC<ProfileBarProps> = ({
+  profileLastName,
+  profileFirstName,
+}) => {
   const classes = useStyles()
 
   return (
@@ -36,7 +44,7 @@ const ProfileBar = () => {
         className={classes.avatar}
       />
       <Typography variant="h5" component="p">
-        Giang Tran
+        {profileFirstName + ' ' + profileLastName}
       </Typography>
 
       <Button variant="outlined">Edit Profile</Button>

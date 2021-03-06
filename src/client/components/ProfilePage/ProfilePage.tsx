@@ -5,6 +5,11 @@ import ProfileBar from '../ProfileBar'
 import React from 'react'
 import ProfilePostContainer from '../ProfilePostContainer'
 import { createStyles, Grid, makeStyles, Theme } from '@material-ui/core'
+import { Post, UserProfile } from '../../types'
+
+type ProfilePageProps = {
+  userProfile: UserProfile
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const ProfilePage = () => {
+const ProfilePage: React.FC<ProfilePageProps> = ({ userProfile }) => {
   const classes = useStyles()
   return (
     <>
@@ -26,12 +31,19 @@ const ProfilePage = () => {
       </Head>
       <Grid container className={classes.container} spacing={1}>
         <Grid item xs={3} className={classes.profileBarAnchor}>
-          <ProfileBar />
+          <ProfileBar
+            profileFirstName={userProfile.firstName}
+            profileLastName={userProfile.lastName}
+          />
         </Grid>
 
         <Grid item xs={7}>
           <CreatePost />
-          <ProfilePostContainer />
+          <ProfilePostContainer
+            posts={userProfile?.posts}
+            profileFirstName={userProfile.firstName}
+            profileLastName={userProfile.lastName}
+          />
         </Grid>
       </Grid>
     </>

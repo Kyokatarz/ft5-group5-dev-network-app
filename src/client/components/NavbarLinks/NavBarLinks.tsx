@@ -23,10 +23,13 @@ const useStyles = makeStyles((theme: Theme) =>
 const NavBarLinks = () => {
   const classes = useStyles()
   const { dispatchAsync } = useUserContext()
+  const { state } = useUserContext()
+  const loggedInUserId = state.user.id
+
   return (
     <ul className={classes.container}>
       <li>
-        <Link href="/profile">
+        <Link href={`/profile/${loggedInUserId}`}>
           <Typography>Profile</Typography>
         </Link>
       </li>

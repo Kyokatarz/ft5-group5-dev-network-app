@@ -1,5 +1,5 @@
 type Query {
-  getUserById(id: String): User
+  getUserById(userId: String): User
   getAllUsers: [User]
   checkCookieAndRetrieveUser: User
   logOut: Boolean

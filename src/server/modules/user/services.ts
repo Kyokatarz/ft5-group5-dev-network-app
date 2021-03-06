@@ -22,6 +22,15 @@ export const getUserById = async (userId: string): Promise<UserDocument> => {
   try {
     const user = await User.findById(userId).select('-password').exec()
     if (!user) throw NOT_FOUND_ERROR
+    await user
+      .populate({
+        path: 'posts',
+        populate: {
+          path: 'comments.user',
+          select: 'firstName lastName ',
+        },
+      })
+      .execPopulate()
     return user
   } catch (err) {
     errorHandler(err)
