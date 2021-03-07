@@ -25,10 +25,7 @@ export const sendRequestToSignUserIn = (email: string, password: string) => {
     try {
       const resp = await request(host, logInUser(email, password))
       console.log(JSON.stringify(resp, null, 2))
-      dispatch({
-        type: 'LOGIN',
-        payload: resp,
-      })
+      dispatch(signUserIn(resp.loginUser))
     } catch (err) {
       console.error(err)
     }

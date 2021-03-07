@@ -19,8 +19,7 @@ export const userReducer = (
   switch (action.type) {
     case 'LOGIN':
       console.log('logging in user')
-      // localStorage.setItem("user", JSON.stringify(action.payload.user));
-      // localStorage.setItem("token", JSON.stringify(action.payload.token));
+      console.log(action.payload)
       return {
         ...state,
         isLoggedIn: true,

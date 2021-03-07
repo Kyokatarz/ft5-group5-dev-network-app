@@ -24,8 +24,10 @@ const NavBarLinks = () => {
   const classes = useStyles()
   const { dispatchAsync } = useUserContext()
   const { state } = useUserContext()
-  const loggedInUserId = state.user.id
-
+  const loggedInUserId = state.user?.id
+  React.useEffect(() => {
+    console.log(state)
+  })
   return (
     <ul className={classes.container}>
       <li>
