@@ -44,7 +44,7 @@ const ProfileBar: React.FC<ProfileBarProps> = ({
         className={classes.avatar}
       />
       <Typography variant="h5" component="p">
-        {profileFirstName + ' ' + profileLastName}
+        {profileFirstName || profileLastName || 'Unnamed User'}
       </Typography>
 
       <Button variant="outlined">Edit Profile</Button>

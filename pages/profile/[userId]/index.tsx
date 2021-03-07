@@ -11,25 +11,26 @@ import {
 } from '../../../src/client/helpers/gql-string-factory'
 
 const index = (props: any) => {
-  return (
-    <>
-      <Head>
-        <title>{useRouter().query.userId}</title>
-      </Head>
-      <ProfilePage userProfile={props.userProfile} />
-    </>
-  )
+  console.log(props)
+  if (props.errors) return <h1>ERROR</h1>
+  else
+    return (
+      <h1>
+        <Head>
+          <title>{useRouter().query.userId}</title>
+        </Head>
+        <ProfilePage userProfile={props.userProfile} />
+      </h1>
+    )
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { userId } = ctx.query as { userId: string }
   try {
-    const { userId } = ctx.query as { userId: string }
     const resp = await request(host, getUserById(userId))
-
     return { props: { userProfile: resp.getUserById } }
   } catch (err) {
-    console.error(err)
-    return { props: { error: JSON.stringify(err, null, 2) } }
+    return { props: { errors: JSON.stringify(err.response.errors[0].message) } }
   }
 }
 

@@ -150,7 +150,10 @@ const SinglePost: React.FC<SinglePostProps> = ({
               <ThumbUpIcon className={classes.icons} />
             </Grid>
             <Grid item>
-              {comments.length} {comments.length <= 1 ? 'Comment' : 'Comments'}
+              <Typography variant="body2">
+                {comments.length}{' '}
+                {comments.length <= 1 ? 'Comment' : 'Comments'}
+              </Typography>
             </Grid>
           </Grid>
           <Divider />
