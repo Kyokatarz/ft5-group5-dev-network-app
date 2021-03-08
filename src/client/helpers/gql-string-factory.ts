@@ -5,7 +5,7 @@ export const host =
     ? 'http://localhost:3000'
     : undefined) + '/api/v1/graphql' //TODO: change after deploy
 
-export const signUpUser = (
+export const signupUser = (
   email: string,
   password: string,
   firstName?: string,

@@ -6,7 +6,7 @@ import {
   checkCookie,
   host,
   logInUser,
-  signUpUser,
+  signupUser,
   userCreateComment,
   userCreatePost,
   userLikePost,
@@ -50,15 +50,18 @@ export const sendRequestToSignUserUp = (
   email: string,
   password: string,
   lastName: string,
-  firstName: string
+  firstName: string,
+  router: NextRouter
 ) => {
   return async (dispatch: Dispatch<any>) => {
     try {
       const resp = await request(
         host,
-        signUpUser(email, password, lastName, firstName)
+        signupUser(email, password, lastName, firstName)
       )
       dispatch(signUserIn(resp))
+      const userId = resp.signupUser.id
+      router.push(`/profile/${userId}`)
       console.log(resp)
     } catch (err) {
       console.error(err)

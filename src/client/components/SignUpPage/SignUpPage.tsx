@@ -12,6 +12,7 @@ import { useEffect } from 'react'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
+import { useRouter } from 'next/router'
 
 import { AuthUserContext } from '../../context/auth'
 import { useContext } from 'react'
@@ -57,10 +58,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUpPage() {
   const classes = useStyles()
+  const router = useRouter()
   const { dispatchAsync } = useContext(AuthUserContext)
   const submitHandler = async (data: any) => {
     const { email, password, lastName, firstName } = data
-    dispatchAsync(sendRequestToSignUserUp(email, password, lastName, firstName))
+    dispatchAsync(
+      sendRequestToSignUserUp(email, password, lastName, firstName, router)
+    )
   }
 
   return (
