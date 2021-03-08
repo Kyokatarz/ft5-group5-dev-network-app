@@ -1,6 +1,7 @@
 import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core'
 import React from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import useUserContext from '../../hooks/useUserContext'
 import { sendRequestToLogOut } from '../../actions/user'
 
@@ -25,6 +26,11 @@ const NavBarLinks = () => {
   const { dispatchAsync } = useUserContext()
   const { state } = useUserContext()
   const loggedInUserId = state.user?.id
+  const router = useRouter()
+  const onLogOutClick = () => {
+    dispatchAsync(sendRequestToLogOut())
+    router.push('/')
+  }
   React.useEffect(() => {
     console.log(state)
   })
@@ -40,7 +46,9 @@ const NavBarLinks = () => {
           <Typography>Dashboard</Typography>
         </Link>
       </li>
-      <li onClick={() => dispatchAsync(sendRequestToLogOut())}>Logout</li>
+      <li onClick={onLogOutClick}>
+        <Typography>Logout</Typography>
+      </li>
     </ul>
   )
 }

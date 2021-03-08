@@ -26,7 +26,6 @@ export const userReducer = (
         user: action.payload,
       }
     case 'LOGOUT':
-      localStorage.clear()
       return {
         ...state,
         isLoggedIn: false,

@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Box,
   Button,
   Checkbox,
   Container,
@@ -10,6 +9,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import React, { FormEvent, ChangeEvent, useState, useContext } from 'react'
 
@@ -26,6 +26,8 @@ type InitialStateType = {
 
 export default function SignIn(): JSX.Element {
   const classes = useStyles()
+  const router = useRouter()
+  const { state, dispatchAsync } = useContext(AuthUserContext)
 
   const initialState: InitialStateType = {
     email: '',
@@ -34,8 +36,8 @@ export default function SignIn(): JSX.Element {
     errorMessage: null,
   }
 
-  const { state, dispatchAsync } = useContext(AuthUserContext)
   const [data, setData] = useState(initialState)
+  const userId = state.user?.id
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setData({
@@ -46,8 +48,7 @@ export default function SignIn(): JSX.Element {
 
   const submitHandler = async (event: FormEvent) => {
     event.preventDefault()
-    console.log('clicked')
-    dispatchAsync(sendRequestToSignUserIn(data.email, data.password))
+    dispatchAsync(sendRequestToSignUserIn(data.email, data.password, router))
   }
 
   return (

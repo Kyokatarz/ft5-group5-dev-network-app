@@ -1,7 +1,7 @@
 import { Dispatch } from 'react'
 import request from 'graphql-request'
 
-import { LOGIN, UserActions, UserProfile } from '../types'
+import { LOGIN, LOGOUT, UserActions, UserProfile } from '../types'
 import {
   checkCookie,
   host,
@@ -12,6 +12,7 @@ import {
   userLikePost,
   logOut,
 } from '../helpers/gql-string-factory'
+import { NextRouter } from 'next/router'
 
 export const signUserIn = (payload: UserProfile): UserActions => {
   return {
@@ -20,12 +21,25 @@ export const signUserIn = (payload: UserProfile): UserActions => {
   }
 }
 
-export const sendRequestToSignUserIn = (email: string, password: string) => {
+export const signUserOut = (): UserActions => {
+  return {
+    type: LOGOUT,
+  }
+}
+
+/*---------------------Thunk------------------------------------------------*/
+export const sendRequestToSignUserIn = (
+  email: string,
+  password: string,
+  router: NextRouter
+) => {
   return async (dispatch: Dispatch<UserActions>) => {
     try {
       const resp = await request(host, logInUser(email, password))
       console.log(JSON.stringify(resp, null, 2))
       dispatch(signUserIn(resp.loginUser))
+      const userId = resp.loginUser.id
+      router.push(`/profile/${userId}`)
     } catch (err) {
       console.error(err)
     }
@@ -98,9 +112,10 @@ export const sendRequestToComment = (postId: string, content: string) => {
 }
 
 export const sendRequestToLogOut = () => {
-  return async () => {
+  return async (dispatch: Dispatch<any>) => {
     try {
       await request(host, logOut())
+      dispatch(signUserOut())
     } catch (err) {
       console.error(err)
     }

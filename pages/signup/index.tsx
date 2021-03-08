@@ -2,16 +2,13 @@ import { GetServerSideProps } from 'next'
 import React from 'react'
 import SignUpPage from '../../src/client/components/SignUpPage'
 
-const SignUp = (props) => {
-  React.useEffect(() => {
-    console.log(props)
-  })
+const SignUp = () => {
   return <SignUpPage />
 }
 
 export default SignUp
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   try {
     console.log('from getserversideprops')
     return { props: { data: '' } }
