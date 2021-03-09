@@ -158,33 +158,45 @@ export const likeComment = (postId: string, commentId: string) => {
 
 export const getUserById = (userId: string) => {
   return gql`
-  query {
-    getUserById(userId: "${userId}") {
-      id
-      email
-      firstName
-      lastName
-      image
-      employmentStatus
-      company
-      posts {
+    query {
+      getUserById(userId: "${userId}") {
         id
-        content
-        date
-        likes
-        comments {
+        email
+        firstName
+        lastName
+        image
+        employmentStatus
+        company
+        posts {
           id
-          user {
-            id
-            firstName
-            lastName
-          }
           content
+          date
           likes
+          comments {
+            id
+            user {
+              id
+              firstName
+              lastName
+            }
+            content
+            likes
+          }
         }
       }
     }
-  }
+  `
+}
+
+export const searchUsersByName = (searchString: string) => {
+  return gql`
+    query {
+      searchUsersByName(searchString: "${searchString}") {
+        id
+        lastName
+        firstName
+      }
+    }
   `
 }
 

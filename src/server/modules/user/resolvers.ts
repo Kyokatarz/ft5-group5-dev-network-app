@@ -11,6 +11,9 @@ export const resolvers: GraphQLResolver = {
     checkCookieAndRetrieveUser: (_, _args, _context) =>
       services.checkCookieAndRetrieveUser(_context),
     logOut: (_, _args, _context) => services.logOut(_context),
+
+    searchUsersByName: (_, _args) =>
+      services.searchUsersByName(_args.searchString),
   },
 
   Mutation: {

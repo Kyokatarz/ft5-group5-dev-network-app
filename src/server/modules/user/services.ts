@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs'
-import mongoose from 'mongoose'
+import mongoose, { Promise } from 'mongoose'
 
 import {
   errorHandler,
@@ -17,6 +17,7 @@ import User, { UserDocument } from '../../models/User'
 import Post, { PostDocument } from '../../models/Post'
 import * as yupSchemas from './yupSchemas/yupSchemas'
 import { logInUserArgs, signUpUserArgs } from '../../types/user'
+import { array } from 'yup'
 
 export const getUserById = async (userId: string): Promise<UserDocument> => {
   try {
@@ -250,6 +251,40 @@ export const checkCookieAndRetrieveUser = async (_context: GraphQLContext) => {
 
     console.log(JSON.stringify(user, undefined, 2))
     return user
+  } catch (err) {
+    errorHandler(err)
+  }
+}
+
+export const searchUsersByName = async (searchString: string) => {
+  try {
+    const searchRegexArray = searchString
+      .split(' ')
+      .map((string) => new RegExp(string, 'i'))
+    console.log('searchRegexArray', searchRegexArray)
+    let searchResult: UserDocument[] = []
+
+    await new Promise((resolve: any) => {
+      searchRegexArray.forEach(async (regex, index) => {
+        const result = await User.find({
+          $or: [
+            { firstName: { $regex: regex } },
+            { lastName: { $regex: regex } },
+          ],
+        }).select('-password -posts')
+        searchResult = searchResult.concat(result)
+        if (index === searchRegexArray.length - 1) resolve()
+      })
+    })
+
+    console.log('searchResult outside:', searchResult)
+    //This final result removes all duplicated searches.
+    //Stackoverflow code
+    const finalResult = searchResult.filter(
+      (obj, index) => index === searchResult.findIndex((el) => el.id === obj.id)
+    )
+
+    return finalResult
   } catch (err) {
     errorHandler(err)
   }
