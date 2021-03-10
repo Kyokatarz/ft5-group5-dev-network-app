@@ -15,12 +15,12 @@ const index = (props: any) => {
   if (props.errors) return <h1>ERROR</h1>
   else
     return (
-      <h1>
+      <>
         <Head>
           <title>{useRouter().query.userId}</title>
         </Head>
         <ProfilePage userProfile={props.userProfile} />
-      </h1>
+      </>
     )
 }
 

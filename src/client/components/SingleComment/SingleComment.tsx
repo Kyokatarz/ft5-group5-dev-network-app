@@ -64,7 +64,7 @@ const SingleComment: React.FC<SingleCommentProps> = ({
   const classes = useStyles()
   const [anchorPopoverEl, setAnchorPopoverEl] = useState(null)
   const { dispatchAsync, state } = useUserContext()
-  const userId = state.user.id
+  const userId = state.user?.id
 
   const [isLikedComment, setIsLikedComment] = useState(likes.includes(userId))
   const [numberOfLikes, setNumberOfLikes] = useState(likes?.length || 0)

@@ -10,7 +10,8 @@ import {
 import SearchBar from 'material-ui-search-bar'
 import MenuIcon from '@material-ui/icons/Menu'
 import Link from 'next/link'
-import React from 'react'
+import { useRouter } from 'next/router'
+import React, { useState } from 'react'
 
 import useUserContext from '../../hooks/useUserContext'
 import LoginSignUp from '../LoginSignUp'
@@ -32,10 +33,17 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 const Navbar = () => {
-  const { state } = useUserContext()
   const classes = useStyles()
+  const { state } = useUserContext()
+  const router = useRouter()
+
+  const [searchString, setSearchString] = useState('')
 
   const userId = state.user?.id
+
+  const onRequestSearchHandler = () => {
+    router.push(`/searchResult?searchString=${searchString}`)
+  }
 
   return (
     <AppBar position="fixed">
@@ -48,7 +56,12 @@ const Navbar = () => {
             App Name
           </Typography>
         </Link>
-        <SearchBar placeholder="Search by name..." />
+        <SearchBar
+          placeholder="Search by name..."
+          onRequestSearch={onRequestSearchHandler}
+          onChange={(string) => setSearchString(string)}
+          value={searchString}
+        />
         {!state.isLoggedIn && <LoginSignUp />}
         {state.isLoggedIn && <NavBarLinks />}
       </Toolbar>
