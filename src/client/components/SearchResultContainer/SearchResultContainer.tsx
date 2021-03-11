@@ -1,4 +1,4 @@
-import { Grid } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import React from 'react'
 
 import { UserProfile } from '../../types'
@@ -13,15 +13,19 @@ const SearchResultContainer: React.FC<SearchResultContainerProps> = ({
 }) => {
   return (
     <Grid container direction="column" spacing={1}>
-      {results.map((result) => (
-        <Grid item key={result.id}>
-          <SearchResultCard
-            id={result.id}
-            firstName={result.firstName}
-            lastName={result.lastName}
-          />
-        </Grid>
-      ))}
+      {results.length > 0 ? (
+        results.map((result) => (
+          <Grid item key={result.id}>
+            <SearchResultCard
+              id={result.id}
+              firstName={result.firstName}
+              lastName={result.lastName}
+            />
+          </Grid>
+        ))
+      ) : (
+        <Typography>No results found.</Typography>
+      )}
     </Grid>
   )
 }

@@ -1,6 +1,6 @@
 import { Avatar, Card, CardActionArea, CardHeader } from '@material-ui/core'
 import React from 'react'
-import router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 
 type SearchResultCardProps = {
   id: string

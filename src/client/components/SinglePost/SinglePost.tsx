@@ -79,7 +79,7 @@ const SinglePost: React.FC<SinglePostProps> = ({
   const userId = state.user?.id
   const date = new Date(Number(dateString))
 
-  const [liked, setLiked] = useState(likes.includes(userId))
+  const [likeArray, setLikeArray] = useState(likes)
   const [numberOfLikes, setNumberOfLikes] = useState(likes.length)
   const [anchorPopoverEl, setAnchorPopoverEl] = useState(null)
 
@@ -97,10 +97,13 @@ const SinglePost: React.FC<SinglePostProps> = ({
 
   const onLikePost = () => {
     dispatchAsync(sendRequestToLikePost(postId))
-    liked
-      ? setNumberOfLikes(numberOfLikes - 1)
-      : setNumberOfLikes(numberOfLikes + 1)
-    setLiked(!liked)
+    if (likeArray.includes(userId)) {
+      setNumberOfLikes(numberOfLikes - 1)
+      setLikeArray((prev) => prev.filter((id) => id !== userId))
+    } else {
+      setNumberOfLikes(numberOfLikes + 1)
+      setLikeArray((prev) => prev.concat(userId))
+    }
   }
 
   return (
@@ -145,7 +148,7 @@ const SinglePost: React.FC<SinglePostProps> = ({
 
           <Grid container spacing={1} className={classes.likeAndCommentDisplay}>
             <Grid item className={classes.numberOfLikesContainer}>
-              <Typography>{numberOfLikes}</Typography>
+              <Typography>{likeArray.length}</Typography>
 
               <ThumbUpIcon className={classes.icons} />
             </Grid>
@@ -162,7 +165,7 @@ const SinglePost: React.FC<SinglePostProps> = ({
               <Grid item xs={6}>
                 <Button
                   fullWidth
-                  color={liked ? 'primary' : 'default'}
+                  color={likeArray.includes(userId) ? 'primary' : 'default'}
                   onClick={onLikePost}
                 >
                   <ThumbUpTwoToneIcon className={classes.icons} /> Like
@@ -184,4 +187,4 @@ const SinglePost: React.FC<SinglePostProps> = ({
   )
 }
 
-export default SinglePost
+export default React.memo(SinglePost)
