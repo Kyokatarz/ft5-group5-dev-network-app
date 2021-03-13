@@ -18,4 +18,3 @@ enum EmploymentStatus {
   OPEN_TO_WORK
   FREELANCER
 }
-

@@ -200,6 +200,29 @@ export const searchUsersByName = (searchString: string) => {
   `
 }
 
+export const updateUserProfile = (update: any) => {
+  const { email, firstName, lastName, company, employmentStatus } = update
+  let string = ''
+  if (email) string += `email: "${email}"`
+  if (firstName) string += `firstName: "${firstName}"`
+  if (lastName) string += `lastName: "${lastName}"`
+  if (company) string += `company: "${company}"`
+  if (employmentStatus) string += `employmentStatus: ${employmentStatus}`
+
+  return gql`
+    mutation{
+      updateUserProfile(update: {
+        ${string}
+      }){
+        id
+        firstName
+        lastName
+        company
+        employmentStatus
+      }
+    }
+  `
+}
 export const logOut = () => {
   return gql`
     query {

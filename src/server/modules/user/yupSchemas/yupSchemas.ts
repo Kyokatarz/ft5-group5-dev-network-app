@@ -13,4 +13,5 @@ export const yupUserUpdate = yup.object().shape({
   lastName: yup.string(),
   image: yup.string(),
   company: yup.string(),
+  employmentStatus: yup.string(),
 })

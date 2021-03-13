@@ -8,7 +8,6 @@ import {
 } from '@material-ui/core'
 import * as yup from 'yup'
 import Link from 'next/link'
-import { useEffect } from 'react'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'

@@ -17,7 +17,6 @@ import User, { UserDocument } from '../../models/User'
 import Post, { PostDocument } from '../../models/Post'
 import * as yupSchemas from './yupSchemas/yupSchemas'
 import { logInUserArgs, signUpUserArgs } from '../../types/user'
-import { array } from 'yup'
 
 export const getUserById = async (userId: string): Promise<UserDocument> => {
   try {
@@ -114,7 +113,7 @@ export const updateUserProfile = async (
     } = update
 
     const token = getTokenFromContext(_context)
-
+    console.log('updateUserProfile:', update)
     await yupSchemas.yupUserUpdate.validate(
       {
         firstName,
@@ -134,6 +133,7 @@ export const updateUserProfile = async (
     if (!user) {
       throw CREDENTIAL_ERROR
     }
+
     if (firstName) user.firstName = firstName
     if (lastName) user.lastName = lastName
     if (email) user.email = email

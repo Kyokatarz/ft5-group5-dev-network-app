@@ -5,7 +5,7 @@ import { PostDocument } from './Post'
 export enum EmploymentStatus {
   employed = 'EMPLOYED',
   openToWork = 'OPEN_TO_WORK',
-  Freelancer = 'FREELANCER',
+  freelancer = 'FREELANCER',
 }
 
 export type UserDocument = Document & {

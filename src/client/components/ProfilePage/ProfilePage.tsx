@@ -30,14 +30,17 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ userProfile }) => {
         <title>Profile</title>
       </Head>
       <Grid container className={classes.container} spacing={1}>
-        <Grid item xs={3} className={classes.profileBarAnchor}>
+        <Grid item xs={2} className={classes.profileBarAnchor}>
           <ProfileBar
             profileFirstName={userProfile.firstName}
             profileLastName={userProfile.lastName}
+            profileCompany={userProfile.company}
+            profileEmploymentStatus={userProfile.employmentStatus}
+            profileId={userProfile.id}
           />
         </Grid>
 
-        <Grid item xs={7}>
+        <Grid item xs={8}>
           <CreatePost />
           <ProfilePostContainer
             posts={userProfile?.posts}

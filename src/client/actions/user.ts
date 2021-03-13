@@ -11,6 +11,7 @@ import {
   userCreatePost,
   userLikePost,
   logOut,
+  updateUserProfile,
 } from '../helpers/gql-string-factory'
 import { NextRouter } from 'next/router'
 
@@ -119,6 +120,18 @@ export const sendRequestToLogOut = () => {
     try {
       await request(host, logOut())
       dispatch(signUserOut())
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
+export const sendRequestToUpdateUserProfile = (
+  update: Partial<UserProfile>
+) => {
+  return async (dispatch: Dispatch<any>) => {
+    try {
+      await request(host, updateUserProfile(update))
     } catch (err) {
       console.error(err)
     }
