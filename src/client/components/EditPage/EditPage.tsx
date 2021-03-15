@@ -15,7 +15,7 @@ import { RadioGroup, TextField } from 'formik-material-ui'
 import React from 'react'
 import * as yup from 'yup'
 import { sendRequestToUpdateUserProfile } from '../../actions/user'
-import useUserContext from '../../hooks/useUserContext'
+import useStateContext from '../../hooks/useStateContext'
 
 import { UserProfile } from '../../types'
 
@@ -52,7 +52,7 @@ const SearchResultPage: React.FC<EditPageProps> = ({
 }) => {
   const classes = useStyles()
 
-  const { dispatchAsync } = useUserContext()
+  const { dispatchAsync } = useStateContext()
 
   const initialValues = {
     firstName: profileFirstName || '',

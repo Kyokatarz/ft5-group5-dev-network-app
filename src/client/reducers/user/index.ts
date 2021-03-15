@@ -3,16 +3,14 @@ import { UserActions } from '../../types'
 export type UserStateType = {
   isLoggedIn: boolean
   user: any
-  token?: string
 }
 
-export const userState: UserStateType = {
+export const initUserState: UserStateType = {
   isLoggedIn: false,
   user: null,
-  token: null,
 }
 
-export const userReducer = (
+const userReducer = (
   state: UserStateType,
   action: UserActions
 ): UserStateType => {
@@ -35,3 +33,5 @@ export const userReducer = (
       return state
   }
 }
+
+export default userReducer

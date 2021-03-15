@@ -13,7 +13,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 
-import useUserContext from '../../hooks/useUserContext'
+import useStateContext from '../../hooks/useStateContext'
 import LoginSignUp from '../LoginSignUp'
 import NavBarLinks from '../NavbarLinks'
 
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Navbar = () => {
   const classes = useStyles()
-  const { state } = useUserContext()
+  const { state } = useStateContext()
   const router = useRouter()
 
   const [searchString, setSearchString] = useState('')

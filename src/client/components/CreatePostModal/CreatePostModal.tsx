@@ -16,7 +16,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import React, { FormEvent, useContext, useState } from 'react'
 
 import { requestUserCreatePost } from '../../actions/user'
-import { AuthUserContext } from '../../context/auth'
+import { StateContext } from '../../context/auth'
 
 type CreatePostModalProps = {
   modalState: boolean
@@ -52,7 +52,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
   closeModal,
 }) => {
   const classes = useStyles()
-  const { dispatchAsync } = useContext(AuthUserContext)
+  const { dispatchAsync } = useContext(StateContext)
   const [content, setContent] = useState('')
   const submitHandler = (event: FormEvent) => {
     event.preventDefault()

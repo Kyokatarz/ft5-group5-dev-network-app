@@ -13,7 +13,7 @@ import { useRouter } from 'next/router'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import React, { FormEvent, ChangeEvent, useState, useContext } from 'react'
 
-import { AuthUserContext } from '../../context/auth'
+import { StateContext } from '../../context/auth'
 import useStyles from './useStyles'
 import { sendRequestToSignUserIn } from '../../actions/user'
 
@@ -27,7 +27,7 @@ type InitialStateType = {
 export default function SignIn(): JSX.Element {
   const classes = useStyles()
   const router = useRouter()
-  const { state, dispatchAsync } = useContext(AuthUserContext)
+  const { state, dispatchAsync } = useContext(StateContext)
 
   const initialState: InitialStateType = {
     email: '',

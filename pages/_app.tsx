@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react'
+import React, { useReducer, useEffect, Component } from 'react'
 import Head from 'next/head'
 import {
   createStyles,
@@ -10,9 +10,10 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 
 import theme from '../src/theme'
 import Navbar from '../src/client/components/Navbar'
-import { AuthUserContext } from '../src/client/context/auth'
-import { userState, userReducer } from '../src/client/reducers/user'
+import { StateContext } from '../src/client/context/auth'
 import { useThunk } from '../src/client/hooks/useThunk'
+import { initRootState, rootReducer } from '../src/client/reducers'
+
 import { requestCheckCookie } from '../src/client/actions/user'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function MyApp(props: any): JSX.Element {
   const classes = useStyles()
   const { Component, pageProps } = props
-  const [state, dispatch] = useReducer(userReducer, userState)
+  const [state, dispatch] = useReducer(rootReducer, initRootState)
   const dispatchAsync = useThunk(dispatch)
 
   React.useEffect(() => {
@@ -39,7 +40,11 @@ export default function MyApp(props: any): JSX.Element {
 
   React.useEffect(() => {
     dispatchAsync(requestCheckCookie() as any)
+    console.log('state', state)
   }, [])
+  React.useEffect(() => {
+    console.log('state', state)
+  })
 
   return (
     <React.Fragment>
@@ -53,12 +58,12 @@ export default function MyApp(props: any): JSX.Element {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <AuthUserContext.Provider value={{ state, dispatch, dispatchAsync }}>
+        <StateContext.Provider value={{ state, dispatch, dispatchAsync }}>
           <Navbar />
           <main className={classes.content}>
             <Component {...pageProps} />
           </main>
-        </AuthUserContext.Provider>
+        </StateContext.Provider>
       </ThemeProvider>
     </React.Fragment>
   )

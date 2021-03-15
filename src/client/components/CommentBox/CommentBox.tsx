@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core'
 import React, { FormEvent, useState } from 'react'
 import { sendRequestToComment } from '../../actions/user'
-import useUserContext from '../../hooks/useUserContext'
+import useStateContext from '../../hooks/useStateContext'
 
 type CommentBoxProps = {
   postId: string
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const CommentBox: React.FC<CommentBoxProps> = ({ postId }) => {
   const classes = useStyles()
-  const { dispatchAsync } = useUserContext()
+  const { dispatchAsync } = useStateContext()
   const [commentText, setCommentText] = useState('')
   const onSubmitComment = (event: FormEvent) => {
     event.preventDefault()

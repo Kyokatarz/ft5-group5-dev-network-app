@@ -23,7 +23,7 @@ import MoreOptionsIcon from '@material-ui/icons/MoreHoriz'
 import DeletePostIcon from '@material-ui/icons/DeleteOutlineOutlined'
 
 import { Comment } from '../../types'
-import useUserContext from '../../hooks/useUserContext'
+import useStateContext from '../../hooks/useStateContext'
 import { sendRequestToLikePost } from '../../actions/user'
 import CommentBox from '../CommentBox'
 import CommentContainer from '../CommentContainer/CommentContainer'
@@ -75,7 +75,7 @@ const SinglePost: React.FC<SinglePostProps> = ({
   profileFirstName,
 }) => {
   const classes = useStyles()
-  const { dispatchAsync, state } = useUserContext()
+  const { dispatchAsync, state } = useStateContext()
   const userId = state.user?.id
   const date = new Date(Number(dateString))
 

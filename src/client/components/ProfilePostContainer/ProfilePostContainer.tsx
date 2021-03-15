@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core'
 import React from 'react'
 
-import useUserContext from '../../hooks/useUserContext'
+import useStateContext from '../../hooks/useStateContext'
 import { Post } from '../../types'
 import SinglePost from '../SinglePost'
 
@@ -16,7 +16,7 @@ const ProfilePostContainer: React.FC<ProfilePostContainerProps> = ({
   profileFirstName,
   profileLastName,
 }) => {
-  const { state } = useUserContext()
+  const { state } = useStateContext()
   React.useEffect(() => {
     console.log(state)
   })

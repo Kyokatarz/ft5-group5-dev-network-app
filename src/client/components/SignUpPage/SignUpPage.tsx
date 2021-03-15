@@ -13,7 +13,7 @@ import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { useRouter } from 'next/router'
 
-import { AuthUserContext } from '../../context/auth'
+import { StateContext } from '../../context/auth'
 import { useContext } from 'react'
 import { sendRequestToSignUserUp } from '../../actions/user'
 
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUpPage() {
   const classes = useStyles()
   const router = useRouter()
-  const { dispatchAsync } = useContext(AuthUserContext)
+  const { dispatchAsync } = useContext(StateContext)
   const submitHandler = async (data: any) => {
     const { email, password, lastName, firstName } = data
     dispatchAsync(

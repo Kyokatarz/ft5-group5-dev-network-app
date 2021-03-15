@@ -1,16 +1,16 @@
 import { Dispatch, useContext } from 'react'
 
-import { AuthUserContext } from '../context/auth'
+import { StateContext } from '../context/auth'
 import { UserState } from '../types'
 
-type UserContext = {
+type StateContext = {
   state: UserState
   dispatch: Dispatch<any>
   dispatchAsync: Dispatch<any>
 }
 
 const useUserContext = () => {
-  const context = useContext<UserContext>(AuthUserContext)
+  const context = useContext<StateContext>(StateContext)
   return context
 }
 

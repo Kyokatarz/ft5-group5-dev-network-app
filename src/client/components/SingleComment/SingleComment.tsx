@@ -22,7 +22,7 @@ import {
   sendRequestToDeleteComment,
   sendRequestToLikeComment,
 } from '../../actions/post'
-import useUserContext from '../../hooks/useUserContext'
+import useStateContext from '../../hooks/useStateContext'
 
 type SingleCommentProps = {
   postId: string
@@ -63,7 +63,7 @@ const SingleComment: React.FC<SingleCommentProps> = ({
 }) => {
   const classes = useStyles()
   const [anchorPopoverEl, setAnchorPopoverEl] = useState(null)
-  const { dispatchAsync, state } = useUserContext()
+  const { dispatchAsync, state } = useStateContext()
   const userId = state.user?.id
 
   const [isLikedComment, setIsLikedComment] = useState(likes.includes(userId))

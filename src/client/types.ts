@@ -1,6 +1,13 @@
 //Action constants
+//__User__
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
+
+//__Post__
+export const ADD_POST = 'ADD_POST'
+export const DELETE_POST = 'DELETE_POST'
+export const ADD_COMMENT = 'ADD_COMMENT'
+export const DELETE_COMMENT = 'DELETE_COMMENT'
 
 // Types
 // A user profile:
@@ -29,29 +36,58 @@ export type Post = {
 //A comment
 export type Comment = {
   id: string
-  user: {
-    id: string
-    firstName: string
-    lastName: string
-  }
+  user: Partial<UserProfile>
   content: string
   likes: string[]
 }
 
 //Actions
-export type logUserIn = {
+//__User__
+export type LogUserIn = {
   type: typeof LOGIN
   payload: UserProfile
 }
 
-export type logUserOut = {
+export type LogUserOut = {
   type: typeof LOGOUT
 }
 
-export type UserActions = logUserIn | logUserOut
+export type UserActions = LogUserIn | LogUserOut
+
+//__Post__
+export type AddPost = {
+  type: typeof ADD_POST
+  payload: Post
+}
+
+export type DeletePost = {
+  type: typeof DELETE_POST
+  payload: string
+}
+
+export type AddComment = {
+  type: typeof ADD_COMMENT
+  payload: Comment
+}
+
+export type DeleteComment = {
+  type: typeof DELETE_COMMENT
+  payload: string
+}
+
+export type PostActions = AddPost | DeletePost | AddComment | DeleteComment
 
 //States:
 export type UserState = {
   isLoggedIn: boolean
   user: UserProfile
+}
+
+export type PostState = {
+  posts: Post[]
+}
+
+export type RootState = {
+  user: UserState
+  posts: PostState
 }

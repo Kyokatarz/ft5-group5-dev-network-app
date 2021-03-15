@@ -2,7 +2,7 @@ import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core'
 import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import useUserContext from '../../hooks/useUserContext'
+import useStateContext from '../../hooks/useStateContext'
 import { sendRequestToLogOut } from '../../actions/user'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const NavBarLinks = () => {
   const classes = useStyles()
-  const { dispatchAsync } = useUserContext()
-  const { state } = useUserContext()
+  const { dispatchAsync } = useStateContext()
+  const { state } = useStateContext()
   const loggedInUserId = state.user?.id
   const router = useRouter()
   const onLogOutClick = () => {
