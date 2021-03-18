@@ -49,6 +49,7 @@ const CommentBox: React.FC<CommentBoxProps> = ({ postId }) => {
             placeholder="Write a comment..."
             value={commentText}
             onChange={(event) => setCommentText(event.target.value)}
+            required
           />
         </form>
       </Grid>

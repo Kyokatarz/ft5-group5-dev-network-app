@@ -40,7 +40,6 @@ export default function MyApp(props: any): JSX.Element {
 
   React.useEffect(() => {
     dispatchAsync(requestCheckCookie() as any)
-    console.log('state', state)
   }, [])
   React.useEffect(() => {
     console.log('state', state)

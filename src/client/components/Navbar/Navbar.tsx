@@ -39,7 +39,8 @@ const Navbar = () => {
 
   const [searchString, setSearchString] = useState('')
 
-  const userId = state.user?.id
+  const userId = state.user?.user?.id
+  const isLoggedIn = state.user?.isLoggedIn
 
   const onRequestSearchHandler = () => {
     router.push(`/searchResult?searchString=${searchString}`)
@@ -51,7 +52,7 @@ const Navbar = () => {
         <Hidden xlDown>
           <MenuIcon className={classes.menuIcon} />
         </Hidden>
-        <Link href={state.isLoggedIn ? `/profile/${userId}` : '/'}>
+        <Link href={isLoggedIn ? `/profile/${userId}` : '/'}>
           <Typography variant="h6" component="a" className={classes.appName}>
             App Name
           </Typography>
@@ -62,8 +63,8 @@ const Navbar = () => {
           onChange={(string) => setSearchString(string)}
           value={searchString}
         />
-        {!state.isLoggedIn && <LoginSignUp />}
-        {state.isLoggedIn && <NavBarLinks />}
+        {!isLoggedIn && <LoginSignUp />}
+        {isLoggedIn && <NavBarLinks />}
       </Toolbar>
     </AppBar>
   )

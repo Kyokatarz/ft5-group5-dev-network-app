@@ -7,6 +7,7 @@ type Action = {
   type: string
   payload: any
 }
+
 type RootStateReducer = (state: RootState, action: Action) => RootState
 
 export const [rootReducer, initRootState] = combineReducers<RootStateReducer>({

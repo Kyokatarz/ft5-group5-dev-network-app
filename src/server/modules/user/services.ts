@@ -224,6 +224,10 @@ export const userCreateComment = async (
     })
     console.log(post.comments)
     await post.save()
+    await post
+      .populate({ path: 'comments.user', select: 'firstName lastName' })
+      .execPopulate()
+    console.log('FROM_POST', post.comments)
     return post
   } catch (err) {
     errorHandler(err)

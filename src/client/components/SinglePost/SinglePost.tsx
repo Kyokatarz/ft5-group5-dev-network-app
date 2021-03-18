@@ -76,7 +76,7 @@ const SinglePost: React.FC<SinglePostProps> = ({
 }) => {
   const classes = useStyles()
   const { dispatchAsync, state } = useStateContext()
-  const userId = state.user?.id
+  const userId = state.user?.user?.id
   const date = new Date(Number(dateString))
 
   const [likeArray, setLikeArray] = useState(likes)
@@ -154,8 +154,8 @@ const SinglePost: React.FC<SinglePostProps> = ({
             </Grid>
             <Grid item>
               <Typography variant="body2">
-                {comments.length}{' '}
-                {comments.length <= 1 ? 'Comment' : 'Comments'}
+                {comments?.length}{' '}
+                {comments?.length <= 1 ? 'Comment' : 'Comments'}
               </Typography>
             </Grid>
           </Grid>

@@ -1,16 +1,16 @@
 import { Dispatch, useContext } from 'react'
 
-import { StateContext } from '../context/auth'
-import { UserState } from '../types'
+import { StateContext as StateContextType } from '../context/auth'
+import { RootState } from '../types'
 
-type StateContext = {
-  state: UserState
+type StateContextType = {
+  state: RootState
   dispatch: Dispatch<any>
   dispatchAsync: Dispatch<any>
 }
 
 const useUserContext = () => {
-  const context = useContext<StateContext>(StateContext)
+  const context = useContext<StateContextType>(StateContextType)
   return context
 }
 

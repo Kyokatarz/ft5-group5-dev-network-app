@@ -20,6 +20,8 @@ import { sendRequestToSignUserUp } from '../../actions/user'
 const signUpYupSchema = yup.object().shape({
   email: yup.string().email(),
   password: yup.string().min(8).max(255),
+  firstName: yup.string().min(1),
+  lastName: yup.string().min(1),
 })
 
 const useStyles = makeStyles((theme) => ({
@@ -97,6 +99,7 @@ export default function SignUpPage() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  required
                 />
               </Grid>
 
@@ -109,6 +112,7 @@ export default function SignUpPage() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="lname"
+                  required
                 />
               </Grid>
               <Grid item xs={12}>

@@ -12,17 +12,21 @@ type ProfilePostContainerProps = {
 }
 
 const ProfilePostContainer: React.FC<ProfilePostContainerProps> = ({
-  posts,
+  posts: postsInProps,
   profileFirstName,
   profileLastName,
 }) => {
   const { state } = useStateContext()
+  const postsInState = state.posts?.posts
+  const renderingPosts = state.posts.usingProps ? postsInProps : postsInState
+
   React.useEffect(() => {
     console.log(state)
   })
+
   return (
     <Grid container direction="column" spacing={1}>
-      {posts?.reverse().map((post) => (
+      {[...renderingPosts]?.reverse().map((post) => (
         <Grid item key={post.id}>
           <SinglePost
             id={post.id}

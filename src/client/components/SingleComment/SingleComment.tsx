@@ -64,9 +64,9 @@ const SingleComment: React.FC<SingleCommentProps> = ({
   const classes = useStyles()
   const [anchorPopoverEl, setAnchorPopoverEl] = useState(null)
   const { dispatchAsync, state } = useStateContext()
-  const userId = state.user?.id
+  const userId = state.user?.user?.id
 
-  const [isLikedComment, setIsLikedComment] = useState(likes.includes(userId))
+  const [isLikedComment, setIsLikedComment] = useState(likes?.includes(userId))
   const [numberOfLikes, setNumberOfLikes] = useState(likes?.length || 0)
 
   const onLikeComment = () => {
@@ -90,7 +90,7 @@ const SingleComment: React.FC<SingleCommentProps> = ({
   }
 
   React.useEffect(() => {
-    console.log('userId', userId === commentUserId)
+    console.log('%cSingleComment', likes)
   })
   return (
     //  First grid container for the whole comment

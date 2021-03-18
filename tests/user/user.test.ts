@@ -169,5 +169,3 @@ describe('Testing user services', () => {
     expect(res.data.userCreatePost.content).toBe('New post')
   })
 })
-
-//TODO: test token

@@ -1,7 +1,14 @@
 import { Dispatch } from 'react'
 import request from 'graphql-request'
 
-import { LOGIN, LOGOUT, UserActions, UserProfile } from '../types'
+import {
+  ADD_POST,
+  LOGIN,
+  LOGOUT,
+  Post,
+  UserActions,
+  UserProfile,
+} from '../types'
 import {
   checkCookie,
   host,
@@ -14,6 +21,7 @@ import {
   updateUserProfile,
 } from '../helpers/gql-string-factory'
 import { NextRouter } from 'next/router'
+import { addCommentInState, setInitPosts } from './post'
 
 export const signUserIn = (payload: UserProfile): UserActions => {
   return {
@@ -28,17 +36,26 @@ export const signUserOut = (): UserActions => {
   }
 }
 
+export const userAddPost = (post: Post) => {
+  return {
+    type: ADD_POST,
+    payload: post,
+  }
+}
+
 /*---------------------Thunk------------------------------------------------*/
 export const sendRequestToSignUserIn = (
   email: string,
   password: string,
   router: NextRouter
 ) => {
-  return async (dispatch: Dispatch<UserActions>) => {
+  return async (dispatch: Dispatch<any>) => {
     try {
       const resp = await request(host, logInUser(email, password))
       console.log(JSON.stringify(resp, null, 2))
       dispatch(signUserIn(resp.loginUser))
+      dispatch(setInitPosts(resp.loginUser.posts))
+
       const userId = resp.loginUser.id
       router.push(`/profile/${userId}`)
     } catch (err) {
@@ -75,6 +92,7 @@ export const requestCheckCookie = () => {
     try {
       const resp = await request(host, checkCookie())
       dispatch(signUserIn(resp.checkCookieAndRetrieveUser))
+      dispatch(setInitPosts(resp.checkCookieAndRetrieveUser.posts))
       console.log(resp)
     } catch (err) {
       console.error(err)
@@ -83,10 +101,11 @@ export const requestCheckCookie = () => {
 }
 
 export const requestUserCreatePost = (content: string) => {
-  return async () => {
+  return async (dispatch: Dispatch<any>) => {
     try {
       const resp = await request(host, userCreatePost(content))
       console.log(resp)
+      dispatch(userAddPost(resp.userCreatePost))
     } catch (err) {
       console.error(err)
     }
@@ -105,9 +124,10 @@ export const sendRequestToLikePost = (postId: string) => {
 }
 
 export const sendRequestToComment = (postId: string, content: string) => {
-  return async () => {
+  return async (dispatch: Dispatch<any>) => {
     try {
       const resp = await request(host, userCreateComment(postId, content))
+      dispatch(addCommentInState(resp.userCreateComment))
       console.log(resp)
     } catch (err) {
       console.error(err)

@@ -8,7 +8,7 @@ export const ADD_POST = 'ADD_POST'
 export const DELETE_POST = 'DELETE_POST'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
-
+export const SET_INIT_POST = 'SET_INIT_POST'
 // Types
 // A user profile:
 export type UserProfile = {
@@ -67,15 +67,28 @@ export type DeletePost = {
 
 export type AddComment = {
   type: typeof ADD_COMMENT
-  payload: Comment
+  payload: Post
 }
 
 export type DeleteComment = {
   type: typeof DELETE_COMMENT
-  payload: string
+  payload: {
+    postId: string
+    commentId: string
+  }
 }
 
-export type PostActions = AddPost | DeletePost | AddComment | DeleteComment
+export type SetInitPost = {
+  type: typeof SET_INIT_POST
+  payload: Post[]
+}
+
+export type PostActions =
+  | AddPost
+  | DeletePost
+  | AddComment
+  | DeleteComment
+  | SetInitPost
 
 //States:
 export type UserState = {
@@ -85,6 +98,7 @@ export type UserState = {
 
 export type PostState = {
   posts: Post[]
+  usingProps: boolean
 }
 
 export type RootState = {

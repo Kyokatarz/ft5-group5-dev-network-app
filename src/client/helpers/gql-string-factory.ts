@@ -67,13 +67,13 @@ export const checkCookie = () => {
           likes
           comments {
             id
+            content
+            likes
             user {
               id
               firstName
               lastName
             }
-            content
-            likes
           }
         }
       }
@@ -82,13 +82,24 @@ export const checkCookie = () => {
 }
 
 export const userCreatePost = (content: string) => {
+  const modifiedContent = content.replace('\n', '\\n')
   return gql`
     mutation {
-      userCreatePost(postContent: "${content}"){
+      userCreatePost(postContent: "${modifiedContent}"){
         id,
         content,
         date,
         likes,
+        comments{
+          id
+          content
+          likes
+          user{
+            id
+            firstName
+            lastName
+          }
+        }
       }
     }
   `
@@ -114,6 +125,16 @@ export const userCreateComment = (postId: string, content: string) => {
         content
         date
         likes
+        comments{ 
+          id
+          content
+          likes
+          user{
+            id
+            firstName
+            lastName
+          }
+        }
 
       }
     }
@@ -174,13 +195,13 @@ export const getUserById = (userId: string) => {
           likes
           comments {
             id
+            content
+            likes
             user {
               id
               firstName
               lastName
             }
-            content
-            likes
           }
         }
       }
