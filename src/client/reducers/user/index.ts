@@ -16,8 +16,6 @@ const userReducer = (
 ): UserStateType => {
   switch (action.type) {
     case 'LOGIN':
-      console.log('logging in user')
-      console.log(action.payload)
       return {
         ...state,
         isLoggedIn: true,

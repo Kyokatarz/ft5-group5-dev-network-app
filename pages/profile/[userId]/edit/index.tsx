@@ -12,7 +12,6 @@ import {
 import EditPage from '../../../../src/client/components/EditPage'
 
 const index = ({ userProfile, errors }: any) => {
-  console.log(userProfile)
   if (errors) return <>ERROR</>
   else
     return (

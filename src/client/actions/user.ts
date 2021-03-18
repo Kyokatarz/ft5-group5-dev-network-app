@@ -52,9 +52,7 @@ export const sendRequestToSignUserIn = (
   return async (dispatch: Dispatch<any>) => {
     try {
       const resp = await request(host, logInUser(email, password))
-      console.log(JSON.stringify(resp, null, 2))
       dispatch(signUserIn(resp.loginUser))
-      dispatch(setInitPosts(resp.loginUser.posts))
 
       const userId = resp.loginUser.id
       router.push(`/profile/${userId}`)

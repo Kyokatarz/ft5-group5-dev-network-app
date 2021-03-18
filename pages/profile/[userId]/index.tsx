@@ -11,7 +11,6 @@ import {
 } from '../../../src/client/helpers/gql-string-factory'
 
 const index = (props: any) => {
-  console.log(props)
   if (props.errors) return <h1>ERROR</h1>
   else
     return (

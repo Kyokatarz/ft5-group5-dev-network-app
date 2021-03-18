@@ -32,13 +32,10 @@ const CommentBox: React.FC<CommentBoxProps> = ({ postId }) => {
     setCommentText('')
   }
 
-  React.useEffect(() => {
-    console.log(commentText)
-  })
   return (
     <Grid container className={classes.commentBoxContainer}>
       <Grid item xs={1}>
-        <Avatar alt="avatar" src="https://i.imgur.com/WgXR4f7.jpg" />
+        <Avatar alt="avatar" />
       </Grid>
       <Grid item xs={10}>
         <form onSubmit={onSubmitComment}>

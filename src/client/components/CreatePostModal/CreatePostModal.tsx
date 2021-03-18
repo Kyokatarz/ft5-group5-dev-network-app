@@ -59,7 +59,6 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
     dispatchAsync(requestUserCreatePost(content))
     closeModal()
     setContent('')
-    console.log(content)
   }
 
   return (

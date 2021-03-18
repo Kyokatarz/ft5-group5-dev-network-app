@@ -1,5 +1,6 @@
 import { Grid } from '@material-ui/core'
 import React from 'react'
+import { changeUsingProps, setInitPosts } from '../../actions/post'
 
 import useStateContext from '../../hooks/useStateContext'
 import { Post } from '../../types'
@@ -16,31 +17,34 @@ const ProfilePostContainer: React.FC<ProfilePostContainerProps> = ({
   profileFirstName,
   profileLastName,
 }) => {
-  const { state } = useStateContext()
+  const { state, dispatchAsync } = useStateContext()
   const postsInState = state.posts?.posts
   const renderingPosts = state.posts.usingProps ? postsInProps : postsInState
 
   React.useEffect(() => {
-    console.log(state)
-  })
+    dispatchAsync(changeUsingProps())
+    dispatchAsync(setInitPosts(postsInProps))
+  }, [postsInProps])
 
-  return (
-    <Grid container direction="column" spacing={1}>
-      {[...renderingPosts]?.reverse().map((post) => (
-        <Grid item key={post.id}>
-          <SinglePost
-            id={post.id}
-            likes={post.likes}
-            content={post.content}
-            date={post.date}
-            comments={post.comments}
-            profileFirstName={profileFirstName}
-            profileLastName={profileLastName}
-          />
-        </Grid>
-      )) || 'Empty'}
-    </Grid>
-  )
+  if (renderingPosts?.length === 0) return <Grid container>Empty</Grid>
+  else
+    return (
+      <Grid container direction="column" spacing={1}>
+        {[...renderingPosts]?.reverse().map((post) => (
+          <Grid item key={post.id}>
+            <SinglePost
+              id={post.id}
+              likes={post.likes}
+              content={post.content}
+              date={post.date}
+              comments={post.comments}
+              profileFirstName={profileFirstName}
+              profileLastName={profileLastName}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    )
 }
 
 export default ProfilePostContainer

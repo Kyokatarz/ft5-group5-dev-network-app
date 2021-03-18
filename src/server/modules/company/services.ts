@@ -126,7 +126,6 @@ export const updateCompanyInfo = async (
   newDetails: Partial<CompanyDocument>
 ): Promise<CompanyDocument> => {
   try {
-    console.log('before updating:', _context)
     const token = _context.cookie?.token
 
     if (!token) {

@@ -14,6 +14,7 @@ import {
   PostActions,
   SET_INIT_POST,
   DELETE_COMMENT,
+  CHANGE_USING_PROPS,
 } from '../types'
 
 export const setInitPosts = (posts: Post[]): PostActions => {
@@ -39,6 +40,10 @@ export const deleteCommentInState = (
   commentId: string
 ): PostActions => {
   return { type: DELETE_COMMENT, payload: { commentId, postId } }
+}
+
+export const changeUsingProps = () => {
+  return { type: CHANGE_USING_PROPS }
 }
 
 /*---------------------Thunk------------------------------------------------*/
@@ -71,7 +76,6 @@ export const sendRequestToLikeComment = (postId: string, commentId: string) => {
   return async (dispatch: Dispatch<any>) => {
     try {
       const resp = await request(host, likeComment(postId, commentId))
-      console.log(resp)
     } catch (err) {
       console.error(err)
     }

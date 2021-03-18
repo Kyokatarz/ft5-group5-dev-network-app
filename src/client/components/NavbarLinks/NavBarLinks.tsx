@@ -25,15 +25,12 @@ const NavBarLinks = () => {
   const classes = useStyles()
   const { dispatchAsync } = useStateContext()
   const { state } = useStateContext()
-  const loggedInUserId = state.user?.id
+  const loggedInUserId = state.user?.user.id
   const router = useRouter()
   const onLogOutClick = () => {
     dispatchAsync(sendRequestToLogOut())
     router.push('/')
   }
-  React.useEffect(() => {
-    console.log(state)
-  })
   return (
     <ul className={classes.container}>
       <li>

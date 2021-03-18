@@ -82,10 +82,8 @@ export const likeComment = async (
     console.log('post', post)
     // If the user has already liked the comment, unlike it.
     if (!foundComment.likes.includes(userId)) {
-      console.log('111111111111')
       post.comments[foundCommentIndex].likes.push(userId)
     } else {
-      console.log('2222222222222')
       post.comments[foundCommentIndex].likes = postComments[
         foundCommentIndex
       ].likes.filter((id) => id.toString() !== userId.toString())

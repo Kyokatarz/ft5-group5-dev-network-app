@@ -2,10 +2,7 @@ import {
   Avatar,
   Box,
   Button,
-  Card,
-  CardHeader,
   createStyles,
-  Divider,
   Grid,
   IconButton,
   makeStyles,
@@ -16,6 +13,7 @@ import {
 import React, { useState } from 'react'
 import DeleteCommentIcon from '@material-ui/icons/DeleteOutlineOutlined'
 import LikeIcon from '@material-ui/icons/ThumbUpAltOutlined'
+import Link from 'next/link'
 
 import MoreOptionsIcon from '@material-ui/icons/MoreHoriz'
 import {
@@ -89,9 +87,6 @@ const SingleComment: React.FC<SingleCommentProps> = ({
     dispatchAsync(sendRequestToDeleteComment(postId, commentId))
   }
 
-  React.useEffect(() => {
-    console.log('%cSingleComment', likes)
-  })
   return (
     //  First grid container for the whole comment
     <Grid container spacing={1}>
@@ -126,11 +121,13 @@ const SingleComment: React.FC<SingleCommentProps> = ({
           className={classes.contentContainer}
         >
           <Grid item>
-            <Typography component="div">
-              <Box fontWeight="fontWeightMedium">
-                {firstName + ' ' + lastName}
-              </Box>
-            </Typography>
+            <Link href={`/profile/${commentUserId}`}>
+              <Typography component="div">
+                <Box fontWeight="fontWeightMedium">
+                  {firstName + ' ' + lastName}
+                </Box>
+              </Typography>
+            </Link>
           </Grid>
           <Grid item>{content}</Grid>
           <Grid item className={classes.commentLikeDisplay}>
