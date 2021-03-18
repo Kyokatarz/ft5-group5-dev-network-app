@@ -1,4 +1,5 @@
 import {
+  Avatar,
   createStyles,
   Grid,
   makeStyles,
@@ -71,10 +72,7 @@ const CreatePost = () => {
       <Paper className={classes.container}>
         <Grid container className={classes.gridContainer} spacing={1}>
           <Grid item xs={1} className={classes.avatarContainer}>
-            <img
-              src="https://i.imgur.com/WgXR4f7.jpg"
-              className={classes.avatar}
-            />
+            <Avatar className={classes.avatar} />
           </Grid>
 
           <Grid item xs={11} className={classes.textFieldContainer}>

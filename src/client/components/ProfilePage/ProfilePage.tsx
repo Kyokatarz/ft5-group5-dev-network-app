@@ -6,6 +6,7 @@ import React from 'react'
 import ProfilePostContainer from '../ProfilePostContainer'
 import { createStyles, Grid, makeStyles, Theme } from '@material-ui/core'
 import { Post, UserProfile } from '../../types'
+import useStateContext from '../../hooks/useStateContext'
 
 type ProfilePageProps = {
   userProfile: UserProfile
@@ -24,6 +25,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const ProfilePage: React.FC<ProfilePageProps> = ({ userProfile }) => {
   const classes = useStyles()
+  const { state } = useStateContext()
+  console.log('userProfile', userProfile)
   return (
     <>
       <Head>
@@ -41,7 +44,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ userProfile }) => {
         </Grid>
 
         <Grid item xs={8}>
-          <CreatePost />
+          {state.user?.user?.id === userProfile.id && <CreatePost />}
           <ProfilePostContainer
             posts={userProfile?.posts}
             profileFirstName={userProfile.firstName}

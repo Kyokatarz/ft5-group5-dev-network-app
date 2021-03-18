@@ -113,7 +113,6 @@ export const updateUserProfile = async (
     } = update
 
     const token = getTokenFromContext(_context)
-    console.log('updateUserProfile:', update)
     await yupSchemas.yupUserUpdate.validate(
       {
         firstName,
@@ -126,7 +125,6 @@ export const updateUserProfile = async (
       { abortEarly: false }
     )
     const payload = getPayloadFromJwt(token)
-    console.log('PAYLOAD:', payload)
     const userId = payload.id
 
     const user = await User.findById(userId).select('-password')
@@ -227,7 +225,6 @@ export const userCreateComment = async (
     await post
       .populate({ path: 'comments.user', select: 'firstName lastName' })
       .execPopulate()
-    console.log('FROM_POST', post.comments)
     return post
   } catch (err) {
     errorHandler(err)
@@ -239,7 +236,6 @@ export const checkCookieAndRetrieveUser = async (_context: GraphQLContext) => {
     const token = getTokenFromContext(_context)
     const payload = getPayloadFromJwt(token)
     const userId = payload.id
-    console.log(userId)
 
     const user = await User.findById(userId).select('-password')
     if (!user) throw NOT_FOUND_ERROR
@@ -253,7 +249,6 @@ export const checkCookieAndRetrieveUser = async (_context: GraphQLContext) => {
       })
       .execPopulate()
 
-    console.log(JSON.stringify(user, undefined, 2))
     return user
   } catch (err) {
     errorHandler(err)
@@ -265,7 +260,6 @@ export const searchUsersByName = async (searchString: string) => {
     const searchRegexArray = searchString
       .split(' ')
       .map((string) => new RegExp(string, 'i'))
-    console.log('searchRegexArray', searchRegexArray)
     let searchResult: UserDocument[] = []
 
     await new Promise((resolve: any) => {
@@ -281,7 +275,6 @@ export const searchUsersByName = async (searchString: string) => {
       })
     })
 
-    console.log('searchResult outside:', searchResult)
     //This final result removes all duplicated searches.
     //Stackoverflow code
     const finalResult = searchResult.filter(

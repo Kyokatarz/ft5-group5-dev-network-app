@@ -90,7 +90,6 @@ export const requestCheckCookie = () => {
     try {
       const resp = await request(host, checkCookie())
       dispatch(signUserIn(resp.checkCookieAndRetrieveUser))
-      dispatch(setInitPosts(resp.checkCookieAndRetrieveUser.posts))
       console.log(resp)
     } catch (err) {
       console.error(err)

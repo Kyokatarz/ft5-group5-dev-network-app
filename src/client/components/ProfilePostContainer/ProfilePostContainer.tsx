@@ -19,13 +19,16 @@ const ProfilePostContainer: React.FC<ProfilePostContainerProps> = ({
 }) => {
   const { state, dispatchAsync } = useStateContext()
   const postsInState = state.posts?.posts
-  const renderingPosts = state.posts.usingProps ? postsInProps : postsInState
+  const renderingPosts = postsInState
 
   React.useEffect(() => {
-    dispatchAsync(changeUsingProps())
     dispatchAsync(setInitPosts(postsInProps))
   }, [postsInProps])
 
+  React.useEffect(() => {
+    console.log('posts', postsInProps)
+    console.log('renderingPosts', postsInProps)
+  })
   if (renderingPosts?.length === 0) return <Grid container>Empty</Grid>
   else
     return (

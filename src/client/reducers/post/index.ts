@@ -3,7 +3,6 @@ import {
   ADD_POST,
   DELETE_COMMENT,
   DELETE_POST,
-  Post,
   PostActions,
   PostState,
   SET_INIT_POST,
@@ -11,7 +10,6 @@ import {
 
 export const initPostState: PostState = {
   posts: [],
-  usingProps: true,
 }
 
 const postReducer = (state: PostState, action: PostActions): PostState => {
@@ -20,17 +18,15 @@ const postReducer = (state: PostState, action: PostActions): PostState => {
       return {
         ...state,
         posts: [...state.posts, action.payload],
-        usingProps: false,
       }
     }
     case SET_INIT_POST: {
-      return { ...state, posts: action.payload, usingProps: false }
+      return { ...state, posts: action.payload }
     }
     case DELETE_POST: {
       return {
         ...state,
         posts: state.posts.filter((post) => post.id !== action.payload),
-        usingProps: false,
       }
     }
     case ADD_COMMENT: {
@@ -39,7 +35,7 @@ const postReducer = (state: PostState, action: PostActions): PostState => {
         .map((post) => post.id)
         .indexOf(action.payload.id)
       tempPostArray[indexOfPost] = action.payload
-      return { ...state, posts: [...tempPostArray], usingProps: false }
+      return { ...state, posts: [...tempPostArray] }
     }
     case DELETE_COMMENT: {
       const tempPostArray = [...state.posts]
@@ -54,8 +50,9 @@ const postReducer = (state: PostState, action: PostActions): PostState => {
         indexOfPost
       ].comments.filter((comment) => comment.id !== action.payload.commentId)
 
-      return { ...state, posts: [...tempPostArray], usingProps: false }
+      return { ...state, posts: [...tempPostArray] }
     }
+
     default:
       return state
   }
