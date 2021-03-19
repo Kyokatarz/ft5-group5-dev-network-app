@@ -3,7 +3,7 @@ import { gql } from 'graphql-request'
 export const host =
   (process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000'
-    : undefined) + '/api/v1/graphql' //TODO: change after deploy
+    : 'https://dev-social.vercel.app/') + '/api/v1/graphql' //TODO: change after deploy
 
 export const signupUser = (
   email: string,
