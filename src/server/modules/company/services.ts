@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs'
+import mongoose from 'mongoose'
 
 import { CompanyDocument } from '../../models/Company'
 import Company from '../../models/Company'
@@ -192,7 +193,7 @@ export const CompanyLikesPost = async (
       post.likes = post.likes.filter((id) => id.toString() !== companyId)
       return await post.save()
     } else {
-      post.likes.push(companyId)
+      post.likes.push(mongoose.Types.ObjectId(companyId))
       return await post.save()
     }
   } catch (err) {
