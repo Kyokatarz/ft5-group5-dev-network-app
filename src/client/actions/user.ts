@@ -75,7 +75,7 @@ export const sendRequestToSignUserUp = (
         host,
         signupUser(email, password, lastName, firstName)
       )
-      dispatch(signUserIn(resp))
+      dispatch(signUserIn(resp.signupUser))
       const userId = resp.signupUser.id
       router.push(`/profile/${userId}`)
       console.log(resp)
