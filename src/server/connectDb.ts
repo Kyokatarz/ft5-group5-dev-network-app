@@ -10,7 +10,7 @@ export const connectDb = async (): Promise<void> => {
   if (!process.env.JWT_KEY) {
     throw new Error('JWT_KEY must be defined')
   }
-  if (!process.env.MONGO_LOCAL_URI) {
+  if (!MONGO_URI) {
     throw new Error('MONGO_URI must be defined')
   }
   try {
