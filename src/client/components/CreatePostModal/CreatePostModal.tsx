@@ -63,7 +63,6 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
 
   return (
     <Modal open={modalState} onClose={closeModal} className={classes.modal}>
-      {/* TODO: CHANGE LATER */}
       <Card className={classes.card}>
         <CardHeader
           title="Create a new post"
