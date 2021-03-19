@@ -2,7 +2,7 @@ import { CompanyDocument } from '../../models/Company'
 import { GraphQLResolver } from '../../types'
 import * as companyServices from './services'
 
-export const resolvers: GraphQLResolver = {
+const resolvers: GraphQLResolver = {
   Query: {
     getAllCompanies: (): Promise<CompanyDocument[]> =>
       companyServices.getAllCompanies(),
@@ -25,3 +25,5 @@ export const resolvers: GraphQLResolver = {
       companyServices.companyDeletesPost(_context, _args.postId),
   },
 }
+
+export default resolvers

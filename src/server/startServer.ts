@@ -1,29 +1,44 @@
 /* eslint @typescript-eslint/no-var-requires: "off" */
 import { GraphQLSchema } from 'graphql'
-import fs from 'fs'
-import { importSchema } from 'graphql-import'
-import { makeExecutableSchema, mergeSchemas } from 'graphql-tools'
+import {
+  makeExecutableSchema,
+  mergeResolvers,
+  mergeTypeDefs,
+} from 'graphql-tools'
 import { ApolloServer } from 'apollo-server-micro'
 import dotenv from 'dotenv'
 import cookie from 'cookie'
 
 import { connectDb } from './connectDb'
+
+import companyTypeDefs from './modules/company/schemas'
+import postTypeDefs from './modules/postGQL/schemas'
+import userTypeDefs from './modules/user/schemas'
+import companyResolvers from './modules/company/resolvers'
+import postResolvers from './modules/postGQL/resolvers'
+import userResolvers from './modules/user/resolvers'
+
 import { GraphQLContext } from './types'
 
 dotenv.config()
 
 export const combineSchemas = (): GraphQLSchema => {
-  const schemas: GraphQLSchema[] = []
-  const folders = fs.readdirSync('./src/server/modules/')
+  const mergedTypeDefs = mergeTypeDefs([
+    companyTypeDefs,
+    postTypeDefs,
+    userTypeDefs,
+  ])
 
-  folders.forEach((folder) => {
-    const { resolvers } = require(`./modules/${folder}/resolvers`)
-    const typeDefs = importSchema(
-      `./src/server/modules/${folder}/index.graphql`
-    )
-    schemas.push(makeExecutableSchema({ typeDefs, resolvers }))
+  const mergedResolvers = mergeResolvers([
+    companyResolvers,
+    postResolvers,
+    userResolvers,
+  ])
+
+  return makeExecutableSchema({
+    typeDefs: mergedTypeDefs,
+    resolvers: mergedResolvers,
   })
-  return mergeSchemas({ schemas })
 }
 
 const context = (globalContext: GraphQLContext) => {
@@ -34,6 +49,7 @@ const context = (globalContext: GraphQLContext) => {
 }
 
 export const startServer = () => {
+  console.log('Okay')
   const rootSchema = combineSchemas()
   connectDb()
   const server = new ApolloServer({ schema: rootSchema, context: context })

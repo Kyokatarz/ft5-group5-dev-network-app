@@ -3,7 +3,7 @@ import { UserDocument } from '../../models/User'
 import { GraphQLContext, GraphQLResolver } from '../../types'
 
 //User resolver
-export const resolvers: GraphQLResolver = {
+const resolvers: GraphQLResolver = {
   Query: {
     getUserById: (_parents, _args, _context): Promise<UserDocument> =>
       services.getUserById(_args.userId),
@@ -39,3 +39,5 @@ export const resolvers: GraphQLResolver = {
     },
   },
 }
+
+export default resolvers

@@ -1,7 +1,7 @@
 import { GraphQLResolver } from '../../types/'
 import * as postServices from './services'
 
-export const resolvers: GraphQLResolver = {
+const resolvers: GraphQLResolver = {
   Query: {
     testHello: () => 'Hello',
   },
@@ -16,3 +16,5 @@ export const resolvers: GraphQLResolver = {
       postServices.likeComment(_context, _args),
   },
 }
+
+export default resolvers
