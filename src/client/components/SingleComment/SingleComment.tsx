@@ -107,10 +107,12 @@ const SingleComment: React.FC<SingleCommentProps> = ({
           horizontal: 'right',
         }}
       >
-        <Button onClick={onDeleteCommentClick}>
-          <DeleteCommentIcon />
-          Delete Comment
-        </Button>
+        {state.user?.user?.id === commentUserId && (
+          <Button onClick={onDeleteCommentClick}>
+            <DeleteCommentIcon />
+            Delete Comment
+          </Button>
+        )}
       </Popover>
       <Grid item xs={10}>
         {/* Second grid container for the name and comment content */}

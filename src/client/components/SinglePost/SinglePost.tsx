@@ -37,6 +37,7 @@ type SinglePostProps = {
   comments: Comment[]
   profileLastName: string
   profileFirstName: string
+  profileId: string
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -73,6 +74,7 @@ const SinglePost: React.FC<SinglePostProps> = ({
   comments,
   profileLastName,
   profileFirstName,
+  profileId,
 }) => {
   const classes = useStyles()
   const { dispatchAsync, state } = useStateContext()
@@ -136,10 +138,15 @@ const SinglePost: React.FC<SinglePostProps> = ({
             horizontal: 'right',
           }}
         >
-          <Button className={classes.dangerButton} onClick={onDeletePostClick}>
-            <DeletePostIcon />
-            Delete Post
-          </Button>
+          {profileId === state.user?.user?.id && (
+            <Button
+              className={classes.dangerButton}
+              onClick={onDeletePostClick}
+            >
+              <DeletePostIcon />
+              Delete Post
+            </Button>
+          )}
         </Popover>
         <CardContent>
           <Container className={classes.postContent}>

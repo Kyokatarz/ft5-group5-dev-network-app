@@ -49,6 +49,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ userProfile }) => {
             posts={userProfile?.posts}
             profileFirstName={userProfile.firstName}
             profileLastName={userProfile.lastName}
+            profileId={userProfile.id}
           />
         </Grid>
       </Grid>

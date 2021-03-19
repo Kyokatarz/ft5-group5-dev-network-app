@@ -10,12 +10,14 @@ type ProfilePostContainerProps = {
   posts: Post[]
   profileFirstName: string
   profileLastName: string
+  profileId: string
 }
 
 const ProfilePostContainer: React.FC<ProfilePostContainerProps> = ({
   posts: postsInProps,
   profileFirstName,
   profileLastName,
+  profileId,
 }) => {
   const { state, dispatchAsync } = useStateContext()
   const postsInState = state.posts?.posts
@@ -25,10 +27,6 @@ const ProfilePostContainer: React.FC<ProfilePostContainerProps> = ({
     dispatchAsync(setInitPosts(postsInProps))
   }, [postsInProps])
 
-  React.useEffect(() => {
-    console.log('posts', postsInProps)
-    console.log('renderingPosts', postsInProps)
-  })
   if (renderingPosts?.length === 0) return <Grid container>Empty</Grid>
   else
     return (
@@ -43,6 +41,7 @@ const ProfilePostContainer: React.FC<ProfilePostContainerProps> = ({
               comments={post.comments}
               profileFirstName={profileFirstName}
               profileLastName={profileLastName}
+              profileId={profileId}
             />
           </Grid>
         ))}
