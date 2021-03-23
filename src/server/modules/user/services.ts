@@ -11,12 +11,15 @@ import {
   findUserById,
   findPostById,
   getTokenFromContext,
+  ALREADY_CONNECTED,
+  NOT_CONNECTED,
 } from '../../helpers'
 import { GraphQLContext } from '../../types'
 import User, { UserDocument } from '../../models/User'
 import Post, { PostDocument } from '../../models/Post'
 import * as yupSchemas from './yupSchemas/yupSchemas'
 import { logInUserArgs, signUpUserArgs } from '../../types/user'
+import { MonochromePhotosTwoTone } from '@material-ui/icons'
 
 export const getUserById = async (userId: string): Promise<UserDocument> => {
   try {
@@ -289,4 +292,79 @@ export const searchUsersByName = async (searchString: string) => {
 
 export const logOut = async (_context: GraphQLContext) => {
   setCookie(_context)
+}
+
+export const connectToAnotherUser = async (
+  _context: GraphQLContext,
+  connectingId: string
+) => {
+  try {
+    const token = getTokenFromContext(_context)
+    const payload = getPayloadFromJwt(token)
+    const userId = payload.id
+
+    const userAskingToConnect = await User.findById(userId)
+    if (!userAskingToConnect) throw NOT_FOUND_ERROR
+
+    const userGettingConnected = await User.findById(connectingId)
+    if (!userGettingConnected) throw NOT_FOUND_ERROR
+
+    //If user is already connected
+    if (
+      userAskingToConnect.connections
+        .map((id) => id.toString())
+        .includes(connectingId)
+    )
+      throw ALREADY_CONNECTED
+
+    userAskingToConnect.connections.push(mongoose.Types.ObjectId(connectingId))
+    userGettingConnected.connections.push(mongoose.Types.ObjectId(userId))
+
+    await userAskingToConnect.save()
+    await userGettingConnected.save()
+
+    return userAskingToConnect
+  } catch (err) {
+    errorHandler(err)
+  }
+}
+
+export const disconnectFromAnotherUser = async (
+  _context: GraphQLContext,
+  disconnectingId: string
+) => {
+  try {
+    const token = getTokenFromContext(_context)
+    const payload = getPayloadFromJwt(token)
+    const userId = payload.id
+
+    const userAskingToDisconnect = await User.findById(userId)
+    if (!userAskingToDisconnect) throw NOT_FOUND_ERROR
+
+    const userGettingDisconnected = await User.findById(disconnectingId)
+    if (!userGettingDisconnected) throw NOT_FOUND_ERROR
+
+    //If user is not connected in the first place
+    if (
+      !userAskingToDisconnect.connections
+        .map((id) => id.toString())
+        .includes(disconnectingId)
+    )
+      throw NOT_CONNECTED
+
+    userAskingToDisconnect.connections = [
+      ...userAskingToDisconnect.connections,
+    ].filter((id) => id.toString() !== disconnectingId)
+
+    userGettingDisconnected.connections = [
+      ...userGettingDisconnected.connections,
+    ].filter((id) => id.toString() !== userId)
+
+    await userAskingToDisconnect.save()
+    await userGettingDisconnected.save()
+
+    return userAskingToDisconnect
+  } catch (err) {
+    errorHandler(err)
+  }
 }

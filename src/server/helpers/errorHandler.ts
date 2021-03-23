@@ -14,6 +14,8 @@ export const NOT_FOUND_ERROR = 'NOT_FOUND_ERROR'
 export const VALIDATION_ERROR = 'ValidationError'
 export const NO_TOKEN = 'NO_TOKEN'
 export const NOT_AUTHORISED_ERROR = 'NOT_AUTHORISED_ERROR'
+export const ALREADY_CONNECTED = 'ALREADY_CONNECTED'
+export const NOT_CONNECTED = 'NOT_CONNECTED'
 
 export const errorHandler = (err: any): void => {
   console.error(err)
@@ -34,6 +36,10 @@ export const errorHandler = (err: any): void => {
       throw new NotLoggedInError()
     case NOT_AUTHORISED_ERROR:
       throw new NotAuthorisedError()
+    case ALREADY_CONNECTED:
+      throw new BadRequestError('Already connected to this user.')
+    case NOT_CONNECTED:
+      throw new BadRequestError('Did not connect to this user')
     default:
       throw new InternalServerError()
   }

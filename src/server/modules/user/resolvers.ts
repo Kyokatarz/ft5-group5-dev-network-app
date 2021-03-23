@@ -34,9 +34,14 @@ const resolvers: GraphQLResolver = {
     userLikePost: (_, _args, _context: GraphQLContext) =>
       services.userLikePost(_context, _args.postId),
 
-    testCookie: (_, _args, _context: GraphQLContext) => {
-      console.log('Heare', _context.cookie)
-    },
+    connectToAnotherUser: (_, _args, _context: GraphQLContext) =>
+      services.connectToAnotherUser(_context, _args.connectingId),
+
+    disconnectFromAnotherUser: (_, _args, _context: GraphQLContext) =>
+      services.disconnectFromAnotherUser(_context, _args.disconnectingId),
+
+    testCookie: (_, _args, _context: GraphQLContext) =>
+      console.log('Heare', _context.cookie),
   },
 }
 

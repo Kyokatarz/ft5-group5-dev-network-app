@@ -60,6 +60,7 @@ export const checkCookie = () => {
         image
         employmentStatus
         company
+        connections
         posts {
           id
           content
@@ -188,6 +189,7 @@ export const getUserById = (userId: string) => {
         image
         employmentStatus
         company
+        connections
         posts {
           id
           content
@@ -240,6 +242,17 @@ export const updateUserProfile = (update: any) => {
         lastName
         company
         employmentStatus
+      }
+    }
+  `
+}
+
+export const connectToAnotherUser = (connectingId: string) => {
+  return gql`
+    mutation {
+      connectToAnotherUser(connectingId: "${connectingId}") {
+        id
+        connections
       }
     }
   `

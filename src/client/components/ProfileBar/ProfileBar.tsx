@@ -12,6 +12,9 @@ import CompanyIcon from '@material-ui/icons/BusinessRounded'
 import EmploymentIcon from '@material-ui/icons/WorkRounded'
 import React from 'react'
 import Link from 'next/link'
+import useStateContext from '../../hooks/useStateContext'
+import classes from '*.module.css'
+import ConnectDisconnectButton from '../ConnectDisconnectButton'
 
 type ProfileBarProps = {
   profileFirstName: string
@@ -52,6 +55,7 @@ const ProfileBar: React.FC<ProfileBarProps> = ({
   profileId,
 }) => {
   const classes = useStyles()
+  const { state } = useStateContext()
 
   return (
     <Card className={classes.container}>
@@ -60,9 +64,17 @@ const ProfileBar: React.FC<ProfileBarProps> = ({
         {profileFirstName || profileLastName || 'Unnamed User'}
       </Typography>
 
-      <Link href={`/profile/${profileId}/edit`}>
-        <Button variant="outlined">Edit Profile</Button>
-      </Link>
+      {state.user?.user?.id === profileId && (
+        <Link href={`/profile/${profileId}/edit`}>
+          <Button variant="outlined">Edit Profile</Button>
+        </Link>
+      )}
+
+      <ConnectDisconnectButton
+        profileId={profileId}
+        connections={state.user?.user?.connections}
+      />
+
       <Grid
         container
         direction="column"

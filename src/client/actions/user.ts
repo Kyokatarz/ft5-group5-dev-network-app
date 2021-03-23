@@ -21,7 +21,7 @@ import {
   updateUserProfile,
 } from '../helpers/gql-string-factory'
 import { NextRouter } from 'next/router'
-import { addCommentInState, setInitPosts } from './post'
+import { addCommentInState } from './post'
 
 export const signUserIn = (payload: UserProfile): UserActions => {
   return {

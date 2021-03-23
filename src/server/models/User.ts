@@ -9,7 +9,7 @@ export enum EmploymentStatus {
 }
 
 export type UserDocument = Document & {
-  id: mongoose.Schema.Types.ObjectId
+  id: mongoose.Types.ObjectId
   email: string
   password: string
   firstName?: string
@@ -18,6 +18,7 @@ export type UserDocument = Document & {
   employmentStatus?: EmploymentStatus
   company?: string
   posts?: string[]
+  connections: mongoose.Types.ObjectId[]
 }
 
 const userSchema = new Schema({
@@ -37,6 +38,7 @@ const userSchema = new Schema({
       ref: 'post',
     },
   ],
+  connections: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
 })
 
 export default (mongoose.models.user as Model<UserDocument>) ||

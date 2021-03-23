@@ -11,6 +11,7 @@ export default gql`
     employmentStatus: EmploymentStatus
     company: String
     posts: [Post]
+    connections: [String]
   }
 
   enum EmploymentStatus {
