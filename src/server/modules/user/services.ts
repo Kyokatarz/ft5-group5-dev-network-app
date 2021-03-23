@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs'
-import mongoose, { Promise } from 'mongoose'
+import mongoose, { connections, Promise } from 'mongoose'
 
 import {
   errorHandler,
@@ -323,7 +323,9 @@ export const connectToAnotherUser = async (
     await userAskingToConnect.save()
     await userGettingConnected.save()
 
-    return userAskingToConnect
+    return await userAskingToConnect
+      .populate({ path: 'connections', select: 'firstName lastName' })
+      .execPopulate()
   } catch (err) {
     errorHandler(err)
   }
@@ -363,7 +365,9 @@ export const disconnectFromAnotherUser = async (
     await userAskingToDisconnect.save()
     await userGettingDisconnected.save()
 
-    return userAskingToDisconnect
+    return await userAskingToDisconnect
+      .populate({ path: 'connections', select: 'firstName lastName' })
+      .execPopulate()
   } catch (err) {
     errorHandler(err)
   }

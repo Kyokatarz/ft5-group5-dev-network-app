@@ -11,12 +11,18 @@ export default gql`
     employmentStatus: EmploymentStatus
     company: String
     posts: [Post]
-    connections: [String]
+    connections: [NameOnly]
   }
 
   enum EmploymentStatus {
     EMPLOYED
     OPEN_TO_WORK
     FREELANCER
+  }
+
+  type NameOnly {
+    firstName: String!
+    lastName: String!
+    id: String!
   }
 `

@@ -2,10 +2,11 @@ import { Button } from '@material-ui/core'
 import React from 'react'
 
 import useStateContext from '../../hooks/useStateContext'
+import { UserProfile } from '../../types'
 
 type ConnectDisconnectButtonProps = {
   profileId: string
-  connections: string[]
+  connections: Partial<UserProfile>[]
 }
 
 const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = ({
@@ -18,7 +19,7 @@ const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = ({
   if (loggedInUserId === profileId || !state.user?.isLoggedIn) return null
   return (
     <>
-      {connections?.includes(profileId) ? (
+      {connections?.map((user) => user.id).includes(profileId) ? (
         <Button variant="outlined" color="secondary">
           Connect
         </Button>

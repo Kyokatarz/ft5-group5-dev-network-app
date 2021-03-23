@@ -13,7 +13,6 @@ import EmploymentIcon from '@material-ui/icons/WorkRounded'
 import React from 'react'
 import Link from 'next/link'
 import useStateContext from '../../hooks/useStateContext'
-import classes from '*.module.css'
 import ConnectDisconnectButton from '../ConnectDisconnectButton'
 
 type ProfileBarProps = {

@@ -21,7 +21,7 @@ export type UserProfile = {
   employmentStatus: string
   company: string
   posts: Post[]
-  connections: string[]
+  connections: Partial<UserProfile>[]
 }
 
 //A post:
