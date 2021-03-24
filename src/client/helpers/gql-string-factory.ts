@@ -60,21 +60,23 @@ export const checkCookie = () => {
         image
         employmentStatus
         company
-        connections
+        connections {
+          id
+          firstName
+          lastName
+        }
         posts {
           id
           content
           date
           likes
           comments {
-            id
-            content
-            likes
             user {
-              id
               firstName
               lastName
             }
+            content
+            likes
           }
         }
       }
@@ -189,7 +191,11 @@ export const getUserById = (userId: string) => {
         image
         employmentStatus
         company
-        connections
+        connections{
+          id
+          firstName
+          lastName
+        }
         posts {
           id
           content
@@ -252,11 +258,31 @@ export const connectToAnotherUser = (connectingId: string) => {
     mutation {
       connectToAnotherUser(connectingId: "${connectingId}") {
         id
-        connections
+        connections{
+          id
+          firstName
+          lastName
+        }
       }
     }
   `
 }
+
+export const disconnectFromAnotherUser = (disconnectingId: string) => {
+  return gql`
+    mutation {
+      disconnectFromAnotherUser(disconnectingId: "${disconnectingId}") {
+        id
+        connections{
+          id
+          firstName
+          lastName
+        }
+      }
+    }
+  `
+}
+
 export const logOut = () => {
   return gql`
     query {

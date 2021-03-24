@@ -57,4 +57,4 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ userProfile }) => {
   )
 }
 
-export default ProfilePage
+export default React.memo(ProfilePage)

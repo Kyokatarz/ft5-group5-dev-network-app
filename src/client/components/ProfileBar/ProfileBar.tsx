@@ -69,10 +69,7 @@ const ProfileBar: React.FC<ProfileBarProps> = ({
         </Link>
       )}
 
-      <ConnectDisconnectButton
-        profileId={profileId}
-        connections={state.user?.user?.connections}
-      />
+      <ConnectDisconnectButton profileId={profileId} />
 
       <Grid
         container

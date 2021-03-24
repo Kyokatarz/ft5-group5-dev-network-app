@@ -2,7 +2,7 @@
 //__User__
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
-
+export const ADD_CONNECTED_USER = 'ADD_CONNECTED_USER'
 //__Post__
 export const ADD_POST = 'ADD_POST'
 export const DELETE_POST = 'DELETE_POST'
@@ -10,6 +10,8 @@ export const ADD_COMMENT = 'ADD_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const SET_INIT_POST = 'SET_INIT_POST'
 export const CHANGE_USING_PROPS = 'CHANGE_USING_PROPS'
+export const SET_CONNECTIONS = 'SET_CONNECTIONS'
+
 // Types
 // A user profile:
 export type UserProfile = {
@@ -54,7 +56,12 @@ export type LogUserOut = {
   type: typeof LOGOUT
 }
 
-export type UserActions = LogUserIn | LogUserOut
+export type SetConnections = {
+  type: typeof SET_CONNECTIONS
+  payload: Partial<UserProfile>
+}
+
+export type UserActions = LogUserIn | LogUserOut | SetConnections
 
 //__Post__
 export type AddPost = {

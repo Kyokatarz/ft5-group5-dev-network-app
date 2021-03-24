@@ -1,4 +1,10 @@
-import { UserActions } from '../../types'
+import {
+  ADD_CONNECTED_USER,
+  LOGIN,
+  LOGOUT,
+  SET_CONNECTIONS,
+  UserActions,
+} from '../../types'
 
 export type UserStateType = {
   isLoggedIn: boolean
@@ -15,18 +21,25 @@ const userReducer = (
   action: UserActions
 ): UserStateType => {
   switch (action.type) {
-    case 'LOGIN':
+    case LOGIN:
       return {
         ...state,
         isLoggedIn: true,
         user: action.payload,
       }
-    case 'LOGOUT':
+    case LOGOUT:
       return {
         ...state,
         isLoggedIn: false,
         user: null,
       }
+    case SET_CONNECTIONS: {
+      return {
+        ...state,
+        user: { ...state.user, connections: action.payload },
+      }
+    }
+
     default:
       return state
   }

@@ -1,30 +1,44 @@
 import { Button } from '@material-ui/core'
 import React from 'react'
 
+import {
+  sendRequestToConnectUser,
+  sendRequestToDisconnectUser,
+} from '../../actions/user'
 import useStateContext from '../../hooks/useStateContext'
-import { UserProfile } from '../../types'
 
 type ConnectDisconnectButtonProps = {
   profileId: string
-  connections: Partial<UserProfile>[]
 }
 
 const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = ({
   profileId,
-  connections,
 }) => {
-  const { state } = useStateContext()
+  const { state, dispatchAsync } = useStateContext()
   const loggedInUserId = state.user?.user?.id
+  const connections = state.user?.user?.connections
+
+  const onConnectClick = () => {
+    dispatchAsync(sendRequestToConnectUser(profileId))
+  }
+  const onDisconnectClick = () => {
+    dispatchAsync(sendRequestToDisconnectUser(profileId))
+  }
 
   if (loggedInUserId === profileId || !state.user?.isLoggedIn) return null
+
   return (
     <>
-      {connections?.map((user) => user.id).includes(profileId) ? (
-        <Button variant="outlined" color="secondary">
+      {!connections?.map((user) => user.id).includes(profileId) ? (
+        <Button variant="outlined" color="secondary" onClick={onConnectClick}>
           Connect
         </Button>
       ) : (
-        <Button variant="outlined" color="secondary">
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={onDisconnectClick}
+        >
           Disconnect
         </Button>
       )}

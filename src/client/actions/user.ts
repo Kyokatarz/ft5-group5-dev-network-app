@@ -6,6 +6,7 @@ import {
   LOGIN,
   LOGOUT,
   Post,
+  SET_CONNECTIONS,
   UserActions,
   UserProfile,
 } from '../types'
@@ -19,6 +20,8 @@ import {
   userLikePost,
   logOut,
   updateUserProfile,
+  connectToAnotherUser,
+  disconnectFromAnotherUser,
 } from '../helpers/gql-string-factory'
 import { NextRouter } from 'next/router'
 import { addCommentInState } from './post'
@@ -43,6 +46,12 @@ export const userAddPost = (post: Post) => {
   }
 }
 
+export const setConnectionsInState = (connections: Partial<UserProfile>[]) => {
+  return {
+    type: SET_CONNECTIONS,
+    payload: connections,
+  }
+}
 /*---------------------Thunk------------------------------------------------*/
 export const sendRequestToSignUserIn = (
   email: string,
@@ -149,6 +158,31 @@ export const sendRequestToUpdateUserProfile = (
   return async (dispatch: Dispatch<any>) => {
     try {
       await request(host, updateUserProfile(update))
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
+export const sendRequestToConnectUser = (userId: string) => {
+  return async (dispatch: Dispatch<any>) => {
+    try {
+      const resp = await request(host, connectToAnotherUser(userId))
+
+      dispatch(setConnectionsInState(resp.connectToAnotherUser.connections))
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
+export const sendRequestToDisconnectUser = (userId: string) => {
+  return async (dispatch: Dispatch<any>) => {
+    try {
+      const resp = await request(host, disconnectFromAnotherUser(userId))
+      dispatch(
+        setConnectionsInState(resp.disconnectFromAnotherUser.connections)
+      )
     } catch (err) {
       console.error(err)
     }

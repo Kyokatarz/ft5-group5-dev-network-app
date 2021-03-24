@@ -27,7 +27,7 @@ export const getUserById = async (userId: string): Promise<UserDocument> => {
     if (!user) throw NOT_FOUND_ERROR
     await user
       .populate({
-        path: 'posts',
+        path: 'posts connections',
         populate: {
           path: 'comments.user',
           select: 'firstName lastName ',
@@ -244,7 +244,7 @@ export const checkCookieAndRetrieveUser = async (_context: GraphQLContext) => {
     if (!user) throw NOT_FOUND_ERROR
     await user
       .populate({
-        path: 'posts',
+        path: 'posts connections',
         populate: {
           path: 'comments.user',
           select: 'firstName lastName ',
