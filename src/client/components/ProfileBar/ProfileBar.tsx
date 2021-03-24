@@ -1,17 +1,22 @@
 import {
   Avatar,
+  Box,
   Button,
   Card,
+  CardContent,
+  CardHeader,
   createStyles,
   Grid,
   makeStyles,
   Theme,
   Typography,
 } from '@material-ui/core'
+import AvatarGroup from '@material-ui/lab/AvatarGroup'
 import CompanyIcon from '@material-ui/icons/BusinessRounded'
 import EmploymentIcon from '@material-ui/icons/WorkRounded'
 import React from 'react'
 import Link from 'next/link'
+
 import useStateContext from '../../hooks/useStateContext'
 import ConnectDisconnectButton from '../ConnectDisconnectButton'
 
@@ -89,9 +94,33 @@ const ProfileBar: React.FC<ProfileBarProps> = ({
             Status: {profileEmploymentStatus || 'N/A'}
           </Typography>
         </Grid>
+
+        <Grid item>
+          <Card elevation={1}>
+            <CardHeader
+              title={
+                <Typography variant="body2">
+                  Connections{' '}
+                  <Box fontWeight={500}>
+                    {' '}
+                    {state.user?.user?.connections.length || 0}
+                  </Box>
+                </Typography>
+              }
+              action={<Link href="/">See all</Link>}
+            />
+            <CardContent>
+              <AvatarGroup max={4}>
+                {state.user?.user.connections.map((connection) => (
+                  <Avatar key={connection.id} alt={connection.firstName[0]} />
+                ))}
+              </AvatarGroup>
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
     </Card>
   )
 }
 
-export default ProfileBar
+export default React.memo(ProfileBar)
