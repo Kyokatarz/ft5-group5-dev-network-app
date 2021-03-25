@@ -19,6 +19,7 @@ import Link from 'next/link'
 
 import useStateContext from '../../hooks/useStateContext'
 import ConnectDisconnectButton from '../ConnectDisconnectButton'
+import { UserProfile } from '../../types'
 
 type ProfileBarProps = {
   profileFirstName: string
@@ -64,63 +65,108 @@ const ProfileBar: React.FC<ProfileBarProps> = ({
   return (
     <Card className={classes.container}>
       <Avatar alt="avatar" className={classes.avatar} />
-      <Typography variant="h5" component="p">
-        {profileFirstName || profileLastName || 'Unnamed User'}
-      </Typography>
-
+      <NameDisplay
+        profileFirstName={profileFirstName}
+        profileLastName={profileLastName}
+      />
       {state.user?.user?.id === profileId && (
-        <Link href={`/profile/${profileId}/edit`}>
-          <Button variant="outlined">Edit Profile</Button>
-        </Link>
+        <EditProfileButton profileId={profileId} />
       )}
 
       <ConnectDisconnectButton profileId={profileId} />
-
-      <Grid
-        container
-        direction="column"
-        spacing={1}
-        className={classes.infoContainer}
-      >
-        <Grid item>
-          <Typography variant="body2">
-            <CompanyIcon color="primary" fontSize="small" /> Company:{' '}
-            {profileCompany || 'N/A'}
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography variant="body2">
-            <EmploymentIcon color="primary" fontSize="small" /> Employment
-            Status: {profileEmploymentStatus || 'N/A'}
-          </Typography>
-        </Grid>
-
-        <Grid item>
-          <Card elevation={1}>
-            <CardHeader
-              title={
-                <Typography variant="body2">
-                  Connections{' '}
-                  <Box fontWeight={500}>
-                    {' '}
-                    {state.user?.user?.connections.length || 0}
-                  </Box>
-                </Typography>
-              }
-              action={<Link href="/">See all</Link>}
-            />
-            <CardContent>
-              <AvatarGroup max={4}>
-                {state.user?.user.connections.map((connection) => (
-                  <Avatar key={connection.id} alt={connection.firstName[0]} />
-                ))}
-              </AvatarGroup>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      <UserJobInfo
+        profileCompany={profileCompany}
+        profileEmploymentStatus={profileEmploymentStatus}
+      />
+      <ConnectionDisplay connections={state.user?.user?.connections} />
     </Card>
   )
 }
 
 export default React.memo(ProfileBar)
+
+/*==========================+
+ |//---Small components---//|
+ +==========================*/
+type NameDisplayProps = {
+  profileFirstName: string
+  profileLastName: string
+}
+
+type EditProfileButtonProps = {
+  profileId: string
+}
+
+type UserJobInfoProps = {
+  profileCompany: string
+  profileEmploymentStatus: string
+}
+
+const NameDisplay: React.FC<NameDisplayProps> = ({
+  profileFirstName,
+  profileLastName,
+}) => (
+  <Typography variant="h5" component="p">
+    {profileFirstName || profileLastName || 'Unnamed User'}
+  </Typography>
+)
+
+const EditProfileButton: React.FC<EditProfileButtonProps> = ({ profileId }) => {
+  return (
+    <Link href={`/profile/${profileId}/edit`}>
+      <Button variant="outlined">Edit Profile</Button>
+    </Link>
+  )
+}
+
+const UserJobInfo: React.FC<UserJobInfoProps> = ({
+  profileCompany,
+  profileEmploymentStatus,
+}) => {
+  const classes = useStyles()
+  return (
+    <Grid
+      container
+      direction="column"
+      spacing={1}
+      className={classes.infoContainer}
+    >
+      <Grid item>
+        <Typography variant="body2">
+          <CompanyIcon color="primary" fontSize="small" /> Company:{' '}
+          {profileCompany || 'N/A'}
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Typography variant="body2">
+          <EmploymentIcon color="primary" fontSize="small" /> Employment Status:{' '}
+          {profileEmploymentStatus || 'N/A'}
+        </Typography>
+      </Grid>
+    </Grid>
+  )
+}
+
+const ConnectionDisplay: React.FC<{ connections: Partial<UserProfile>[] }> = ({
+  connections,
+}) => {
+  return (
+    <Card elevation={1} style={{ width: '100%' }}>
+      <CardHeader
+        title={
+          <Typography variant="body2">
+            Connections <Box fontWeight={500}> {connections?.length || 0}</Box>
+          </Typography>
+        }
+        action={<Link href="/">See all</Link>}
+      />
+      <CardContent>
+        <AvatarGroup max={4}>
+          {connections?.map((connection) => (
+            <Avatar key={connection.id}>{connection.firstName[0]}</Avatar>
+          ))}
+        </AvatarGroup>
+      </CardContent>
+    </Card>
+  )
+}
