@@ -30,7 +30,7 @@ export const getUserById = async (userId: string): Promise<UserDocument> => {
         path: 'posts connections',
         populate: {
           path: 'comments.user',
-          select: 'firstName lastName ',
+          select: 'firstName lastName company employmentStatus',
         },
       })
       .execPopulate()

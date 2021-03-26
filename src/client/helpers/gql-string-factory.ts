@@ -195,6 +195,8 @@ export const getUserById = (userId: string) => {
           id
           firstName
           lastName
+          company
+          employmentStatus
         }
         posts {
           id

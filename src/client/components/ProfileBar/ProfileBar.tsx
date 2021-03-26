@@ -78,7 +78,10 @@ const ProfileBar: React.FC<ProfileBarProps> = ({
         profileCompany={profileCompany}
         profileEmploymentStatus={profileEmploymentStatus}
       />
-      <ConnectionDisplay connections={state.user?.user?.connections} />
+      <ConnectionDisplay
+        connections={state.user?.user?.connections}
+        profileId={profileId}
+      />
     </Card>
   )
 }
@@ -147,9 +150,10 @@ const UserJobInfo: React.FC<UserJobInfoProps> = ({
   )
 }
 
-const ConnectionDisplay: React.FC<{ connections: Partial<UserProfile>[] }> = ({
-  connections,
-}) => {
+const ConnectionDisplay: React.FC<{
+  connections: Partial<UserProfile>[]
+  profileId: string
+}> = ({ connections, profileId }) => {
   return (
     <Card elevation={1} style={{ width: '100%' }}>
       <CardHeader
@@ -158,7 +162,7 @@ const ConnectionDisplay: React.FC<{ connections: Partial<UserProfile>[] }> = ({
             Connections <Box fontWeight={500}> {connections?.length || 0}</Box>
           </Typography>
         }
-        action={<Link href="/">See all</Link>}
+        action={<Link href={`/profile/${profileId}/connections`}>See all</Link>}
       />
       <CardContent>
         <AvatarGroup max={4}>

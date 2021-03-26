@@ -11,7 +11,7 @@ export default gql`
     employmentStatus: EmploymentStatus
     company: String
     posts: [Post]
-    connections: [NameOnly]
+    connections: [ConnectionPopulate]
   }
 
   enum EmploymentStatus {
@@ -20,9 +20,11 @@ export default gql`
     FREELANCER
   }
 
-  type NameOnly {
+  type ConnectionPopulate {
     firstName: String!
     lastName: String!
     id: String!
+    company: String
+    employmentStatus: EmploymentStatus
   }
 `
